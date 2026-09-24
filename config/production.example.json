@@ -1,0 +1,9 @@
+{
+  "APP_ENV": "production",
+  "APP_NAME": "GGs",
+  "SUPABASE_URL": "https://production-project.supabase.co",
+  "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_replace_me",
+  "AUTH_REDIRECT_URL": "com.ggs.mobile.production://auth/callback",
+  "SUPPORT_URL": "https://example.invalid/support",
+  "FIREBASE_ENABLED": "false"
+}

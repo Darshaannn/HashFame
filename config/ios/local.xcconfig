@@ -1,0 +1,3 @@
+APP_DISPLAY_NAME=GGs Local
+AUTH_SCHEME=com.ggs.mobile.local
+PRODUCT_BUNDLE_IDENTIFIER=com.ggs.mobile.local

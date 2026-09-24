@@ -1,0 +1,3 @@
+-- Enums in 0002 are the Phase-1 reference data.
+-- Synthetic auth identities are in seed.sql, invoked by local reset only.
+-- Never create test logins in a migration applied to hosted production.

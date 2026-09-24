@@ -1,0 +1,109 @@
+name: Phase 1 CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase-1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flutter:
+    name: Flutter quality and Android builds
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.5
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Verify repository security invariants
+        working-directory: .
+        run: pwsh ./scripts/validate-repository.ps1
+      - name: Verify generated Dart
+        run: |
+          dart run build_runner build
+          git diff --exit-code -- lib
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze --fatal-infos
+      - run: flutter test --coverage
+      - name: Build local Android APK
+        run: flutter build apk --debug --flavor local --dart-define-from-file=../../config/local.example.json
+      - name: Build staging Android APK
+        run: flutter build apk --debug --flavor staging --dart-define-from-file=../../config/staging.example.json
+
+  ios:
+    name: iOS simulator build
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: apps/mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.5
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Select staging native identity
+        run: bash ../../scripts/select-ios-environment.sh staging
+      - name: Build staging simulator app
+        run: flutter build ios --simulator --debug --dart-define-from-file=../../config/staging.example.json
+
+  database:
+    name: Supabase migrations and RLS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.117.0
+      - run: supabase start
+      - name: Fresh rebuild and security tests (run 1)
+        run: |
+          supabase db reset --local
+          psql postgresql://postgres:postgres@127.0.0.1:54322/postgres --set ON_ERROR_STOP=1 --file supabase/tests/foundation.sql
+      - name: Fresh rebuild and security tests (run 2)
+        run: |
+          supabase db reset --local
+          psql postgresql://postgres:postgres@127.0.0.1:54322/postgres --set ON_ERROR_STOP=1 --file supabase/tests/foundation.sql
+      - if: always()
+        run: supabase stop --no-backup
+
+  edge-functions:
+    name: Edge Function format, lint, typecheck and tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: supabase/functions
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno fmt --check
+      - run: deno lint
+      - run: deno check request-deletion/index.ts
+      - run: deno test request-deletion/handler_test.ts
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

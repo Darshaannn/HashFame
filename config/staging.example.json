@@ -1,0 +1,9 @@
+{
+  "APP_ENV": "staging",
+  "APP_NAME": "GGs Staging",
+  "SUPABASE_URL": "https://staging-project.supabase.co",
+  "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_replace_me",
+  "AUTH_REDIRECT_URL": "com.ggs.mobile.staging://auth/callback",
+  "SUPPORT_URL": "https://staging.example.invalid/support",
+  "FIREBASE_ENABLED": "false"
+}

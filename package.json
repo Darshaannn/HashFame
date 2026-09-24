@@ -1,0 +1,13 @@
+{
+  "name": "ggs-foundation-tooling",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test:postgres": "node scripts/test-postgres.cjs"
+  },
+  "dependencies": {
+    "pg": "8.16.3"
+  }
+}

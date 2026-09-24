@@ -1,0 +1,6 @@
+// Safe local defaults. Environment.generated.xcconfig is ignored and may
+// override these values for staging or production builds.
+APP_DISPLAY_NAME=GGs Local
+AUTH_SCHEME=com.ggs.mobile.local
+PRODUCT_BUNDLE_IDENTIFIER=com.ggs.mobile.local
+#include? "Environment.generated.xcconfig"
