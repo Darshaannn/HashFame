@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../core/config/app_config.dart';
 import '../core/design_system/gallery_screen.dart';
+import '../demo/demo_launcher_screen.dart';
 import '../features/account/domain/account.dart';
 import '../features/account/presentation/account_screens.dart';
 import '../features/agency/presentation/agency_screens.dart';
@@ -96,6 +97,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           ref.read(configProvider).environment != AppEnvironment.production,
     ),
     routes: [
+      GoRoute(
+        path: '/demo',
+        name: 'demo_launcher',
+        builder: (_, state) => const DemoLauncherScreen(),
+      ),
       GoRoute(
         path: '/welcome',
         name: 'welcome',

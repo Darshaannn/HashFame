@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'app/app.dart';
 import 'app/providers.dart';
+import 'app/router.dart';
 import 'core/config/app_config.dart';
 import 'core/design_system/tokens.dart';
 import 'core/telemetry/analytics_service.dart';
@@ -57,38 +57,50 @@ void main() {
   );
 }
 
-class DemoAppRoot extends StatefulWidget {
+class DemoAppRoot extends ConsumerStatefulWidget {
   const DemoAppRoot({super.key});
 
   @override
-  State<DemoAppRoot> createState() => _DemoAppRootState();
+  ConsumerState<DemoAppRoot> createState() => _DemoAppRootState();
 }
 
-class _DemoAppRootState extends State<DemoAppRoot> {
+class _DemoAppRootState extends ConsumerState<DemoAppRoot> {
   bool _roleSelected = false;
 
   @override
   Widget build(BuildContext context) {
-    if (!_roleSelected) {
-      return MaterialApp(
-        title: 'GGs Demo Launcher',
-        theme: buildAppTheme(),
-        debugShowCheckedModeBanner: false,
-        home: DemoLauncherScreen(
-          onRoleSelected: () {
-            setState(() {
-              _roleSelected = true;
-            });
-          },
-        ),
-      );
-    }
+    final router = ref.watch(routerProvider);
 
-    return Column(
-      children: [
-        const Material(child: DemoTopBanner()),
-        const Expanded(child: FoundationApp()),
-      ],
+    return MaterialApp.router(
+      title: 'GGs Demo',
+      theme: buildAppTheme(),
+      debugShowCheckedModeBanner: false,
+      routerConfig: router,
+      builder: (context, child) {
+        if (!_roleSelected) {
+          return DemoLauncherScreen(
+            onRoleSelected: () {
+              setState(() {
+                _roleSelected = true;
+              });
+              final role = DemoStore.instance.currentRole;
+              router.go(homePath(role));
+            },
+          );
+        }
+
+        return Scaffold(
+          body: Column(
+            children: [
+              const DemoTopBanner(),
+              Expanded(
+                child: child ?? const SizedBox.shrink(),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
+

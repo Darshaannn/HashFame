@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:go_router/go_router.dart';
+
 import 'package:ggs_mobile/app/providers.dart';
+import 'package:ggs_mobile/app/router.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/features/account/domain/account.dart';
 import 'package:ggs_mobile/features/auth/presentation/session_controller.dart';
@@ -10,9 +13,9 @@ import 'demo_repositories.dart';
 import 'demo_store.dart';
 
 class DemoLauncherScreen extends ConsumerWidget {
-  const DemoLauncherScreen({super.key, required this.onRoleSelected});
+  const DemoLauncherScreen({super.key, this.onRoleSelected});
 
-  final VoidCallback onRoleSelected;
+  final VoidCallback? onRoleSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -203,7 +206,11 @@ class DemoLauncherScreen extends ConsumerWidget {
       authRepo.notifyRoleChanged();
     }
     ref.read(sessionProvider.notifier).refresh();
-    onRoleSelected();
+    if (onRoleSelected != null) {
+      onRoleSelected!();
+    } else {
+      context.go(homePath(role));
+    }
   }
 }
 
