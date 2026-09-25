@@ -10,6 +10,8 @@ import 'package:ggs_mobile/features/creator/presentation/profile/creator_profile
 import 'package:ggs_mobile/features/discovery/presentation/discovery_controller.dart';
 import 'package:ggs_mobile/features/shortlist/presentation/shortlist_controller.dart';
 
+import 'package:go_router/go_router.dart';
+
 import 'demo_repositories.dart';
 import 'demo_store.dart';
 
@@ -149,6 +151,14 @@ class DemoTopBanner extends ConsumerWidget implements PreferredSizeWidget {
     ref.invalidate(currentCreatorProfileProvider);
     ref.invalidate(opportunitySearchControllerProvider);
 
+    final path = switch (newRole) {
+      ProfessionalRole.brandMarketer => '/home/brand_marketer',
+      ProfessionalRole.creator => '/home/creator',
+      ProfessionalRole.agency => '/home/agency',
+      _ => '/home/brand_marketer',
+    };
+    context.go(path);
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 2),
@@ -168,6 +178,14 @@ class DemoTopBanner extends ConsumerWidget implements PreferredSizeWidget {
     ref.invalidate(discoveryControllerProvider);
     ref.invalidate(currentCreatorProfileProvider);
     ref.invalidate(opportunitySearchControllerProvider);
+
+    final path = switch (DemoStore.instance.currentRole) {
+      ProfessionalRole.brandMarketer => '/home/brand_marketer',
+      ProfessionalRole.creator => '/home/creator',
+      ProfessionalRole.agency => '/home/agency',
+      _ => '/home/brand_marketer',
+    };
+    context.go(path);
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(

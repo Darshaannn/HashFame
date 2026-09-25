@@ -1,0 +1,136 @@
+/// Deterministic local dataset extracted from the official Google Sheet:
+/// https://docs.google.com/spreadsheets/d/1axrz8MIw8D3aE2Hxq6GQ4urmZ0KRHBIOMDjdjPVDtwY/edit?usp=sharing
+///
+/// Offline fallback and benchmark data embedded for instant synchronous boot.
+const String demoCreatorsCsvData = '''
+Creators,IG Handles,Followers,Caterogy,Avg Audince View(Per Followers),Engagment Rate,Cost,Usage Right (3 M),Usage Right (6M),Usage Right (1M),Number,City
+Krina Pathak,https://www.instagram.com/krina_pathak,100K,Actor,7.42,4.63%,,20000,95000,47000,,
+Paridhee oza,https://www.instagram.com/paridhee_oza/?hl=en,"9,645K",Actor,,,,,,,,
+Sean Banerjee,https://www.instagram.com/seanbanerjee.sb/?hl=en,222K,Actor,,,,,,,,
+Mallobika Banerjii,https://www.instagram.com/malobika_m.j/?hl=en,4.73 M,Actor,,,,,,,,
+Daisy Bopanna,https://www.instagram.com/daisybopanna/,242K,Actor,,,,,110000,,,Mumbai
+Piyush Manwani,https://www.instagram.com/piyush/,455K,Actor,,,,,,,,
+Gaurav Arora,https://www.instagram.com/megauravarora/,149K,Actor,,,,,,,,
+Shruti Arora ,https://www.instagram.com/shrutiaurora/,22K,Beauty,,,18000,40000,,,Pune
+Ankita Goswami Barjatya,https://www.instagram.com/,9.8K,Beauty,,,,7000,,,,
+Zaara Sheikh,https://www.instagram.com/sheikhzaara786/?hl=en,102K,Beauty & Fashion,,,,,,,,
+Rohith,https://www.instagram.com/tollfreetraveller,80.5K,Bike Influencers,,,,,,,,
+Vishakha Fulsunge,https://www.instagram.com/ridergirlvishakha/,906K,Bike Influencers,,,,,,,,
+Candida Louis,https://www.instagram.com/candidalouis,267K,Bike Influencers,,,,,,,,
+Roshni Misbah,https://www.instagram.com/roshnimisbah,340K,Bike Influencers,,,,,,,,
+Karan Raina,https://www.instagram.com/karan_raina_,94.6K,Bike Influencers,,,,,,,,
+Yamini Bisht,https://www.instagram.com/motofoxyy,270K,Bike Influencers,,,,,,,,
+Kongkon Talukdar,https://www.instagram.com/kongkon_talukdar,71.4K,Bike Influencers,,,,,,,,
+Rahul Soni,https://www.instagram.com/rahulsoni_1997,36.9K,Bike Influencers,,,,,,,,
+Arafiya Bukhari,https://www.instagram.com/arafiyaabukhari,146K,Bike Influencers,,,,,,,,
+Kalyani Potekar,https://www.instagram.com/bikergirl_93,75.5K,Bike Influencers,,,,,,,,
+Flexcia Dsouza,https://www.instagram.com/flexcia_dsouza,169K,Bike Influencers,,,,,,,,
+Strell,https://www.instagram.com/iamstrell,488K,Bike Influencers,,,,,,,,
+Sagar Sheldekar,https://www.instagram.com/sagarsheldekar,124K,Bike Influencers,,,,,,,,
+Thasni Thaaz,https://www.instagram.com/thasni___thaaz,164K,Bike Influencers,,,,,,,,
+Baidik Chatterjee,https://www.instagram.com/baidik_c,90.2K,Bike Influencers,,,,,,,,
+Dusty Jackets,https://www.instagram.com/dustyjacketstravel,78K,Bike Influencers,,,,,,,,
+Riswan A,https://www.instagram.com/thetravelworld2020,99.8K,Bike Influencers,,,,,,,,
+Sanoj SK,https://www.instagram.com/sanoj_sk,91K,Bike Influencers,,,,,,,,
+Alisha Hoda,https://www.instagram.com/alisha_hoda,48K,Bike Influencers,,,,,,,,
+Mahak Kapoor,https://www.instagram.com/her_garage_yt,1M,Car Influencers,,,,,,,,
+Faisal Khan,https://www.instagram.com/fasbeam,965K,Car Influencers,,,,,,,,
+Car Girls India,https://www.instagram.com/cargirlsindia,797K,Car Influencers,,,,,,,,
+Mia Joseph Chirakkekaran,https://www.instagram.com/octane_girl,725K,Car Influencers,,,,,,,,
+Gagan Choudhary,https://www.instagram.com/ganikgagan,627K,Car Influencers,,,,,,,,
+Umar Bopary,https://www.instagram.com/mycarmydreamofficial/,592K,Car Influencers,,,,,,,,
+Garima Avtar,https://www.instagram.com/garimaavtar,516K,Car Influencers,,,,,,,,
+Nitin Choudhary,https://www.instagram.com/wowautosbynitin,424K,Car Influencers,,,,,,,,
+Sirish Chandran,https://www.instagram.com/sirishchandran,278K,Car Influencers,,,,,,,,
+Deepesh Pandey,https://www.instagram.com/ddsravi,158K,Car Influencers,,,,,,,,
+Nikky Verma,https://www.instagram.com/revv.buzz,142K,Car Influencers,,,,,,,,
+On the Go Reviews,https://www.instagram.com/onthego.reviews,128K,Car Influencers,,,,,,,,
+Dhruv Attri,https://www.instagram.com/dhruvattri208,131K,Car Influencers,,,,,,,,
+Bhuvan Chowdhary,https://www.instagram.com/b.choww,108K,Car Influencers,,,,,,,,
+Deepali Rana,https://www.instagram.com/deepalirana,103K,Car Influencers,,,,,,,,
+Rohit Yadav,https://www.instagram.com/itsmanandmotor/,94.9K,Car Influencers,,,,,,,,
+Renuka Kirpalani,https://www.instagram.com/renukakirpalani/,93K,Car Influencers,,,,,,,,
+Rishi Kapoor,https://www.instagram.com/rjrishikapoor/,88.5K,Car Influencers,,,,,,,,
+Aparna Umesh,https://www.instagram.com/aparnaaumesh,83.9K,Car Influencers,,,,,,,,
+Vikas Yogi,https://www.instagram.com/autoyogi/,76K,Car Influencers,,,,,,,,
+Alisha Arora,https://www.instagram.com/aleeshaaroraa,101K,Creators,,,,,,,,Mumbai
+Aishwary Khajuria,https://www.instagram.com/,173K,Creators,,,,,,,,
+Fatema Hundekari,https://www.instagram.com/fatemahundekari/,50.6k,Fashion,,,,27000,,,,
+Palak,https://www.instagram.com/,205K,Fashion,,,,75000,,,,
+Nandini Chatterjee,https://www.instagram.com/,67.3K,Fashion,,,,22000,,,,
+Neha Jain, ,291K,Fashion/ Lifestyle,,,,95000,,,,
+Dr. Sejal Jain,https://www.instagram.com/glamprotocol?hl=en,442K,Fashion/ Lifestyle,,,,,,,,
+Chirag Khanna ,https://www.instagram.com/chiragkhannaa/,239K,Fashion/ Lifestyle,,,350000,,,410000,,
+Krishen Riyat,https://www.instagram.com/krishenriyat/,57.3K,Fashion/ Lifestyle,,,200000,,,230000,,
+Himanshu Shukla,https://www.instagram.com/hemann007/,371K,Fashion/ Lifestyle,,,130000,,,,,,
+Devashish,https://www.instagram.com/p/DZzuSvrCK2h/?img_index=1,72.3K,Fashion/ Lifestyle,,,,,,,,
+Ankit Chopra,https://www.instagram.com/aankitchopra/,294K,Fashion/ Lifestyle,,,,,,,,
+Shreyas Bhandarkar,https://www.instagram.com/shreyasbhandarkar/,100K,Fitness,,,,,,,,
+Madhura's Recipie,https://www.instagram.com/madhurasrecipe/,1.1M,Food Cooking,,,,150000,,,,
+Sarita Padman ,https://www.instagram.com/saritaskitchenofficial/,491K,Food/ Cooking,,,,90000,,,,
+Lina,https://www.instagram.com/ahouse_to_myhome,214K,Home Decor/ Interior Design,,,,60000,,,,
+Ridhi Kosla Jalan,https://www.instagram.com/ridhi.khosla.jalan,813K,Home Decor/ Interior Styling,,,,,,,,
+Sonakshi Awana,https://www.instagram.com/incredible_prodigy,317K,Home Decor/ Interior Styling,,,,,,,,
+Navneet Sandhu,https://www.instagram.com/designdecortravel,398K,Home Decor/ Interior Styling/ Travel,,,,250000,,,,
+Grishma Shah,https://www.instagram.com/thecurateddecor,418K,Interior Decor,,,,,,,,
+Falaque Rashid Roy,https://www.instagram.com/falaque.rashidroy,243K,Lifestyle,,,,,,,,
+Sanket Mehta,https://www.instagram.com/sankett25,806K,Lifestyle,,,,,,750000,,
+Utkarsh Khatri,https://www.instagram.com/_utkarsh_khatri/,271K,Lifestyle,,,,,,,,
+Dhwani Bhatt,https://www.instagram.com/dhwaniibhatt,100k,Lifestyle ,,,,,,,,Mumbai
+Disha (suggested),https://www.instagram.com/that_aesthetic_doctor/,4.6k,Lifestyle ,,,,8000,,,,
+Natasha Shotri (Ludhiana),https://www.instagram.com/natasha_shrotri/,121k,Lifestyle ,,,,,,,,
+Radha Chaudhary,https://www.instagram.com/,11k ,Lifestyle ,,,,,,,,
+Shilpa Kataria Singh,https://www.instagram.com/shillpakatariasingh/?hl=en,1 M,Lifestyle / Travel/ Beauty,,,,,,,,
+Chahat Dalal,https://www.instagram.com/chahat.dalal/,258k,Lifestyle & Travel,,,25000,60000,,,Pune
+travel_the_world_with_wifey,https://www.instagram.com/,50.8k,Lifestyle & Travel,,,,25000,,,,
+Simran Poddar,https://www.instagram.com/bellisimo__simran,129K,Lifestyle/Home Decor,,,,60000,,,,
+Hiiya Bajwa,https://www.instagram.com/hiiyabajwa/,72.3K,Model,,,35000,,,,,
+Kiran Gill,https://www.instagram.com/kiran.jeet.gill/reels/,65.6K,Model,,,,,,,,
+Abhinav Raghavan,https://www.instagram.com/abhinav.raghavan/,76.9K,Model,,,,,,,,
+Rohit Khandelwal,https://www.instagram.com/rohit_khandelwal77/,740K,Model,,,200000,,,230000,,
+Ekta Varma,https://www.instagram.com/mommy_mode_on,125K,Mom Influencer,,,50000,45000,,,Mumbai
+Nilam Chauhan,https://www.instagram.com/nilam_chauhan55/,11.8k,Mom Influencer,,,,6000,,,,
+Gauri Shah,https://www.instagram.com/,78.8K,Mom Influencer,,,,"35,000",,,,
+Linda Fernandes,https://www.instagram.com/thatquirkymamma,445K,Mom Influencer,,,,,45000,,,Mumbai
+Divya Patel,https://www.instagram.com/lifewidbaby,264K,Mom Influencer,,,,,40000,,,Mumbai
+Sneha Palliwal,https://www.instagram.com/highstreetmommy/,344K,Mom Influencer,,,,,50000,,,Mumbai
+Avanne Dubash,https://www.instagram.com/avannedubash/,13.9K,Mom Influencer,,,20000,,,,,Mumbai
+Chrissy,https://www.instagram.com/chryssie_missyy/,74.5K,Mom Influencer,252,13.21%.,30000,,,,,Mumbai
+Tanbeer Bhatia,https://www.instagram.com/tanu.m.bhatia/,7.1K,Mom Influencer,,,8000,,,,,Mumbai
+Priyanka Thakur,https://www.instagram.com/amomnextdoor,211K,Mom Influencer,,,,,,,,Bangalore
+Chitrangi Sharma,https://www.instagram.com/mydesipandora,101K,Mom Influencer,,,,,12000,,,Jaipur
+Ekta Varma,https://www.instagram.com/mommy_mode_on,125K,Mom Influencer,,,,50000,,45000,,Mumbai
+Anjali Pandey Verma,https://www.instagram.com/anjalipandeyverma,101K,Mom Influencer,,,,45000,,,,Mumbai
+Natasha Patel,https://www.instagram.com/natasshapatel,143K,Mom Influencer,,,,,,,,Mumbai
+Himani Seth,https://www.instagram.com/himaniseth01,361K,Mom Influencer,,,,140000,,,,Mumbai/ Delhi
+Priyanka Thakur,https://www.instagram.com/amomnextdoor,211K,Mom Influencer/ Lifestyle/ Travel,,,,135000,,,,
+Pallavi Goenka,https://www.instagram.com/pallavi_goenka_/,150k,Real Estate,,,20000,35000,,,Pune
+Puneri Blogger,https://www.instagram.com/puneriblogger/,53k,Real Estate / Lifestyle,,,,15000,,,,
+Eeshika Biswas,https://www.instagram.com/eeshikabiswas/,30.4K,Real Estate / Lifestyle,,,,20000,,,,
+the_harsha_khatri,https://www.instagram.com/,103k,Travel,,,,30000,,,,
+Travel with wifey (Shrilanka),https://www.instagram.com/travel_with_wife/,248k,Travel,,,,,,,,
+Cherry Jain,https://www.instagram.com/cherryjainn_,247K,Travel / Lifestyle,,,,,,,,
+Esha Fruitwala,https://www.instagram.com/eshaisthename,129K,Travel / Lifestyle,,,,60000,,,,
+Sandhya Majji,https://www.instagram.com/pinkpebble/,256K,Travel / Lifestyle,,,,,"75,000",,,,
+Kushoo Rathi,https://www.instagram.com/,117k,Travel / Lifestyle,,,,,"70,000",,,,
+Parvathy,https://instagram.com/vibewithpaaru,300k,Travel / Lifestyle,,,,,300000,,,
+Soumya,https://instagram.com/thebloggerbeee,58.7k,Travel / Lifestyle,,,,,"10,000",,,,
+Archana Singh,https://instagram.com/travelseewrite,262k,Travel / Lifestyle,,,,,220000,,,
+Mandavi Jaiswal,https://instagram.com/anurbannomadic,100k,Travel / Lifestyle,,,,,40000,,,
+Chandani Ayani,https://instagram.com/bloggerchandnii,110k,Travel / Lifestyle,,,,70000,120000,,,
+Pratiksha Das,https://instagram.com/racerchick_11,113 k,Travel / Lifestyle,,,,,85000,,,
+Ankit Chopra,https://www.instagram.com/aankitchopra/,295K,Travel / Lifestyle,,,,,,,,
+Arihant Baid,https://www.instagram.com/arihantbaidofficial,1.2 M,Travel / Lifestyle,,,120000,,,,,
+Surbhi Vaid,https://www.instagram.com/surbhivaid05/,98.9K,Travel / Lifestyle,,,,,,,,
+Tanya Purohit,https://www.instagram.com/tanya_purohit/,92.4K,Travel / Lifestyle,,,,,,,,
+Yashika Gupta,https://www.instagram.com/yashikagupta1008/reels/,96.6K,Travel / Lifestyle,,,,,,,,
+Tanvi Shah,https://www.instagram.com/tanvishah91/,316K,Travel / Lifestyle,,,,,,,,
+Mayan Tilanger,https://www.instagram.com/mayantilanger_b,881K,Travel / Lifestyle,,,,,,,,
+Shubham Tiwari,https://www.instagram.com/shubhamxcricket,278K,Travel / Lifestyle,,,,,,,,
+Shreevats Goswami,https://www.instagram.com/shreevatsgoswami,227K,Travel / Lifestyle,,,,,,,,
+R Rajesh ,https://www.instagram.com/r_rajesh_07,2M,Truck Influencers,,,700000,,,,,
+Anuj vlogs ,https://www.instagram.com/anuj__vlogs,388k,Truck Influencers,,,35000,,,,,
+Faiz,https://www.instagram.com/faiz_drive/,247k,Truck Influencers,,,25000,,,,,
+Raman Nayak,https://www.instagram.com/raman_nyk/,162K,Truck Influencers,,,75000,,,,,
+Pankaj,https://www.instagram.com/pankaj_maddeshiya_vlog,24.7K,Truck Influencers,,,15000,,,,,
+''';

@@ -14,6 +14,9 @@ import 'package:ggs_mobile/features/profile_common/domain/verification.dart';
 import 'package:ggs_mobile/features/shortlist/domain/shortlist.dart';
 import 'package:ggs_mobile/features/shortlist/domain/shortlist_member.dart';
 
+import 'demo_raw_csv_data.dart';
+import 'demo_sheet_creator_importer.dart';
+
 class DemoStore {
   DemoStore._() {
     reset();
@@ -949,6 +952,20 @@ class DemoStore {
         ),
       );
     }
+
+    // Ingest real creator entries supplied from the official Google Sheet
+    final sheetProfiles = DemoSheetCreatorImporter.parseSheetProfiles(
+      demoCreatorsCsvData,
+      categories,
+      languages,
+    );
+    creatorProfiles.addAll(sheetProfiles);
+
+    final sheetDiscovery = DemoSheetCreatorImporter.parseSheetDiscoveryItems(
+      demoCreatorsCsvData,
+      categories,
+    );
+    discoveryItems.addAll(sheetDiscovery);
   }
 
   void _seedShortlists() {
