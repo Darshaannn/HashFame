@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'app/app.dart';
 import 'app/providers.dart';
-import 'app/router.dart';
 import 'core/config/app_config.dart';
-import 'core/design_system/tokens.dart';
 import 'core/telemetry/analytics_service.dart';
-import 'demo/demo_banner.dart';
-import 'demo/demo_launcher_screen.dart';
 import 'demo/demo_repositories.dart';
 import 'demo/demo_store.dart';
 
@@ -57,50 +54,12 @@ void main() {
   );
 }
 
-class DemoAppRoot extends ConsumerStatefulWidget {
+class DemoAppRoot extends StatelessWidget {
   const DemoAppRoot({super.key});
 
   @override
-  ConsumerState<DemoAppRoot> createState() => _DemoAppRootState();
-}
-
-class _DemoAppRootState extends ConsumerState<DemoAppRoot> {
-  bool _roleSelected = false;
-
-  @override
   Widget build(BuildContext context) {
-    final router = ref.watch(routerProvider);
-
-    return MaterialApp.router(
-      title: 'GGs Demo',
-      theme: buildAppTheme(),
-      debugShowCheckedModeBanner: false,
-      routerConfig: router,
-      builder: (context, child) {
-        if (!_roleSelected) {
-          return DemoLauncherScreen(
-            onRoleSelected: () {
-              setState(() {
-                _roleSelected = true;
-              });
-              final role = DemoStore.instance.currentRole;
-              router.go(homePath(role));
-            },
-          );
-        }
-
-        return Scaffold(
-          body: Column(
-            children: [
-              const DemoTopBanner(),
-              Expanded(
-                child: child ?? const SizedBox.shrink(),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    return const FoundationApp();
   }
 }
 

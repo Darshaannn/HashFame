@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:ggs_mobile/demo/demo_banner.dart';
+
 class BrandShell extends StatelessWidget {
   const BrandShell({
     super.key,
@@ -15,7 +17,12 @@ class BrandShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: child,
+      body: Column(
+        children: [
+          const DemoTopBanner(),
+          Expanded(child: child),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
         onDestinationSelected: onNavigationIndexChanged,

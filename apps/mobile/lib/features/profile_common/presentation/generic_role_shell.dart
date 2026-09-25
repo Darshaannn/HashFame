@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:ggs_mobile/demo/demo_banner.dart';
+
 class GenericRoleShell extends StatelessWidget {
   const GenericRoleShell({
     super.key,
@@ -17,7 +19,12 @@ class GenericRoleShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: child,
+      body: Column(
+        children: [
+          const DemoTopBanner(),
+          Expanded(child: child),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
         onDestinationSelected: onNavigationIndexChanged,

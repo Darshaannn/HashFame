@@ -48,7 +48,7 @@ String? routeRedirect(
   final destination = switch (session.phase) {
     SessionPhase.loading => '/startup',
     SessionPhase.unauthenticated =>
-      ['/welcome', '/roles'].contains(path) ||
+      ['/welcome', '/roles', '/demo'].contains(path) ||
               (path == '/auth' && selectedRole != null)
           ? path
           : '/welcome',
@@ -56,6 +56,7 @@ String? routeRedirect(
     SessionPhase.restricted || SessionPhase.error => '/status',
     SessionPhase.ready =>
       (path == homePath(session.snapshot!.account.primaryRoleLabel!) ||
+              path == '/demo' ||
               path == '/profile' ||
               path.startsWith('/profile/edit') ||
               path == '/discover' ||
@@ -87,7 +88,9 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.listen(sessionProvider, (_, next) => refresh.refresh());
   ref.listen(selectedRoleProvider, (_, next) => refresh.refresh());
   final router = GoRouter(
-    initialLocation: '/startup',
+    initialLocation: ref.read(configProvider).name == 'GGs Demo'
+        ? '/demo'
+        : '/startup',
     refreshListenable: refresh,
     redirect: (_, state) => routeRedirect(
       ref.read(sessionProvider),
