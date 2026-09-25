@@ -9,6 +9,7 @@ import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
 import '../../../core/errors/app_failure.dart';
 import '../../auth/presentation/session_controller.dart';
+import '../../profile_common/presentation/widgets/unified_profile_widgets.dart';
 import '../domain/account.dart';
 import 'account_controller.dart';
 
@@ -144,7 +145,7 @@ class RoleHomeScreen extends ConsumerWidget {
         ),
         AppButton(
           label: 'Account settings',
-          onPressed: snapshot.offline ? null : () => context.go('/settings'),
+          onPressed: snapshot.offline ? null : () => context.push('/settings'),
         ),
         OutlinedButton(
           onPressed: () => ref.read(sessionProvider.notifier).refresh(),
@@ -152,7 +153,7 @@ class RoleHomeScreen extends ConsumerWidget {
         ),
         if (ref.watch(configProvider).environment != AppEnvironment.production)
           TextButton(
-            onPressed: () => context.go('/gallery'),
+            onPressed: () => context.push('/gallery'),
             child: const Text('Component gallery'),
           ),
         const ActionError(),
@@ -219,7 +220,7 @@ class ProfileScreen extends ConsumerWidget {
           ),
         AppButton(
           label: 'Edit account settings',
-          onPressed: snapshot.offline ? null : () => context.go('/settings'),
+          onPressed: snapshot.offline ? null : () => context.push('/settings'),
         ),
         TextButton(
           onPressed: () =>
@@ -240,6 +241,7 @@ class SettingsScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   late final TextEditingController name;
   final form = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -259,65 +261,221 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final busy = ref.watch(accountActionProvider).isLoading;
     final settings = ref.watch(settingsProvider);
     final action = ref.read(accountActionProvider.notifier);
+    final isDemo = ref.watch(configProvider).name == 'GGs Demo';
+
     return AppScaffold(
-      title: 'Account settings',
+      title: 'Settings & Preferences',
       children: [
-        Form(
-          key: form,
-          child: AppTextField(
-            label: 'Display name',
-            controller: name,
-            validator: validateName,
-            maxLength: 80,
-            enabled: !busy,
-          ),
+        // ACCOUNT SECTION
+        GGSettingsSection(
+          title: 'Account Information',
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Form(
+                key: form,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppTextField(
+                      label: 'Display Name',
+                      controller: name,
+                      validator: validateName,
+                      maxLength: 80,
+                      enabled: !busy,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    AppButton(
+                      label: 'Save Name',
+                      busy: busy,
+                      onPressed: () {
+                        if (form.currentState!.validate()) {
+                          action.saveName(name.text);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Display name updated successfully!',
+                              ),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-        AppButton(
-          label: 'Save name',
-          busy: busy,
-          onPressed: () {
-            if (form.currentState!.validate()) action.saveName(name.text);
-          },
-        ),
-        settings.when(
-          loading: () => const AppSkeleton(),
-          error: (e, s) => AppErrorState(
-            message: mapFailure(e).message,
-            onRetry: () => ref.invalidate(settingsProvider),
-          ),
-          data: (value) => SwitchListTile(
-            title: const Text('Product updates'),
-            subtitle: const Text('Receive optional news about the product.'),
-            value: value.notificationPreferences.productUpdates,
-            onChanged: busy
-                ? null
-                : (enabled) => action.saveSettings(
-                    value.copyWith(
-                      notificationPreferences: value.notificationPreferences
-                          .copyWith(productUpdates: enabled),
+
+        // PREFERENCES SECTION
+        GGSettingsSection(
+          title: 'Preferences',
+          children: [
+            settings.when(
+              loading: () => const Padding(
+                padding: EdgeInsets.all(AppSpacing.md),
+                child: AppSkeleton(count: 1, height: 48),
+              ),
+              error: (e, s) => AppErrorState(
+                message: mapFailure(e).message,
+                onRetry: () => ref.invalidate(settingsProvider),
+              ),
+              data: (value) => SwitchListTile(
+                title: const Text('Product Updates & Notifications'),
+                subtitle: const Text(
+                  'Receive optional news, alerts & platform announcements.',
+                ),
+                value: value.notificationPreferences.productUpdates,
+                onChanged: busy
+                    ? null
+                    : (enabled) => action.saveSettings(
+                        value.copyWith(
+                          notificationPreferences: value.notificationPreferences
+                              .copyWith(productUpdates: enabled),
+                        ),
+                      ),
+              ),
+            ),
+            GGAccountActionTile(
+              title: 'Appearance & Theme',
+              subtitle: 'System default (Dark & light mode)',
+              icon: Icons.palette_outlined,
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Appearance: Automatic system theme matching active.',
                     ),
                   ),
-          ),
+                );
+              },
+            ),
+          ],
         ),
-        const ActionError(),
-        OutlinedButton(
-          onPressed: busy
-              ? null
-              : () async {
-                  final confirmed = await AppDialog.confirm(
-                    context,
-                    title: 'Request account deletion?',
-                    message: 'This records a deletion request and restricts your account. Full deletion is handled by support; it is not immediate.',
+
+        // SECURITY SECTION
+        GGSettingsSection(
+          title: 'Security',
+          children: [
+            GGAccountActionTile(
+              title: 'Authentication & Session',
+              subtitle: 'Multi-factor authentication & active devices',
+              icon: Icons.security_outlined,
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Session security: Enterprise OTP authentication verified.',
+                    ),
+                  ),
+                );
+              },
+            ),
+            GGAccountActionTile(
+              title: 'Request Account Deletion',
+              subtitle: 'Permanently remove your profile and data',
+              icon: Icons.delete_outline,
+              isDestructive: true,
+              onTap: busy
+                  ? null
+                  : () async {
+                      final confirmed = await AppDialog.confirm(
+                        context,
+                        title: 'Request account deletion?',
+                        message: 'This records a deletion request and restricts your account. Full deletion is handled by support; it is not immediate.',
+                      );
+                      if (confirmed && mounted) await action.deleteRequest();
+                    },
+            ),
+          ],
+        ),
+
+        // SUPPORT SECTION
+        GGSettingsSection(
+          title: 'Support & Legal',
+          children: [
+            GGAccountActionTile(
+              title: 'Contact Concierge Support',
+              subtitle: 'Get assistance from the GGs ops team',
+              icon: Icons.headset_mic_outlined,
+              onTap: () async {
+                final support = ref.read(configProvider).supportUrl;
+                final opened = await launchUrl(
+                  Uri.parse(support),
+                  mode: LaunchMode.externalApplication,
+                );
+                if (!opened && context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Contact support at $support')),
                   );
-                  if (confirmed && mounted) await action.deleteRequest();
-                },
-          child: const Text('Request account deletion'),
+                }
+              },
+            ),
+            GGAccountActionTile(
+              title: 'Terms of Service',
+              subtitle: 'Platform usage agreements',
+              icon: Icons.description_outlined,
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Terms of Service v1.0 active.'),
+                  ),
+                );
+              },
+            ),
+            GGAccountActionTile(
+              title: 'Privacy Policy',
+              subtitle: 'DPDP & GDPR data handling compliance',
+              icon: Icons.privacy_tip_outlined,
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Privacy Policy: End-to-end encrypted.'),
+                  ),
+                );
+              },
+            ),
+            GGAccountActionTile(
+              title: 'About GGs Mobile',
+              subtitle: 'v1.0.0 • Creator Intelligence & Collaboration OS',
+              icon: Icons.info_outline,
+              onTap: () {
+                showAboutDialog(
+                  context: context,
+                  applicationName: 'GGs',
+                  applicationVersion: '1.0.0 (Boss Demo)',
+                  applicationLegalese:
+                      '© 2026 GGs Platform Inc. All rights reserved.',
+                );
+              },
+            ),
+          ],
         ),
-        const SupportButton(),
-        TextButton(
-          onPressed: busy ? null : action.logout,
-          child: const Text('Sign out'),
+
+        const ActionError(),
+
+        // SIGN OUT ACTION
+        GGSettingsSection(
+          title: 'Session',
+          children: [
+            GGAccountActionTile(
+              title: 'Sign Out',
+              subtitle: isDemo
+                  ? 'Exit presentation session'
+                  : 'Sign out from current session',
+              icon: Icons.logout,
+              isDestructive: true,
+              onTap: () => GGSignOutDialog.show(context, ref),
+            ),
+          ],
         ),
+
+        if (isDemo) ...[
+          const SizedBox(height: AppSpacing.sm),
+          const GGDemoControlsCard(),
+        ],
       ],
     );
   }

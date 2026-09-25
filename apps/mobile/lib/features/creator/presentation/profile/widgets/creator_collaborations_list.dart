@@ -27,7 +27,12 @@ class CreatorCollaborationsList extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Past Collaborations', style: AppTypography.heading),
+              const Expanded(
+                child: Text(
+                  'Past Collaborations',
+                  style: AppTypography.heading,
+                ),
+              ),
               if (onAddPressed != null)
                 TextButton.icon(
                   onPressed: onAddPressed,

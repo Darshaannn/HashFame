@@ -38,14 +38,14 @@ class BrandShell extends StatelessWidget {
             label: 'Discover',
           ),
           NavigationDestination(
-            icon: Icon(Icons.bookmark_border),
-            selectedIcon: Icon(Icons.bookmark),
-            label: 'Shortlists',
-          ),
-          NavigationDestination(
             icon: Icon(Icons.campaign_outlined),
             selectedIcon: Icon(Icons.campaign),
             label: 'Campaigns',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bookmark_border),
+            selectedIcon: Icon(Icons.bookmark),
+            label: 'Shortlists',
           ),
           NavigationDestination(
             icon: Icon(Icons.business_outlined),

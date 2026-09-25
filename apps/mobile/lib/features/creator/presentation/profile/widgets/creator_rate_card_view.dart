@@ -30,7 +30,9 @@ class CreatorRateCardView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Rate Card', style: AppTypography.heading),
+              const Expanded(
+                child: Text('Rate Card', style: AppTypography.heading),
+              ),
               if (onAddPressed != null)
                 TextButton.icon(
                   onPressed: onAddPressed,

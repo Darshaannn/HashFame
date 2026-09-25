@@ -38,7 +38,9 @@ class CreatorSocialAccountsCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Social Platforms', style: AppTypography.heading),
+              const Expanded(
+                child: Text('Social Platforms', style: AppTypography.heading),
+              ),
               if (onAddPressed != null)
                 TextButton.icon(
                   onPressed: onAddPressed,

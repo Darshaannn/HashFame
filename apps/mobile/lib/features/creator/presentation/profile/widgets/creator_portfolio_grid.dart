@@ -28,7 +28,9 @@ class CreatorPortfolioGrid extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Portfolio & Work', style: AppTypography.heading),
+              const Expanded(
+                child: Text('Portfolio & Work', style: AppTypography.heading),
+              ),
               if (onAddPressed != null)
                 TextButton.icon(
                   onPressed: onAddPressed,

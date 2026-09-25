@@ -31,7 +31,10 @@ class DemoSheetCreatorImporter {
       final row = rows[i];
       if (row.isEmpty) continue;
       final name = row.isNotEmpty ? row[0].trim() : '';
-      if (name.isEmpty || name.toLowerCase() == 'creators' || name.startsWith('Title:') || name.startsWith('Source:')) {
+      if (name.isEmpty ||
+          name.toLowerCase() == 'creators' ||
+          name.startsWith('Title:') ||
+          name.startsWith('Source:')) {
         continue;
       }
 
@@ -86,7 +89,10 @@ class DemoSheetCreatorImporter {
       final row = rows[i];
       if (row.isEmpty) continue;
       final name = row.isNotEmpty ? row[0].trim() : '';
-      if (name.isEmpty || name.toLowerCase() == 'creators' || name.startsWith('Title:') || name.startsWith('Source:')) {
+      if (name.isEmpty ||
+          name.toLowerCase() == 'creators' ||
+          name.startsWith('Title:') ||
+          name.startsWith('Source:')) {
         continue;
       }
 
@@ -106,7 +112,8 @@ class DemoSheetCreatorImporter {
       final id = 'sheet_creator_${i}_${_slugify(handle)}';
 
       final matchingCat = availableCategories.firstWhere(
-        (c) => c.name.toLowerCase().contains(categoryName.toLowerCase()) ||
+        (c) =>
+            c.name.toLowerCase().contains(categoryName.toLowerCase()) ||
             categoryName.toLowerCase().contains(c.name.toLowerCase()),
         orElse: () => Category(
           id: 'cat_${_slugify(categoryName)}',
@@ -133,13 +140,16 @@ class DemoSheetCreatorImporter {
         userId: id,
         displayName: name,
         professionalName: handle.isNotEmpty ? handle : null,
-        bio: 'Professional content creator specializing in $categoryName in ${city ?? "India"}. Focused on high-engagement visual storytelling and authentic brand collaborations.',
+        bio:
+            'Professional content creator specializing in $categoryName in ${city ?? "India"}. Focused on high-engagement visual storytelling and authentic brand collaborations.',
         location: LocationData(
           city: city,
           state: _inferState(city),
           country: 'IN',
         ),
-        availability: const CreatorAvailability(status: AvailabilityStatus.open),
+        availability: const CreatorAvailability(
+          status: AvailabilityStatus.open,
+        ),
         isRepresented: i % 4 == 0,
         onboardingStep: 5,
         onboardingCompleted: true,
@@ -216,7 +226,8 @@ class DemoSheetCreatorImporter {
         final numPart = double.parse(cleaned.substring(0, cleaned.length - 1));
         return (numPart * 1000).round();
       } else {
-        return int.tryParse(cleaned) ?? (double.tryParse(cleaned)?.round() ?? 0);
+        return int.tryParse(cleaned) ??
+            (double.tryParse(cleaned)?.round() ?? 0);
       }
     } catch (_) {
       return 0;
@@ -226,7 +237,10 @@ class DemoSheetCreatorImporter {
   static double _parseRate(String costRaw, String usage3M, String usage6M) {
     for (final raw in [costRaw, usage3M, usage6M]) {
       if (raw.isEmpty) continue;
-      final cleaned = raw.replaceAll(',', '').replaceAll(' ', '').replaceAll('₹', '');
+      final cleaned = raw
+          .replaceAll(',', '')
+          .replaceAll(' ', '')
+          .replaceAll('₹', '');
       final parsed = double.tryParse(cleaned);
       if (parsed != null && parsed > 0) {
         return parsed;
@@ -238,10 +252,15 @@ class DemoSheetCreatorImporter {
   static String _normalizeCategory(String raw) {
     if (raw.isEmpty) return 'Lifestyle & Vlogs';
     final lower = raw.toLowerCase();
-    if (lower.contains('bike') || lower.contains('car') || lower.contains('truck') || lower.contains('auto')) {
+    if (lower.contains('bike') ||
+        lower.contains('car') ||
+        lower.contains('truck') ||
+        lower.contains('auto')) {
       return 'Technology & Gadgets';
     }
-    if (lower.contains('fashion') || lower.contains('model') || lower.contains('actor')) {
+    if (lower.contains('fashion') ||
+        lower.contains('model') ||
+        lower.contains('actor')) {
       return 'Fashion & Style';
     }
     if (lower.contains('beauty') || lower.contains('skincare')) {
@@ -256,7 +275,11 @@ class DemoSheetCreatorImporter {
     if (lower.contains('travel') || lower.contains('wander')) {
       return 'Travel & Adventure';
     }
-    if (lower.contains('home') || lower.contains('decor') || lower.contains('interior') || lower.contains('mom') || lower.contains('real estate')) {
+    if (lower.contains('home') ||
+        lower.contains('decor') ||
+        lower.contains('interior') ||
+        lower.contains('mom') ||
+        lower.contains('real estate')) {
       return 'Lifestyle & Vlogs';
     }
     return raw.trim();
@@ -291,6 +314,9 @@ class DemoSheetCreatorImporter {
   }
 
   static String _slugify(String input) {
-    return input.toLowerCase().replaceAll(RegExp(r'[^a-z0-9_]'), '_').replaceAll(RegExp(r'_+'), '_');
+    return input
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '_')
+        .replaceAll(RegExp(r'_+'), '_');
   }
 }

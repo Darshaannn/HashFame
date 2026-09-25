@@ -92,23 +92,28 @@ class CampaignOpportunityCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Compensation',
-                      style: TextStyle(fontSize: 11, color: AppColors.muted),
-                    ),
-                    Text(
-                      _buildCompensationText(),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.ink,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Compensation',
+                        style: TextStyle(fontSize: 11, color: AppColors.muted),
                       ),
-                    ),
-                  ],
+                      Text(
+                        _buildCompensationText(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.ink,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(width: AppSpacing.sm),
                 if (item.myApplicationStatus != null)
                   AppBadge(
                     label:

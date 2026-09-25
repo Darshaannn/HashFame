@@ -43,9 +43,9 @@ class _CreatorShellState extends State<CreatorShell> {
             label: 'Discover Work',
           ),
           NavigationDestination(
-            icon: Icon(Icons.chat_bubble_outline),
-            selectedIcon: Icon(Icons.chat_bubble),
-            label: 'Inbox',
+            icon: Icon(Icons.assignment_outlined),
+            selectedIcon: Icon(Icons.assignment),
+            label: 'Applications',
           ),
           NavigationDestination(
             icon: Icon(Icons.notifications_outlined),

@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:ggs_mobile/app/providers.dart';
-import 'package:ggs_mobile/core/design_system/components.dart';
-import 'package:ggs_mobile/core/design_system/tokens.dart';
-import 'package:ggs_mobile/core/errors/app_failure.dart';
-import 'package:ggs_mobile/features/account/presentation/account_controller.dart';
-import 'package:ggs_mobile/features/auth/presentation/session_controller.dart';
-import 'package:ggs_mobile/features/brand/domain/brand_profile.dart';
+import '../../../app/providers.dart';
+import '../../../core/design_system/components.dart';
+import '../../../core/design_system/tokens.dart';
+import '../../../core/errors/app_failure.dart';
+import '../../auth/presentation/session_controller.dart';
+import '../../brand/domain/brand_profile.dart';
+import '../../profile_common/presentation/widgets/unified_profile_widgets.dart';
+import 'brand_shell.dart';
 
 final brandProfileProvider = FutureProvider.autoDispose<BrandMarketerProfile>((
   ref,
@@ -31,119 +32,139 @@ class BrandHomeScreen extends ConsumerWidget {
     }
 
     final account = snapshot.account;
+    final brand = brandAsync.value;
+    final orgName = brand?.organizationName ?? 'Nova Beauty India';
 
-    return AppScaffold(
-      title: 'Brand & Marketer Home',
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.settings_outlined),
-          tooltip: 'Settings',
-          onPressed: () => context.go('/settings'),
-        ),
-      ],
-      children: [
-        Row(
-          children: [
-            AppAvatar(label: account.displayName),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hello, ${account.displayName}',
-                    style: AppTypography.heading,
-                  ),
-                  const Text(
-                    'Marketer Workspace',
-                    style: TextStyle(color: AppColors.muted),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: AppSpacing.sm),
-
-        // Brand Organization Status Card
-        brandAsync.when(
-          loading: () => const AppSkeleton(),
-          error: (e, _) => AppErrorState(message: mapFailure(e).message),
-          data: (profile) => AppCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Company & Brand Profile',
-                  style: AppTypography.heading,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  'Organization: ${profile.organizationName ?? 'Not yet linked to legal org'}',
-                ),
-                if (profile.jobTitle != null && profile.jobTitle!.isNotEmpty)
-                  Text('Role: ${profile.jobTitle}'),
-                const SizedBox(height: AppSpacing.sm),
-                Text('Managed Brands: ${profile.managedBrands.length} active'),
-                const SizedBox(height: AppSpacing.md),
-                OutlinedButton.icon(
-                  onPressed: () => context.go('/profile'),
-                  icon: const Icon(Icons.business_outlined, size: 18),
-                  label: const Text('Manage Brand Details'),
-                ),
-              ],
-            ),
+    return BrandShell(
+      currentIndex: 0,
+      onNavigationIndexChanged: (idx) {
+        if (idx == 0) return;
+        if (idx == 1) context.go('/discover');
+        if (idx == 2) context.go('/campaigns');
+        if (idx == 3) context.go('/shortlists');
+        if (idx == 4) context.go('/profile');
+      },
+      child: AppScaffold(
+        title: 'Brand Workspace',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings_outlined),
+            tooltip: 'Settings',
+            onPressed: () => context.push('/settings'),
           ),
-        ),
+        ],
+        children: [
+          // Header
+          GGProfileHeader(
+            name: brand?.displayName ?? account.displayName,
+            roleOrTitle: brand?.jobTitle ?? 'Brand Marketer',
+            organization: orgName,
+            isVerified: true,
+            onEditPressed: () => context.push('/profile/edit/brand'),
+          ),
 
-        // Quick Actions
-        AppCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          // Quick Actions
+          GGSettingsSection(
+            title: 'Quick Actions',
             children: [
-              const Text('Marketer Actions', style: AppTypography.heading),
-              const SizedBox(height: AppSpacing.sm),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  AppButton(
-                    label: 'Discover Creators',
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Creator search and discovery opens in Phase 2B.',
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  OutlinedButton(
-                    onPressed: () => context.go('/profile'),
-                    child: const Text('Company Profile'),
-                  ),
-                ],
+              GGAccountActionTile(
+                title: 'Discover Creators',
+                subtitle: 'Filter by niche, followers, city & rates',
+                icon: Icons.search,
+                onTap: () => context.go('/discover'),
+              ),
+              GGAccountActionTile(
+                title: 'Create Campaign',
+                subtitle: 'Post a new campaign brief for creators',
+                icon: Icons.add_circle_outline,
+                onTap: () => context.push('/campaigns/new'),
+              ),
+              GGAccountActionTile(
+                title: 'Manage Campaigns',
+                subtitle: 'Review applicants and live campaigns',
+                icon: Icons.campaign_outlined,
+                onTap: () => context.go('/campaigns'),
+              ),
+              GGAccountActionTile(
+                title: 'Saved Shortlists',
+                subtitle: 'View curated creator rosters',
+                icon: Icons.bookmark_border,
+                onTap: () => context.go('/shortlists'),
               ),
             ],
           ),
-        ),
 
-        // Campaigns Empty State
-        const AppEmptyState(
-          title: 'Campaigns & Collaboration Workspace',
-          message: 'Campaign briefs, proposals, creator rosters, and deal workflows will be available in Phase 2C.',
-        ),
-
-        const SizedBox(height: AppSpacing.md),
-        TextButton(
-          onPressed: ref.watch(accountActionProvider).isLoading
-              ? null
-              : () => ref.read(accountActionProvider.notifier).logout(),
-          child: const Text('Sign Out'),
-        ),
-      ],
+          // Brand Organization Summary Card
+          brandAsync.when(
+            loading: () => const AppSkeleton(count: 1),
+            error: (e, _) => AppErrorState(message: mapFailure(e).message),
+            data: (profile) => AppCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          'Managed Brands & Portfolio',
+                          style: AppTypography.heading,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      AppBadge(label: '${profile.managedBrands.length} Active'),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    profile.bio ??
+                        'Leading brand partnerships and digital campaigns.',
+                    style: const TextStyle(
+                      color: AppColors.inkSecondary,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  for (final b in profile.managedBrands)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.check_circle_outline,
+                            size: 16,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            b.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            '• ${b.industry}',
+                            style: const TextStyle(
+                              color: AppColors.muted,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: AppSpacing.sm),
+                  OutlinedButton(
+                    onPressed: () => context.go('/profile'),
+                    child: const Text('View Full Profile'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -154,81 +175,180 @@ class BrandProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final brandAsync = ref.watch(brandProfileProvider);
+    final isDemo = ref.watch(configProvider).name == 'GGs Demo';
 
-    return AppScaffold(
-      title: 'Company & Marketer Profile',
-      children: [
-        brandAsync.when(
-          loading: () => const AppSkeleton(),
-          error: (e, _) => AppErrorState(
-            message: mapFailure(e).message,
-            onRetry: () => ref.invalidate(brandProfileProvider),
+    return BrandShell(
+      currentIndex: 4,
+      onNavigationIndexChanged: (idx) {
+        if (idx == 0) context.go('/home/brand_marketer');
+        if (idx == 1) context.go('/discover');
+        if (idx == 2) context.go('/campaigns');
+        if (idx == 3) context.go('/shortlists');
+        if (idx == 4) return;
+      },
+      child: AppScaffold(
+        title: 'Brand Profile',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings_outlined),
+            tooltip: 'Settings',
+            onPressed: () => context.push('/settings'),
           ),
-          data: (profile) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(profile.displayName, style: AppTypography.heading),
-                    if (profile.jobTitle != null)
-                      Text(
-                        profile.jobTitle!,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                    if (profile.workEmail != null)
-                      Text('Work Email: ${profile.workEmail}'),
-                    if (profile.phone != null) Text('Phone: ${profile.phone}'),
-                    const SizedBox(height: AppSpacing.sm),
-                    Text(profile.bio ?? 'No professional bio added.'),
-                  ],
+        ],
+        children: [
+          brandAsync.when(
+            loading: () => const AppSkeleton(),
+            error: (e, _) => AppErrorState(
+              message: mapFailure(e).message,
+              onRetry: () => ref.invalidate(brandProfileProvider),
+            ),
+            data: (profile) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GGProfileHeader(
+                  name: profile.displayName,
+                  roleOrTitle: profile.jobTitle ?? 'Brand Marketer',
+                  organization: profile.organizationName ?? 'Nova Beauty India',
+                  isVerified: true,
+                  onEditPressed: () => context.push('/profile/edit/brand'),
                 ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              AppCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Organization / Brands',
-                      style: AppTypography.heading,
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    Text(
-                      'Organization Name: ${profile.organizationName ?? "Independent Marketer"}',
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    if (profile.managedBrands.isEmpty)
+                const SizedBox(height: AppSpacing.md),
+
+                // Organization Overview
+                AppCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       const Text(
-                        'No specific brands registered under this organization.',
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          color: AppColors.muted,
+                        'Company & Organization',
+                        style: AppTypography.heading,
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        'Organization: ${profile.organizationName ?? "Independent Marketer"}',
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      if (profile.workEmail != null)
+                        Text('Work Email: ${profile.workEmail}'),
+                      if (profile.phone != null)
+                        Text('Phone: ${profile.phone}'),
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        profile.bio ?? 'No professional bio added.',
+                        style: const TextStyle(
+                          color: AppColors.inkSecondary,
+                          fontSize: 13,
                         ),
-                      )
-                    else
-                      for (final b in profile.managedBrands)
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(
-                            b.name,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+
+                // Managed Brands
+                AppCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Managed Brand Lines',
+                        style: AppTypography.heading,
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      if (profile.managedBrands.isEmpty)
+                        const Text(
+                          'No specific brands registered under this organization.',
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: AppColors.muted,
                           ),
-                          subtitle: Text(
-                            [
-                              b.industry,
-                              b.headquarters,
-                            ].whereType<String>().join(' • '),
+                        )
+                      else
+                        for (final b in profile.managedBrands)
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(
+                              b.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            subtitle: Text(
+                              [
+                                b.industry,
+                                b.headquarters,
+                              ].whereType<String>().join(' • '),
+                            ),
                           ),
-                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+
+                // Account & Settings Menu
+                GGSettingsSection(
+                  title: 'Account',
+                  children: [
+                    GGAccountActionTile(
+                      title: 'Edit Brand Profile',
+                      subtitle: 'Update marketer info and organization details',
+                      icon: Icons.edit_outlined,
+                      onTap: () => context.push('/profile/edit/brand'),
+                    ),
+                    GGAccountActionTile(
+                      title: 'Account Settings',
+                      subtitle: 'Preferences, security and notifications',
+                      icon: Icons.settings_outlined,
+                      onTap: () => context.push('/settings'),
+                    ),
+                    GGAccountActionTile(
+                      title: 'Help & Support',
+                      subtitle: 'Contact concierge team & platform FAQs',
+                      icon: Icons.help_outline,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Support: support@ggs.platform • Live concierge available 24/7.',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    GGAccountActionTile(
+                      title: 'Privacy Policy & Terms',
+                      subtitle: 'Review legal terms & privacy protections',
+                      icon: Icons.privacy_tip_outlined,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'GGs enforces full enterprise confidentiality & GDPR/DPDP compliance.',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    GGAccountActionTile(
+                      title: 'Sign Out',
+                      subtitle: isDemo
+                          ? 'Exit presentation session'
+                          : 'Log out from account',
+                      icon: Icons.logout,
+                      isDestructive: true,
+                      onTap: () => GGSignOutDialog.show(context, ref),
+                    ),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: AppSpacing.md),
+
+                // Demo Controls
+                if (isDemo) const GGDemoControlsCard(),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

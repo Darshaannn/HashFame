@@ -62,4 +62,3 @@ class DemoAppRoot extends StatelessWidget {
     return const FoundationApp();
   }
 }
-
