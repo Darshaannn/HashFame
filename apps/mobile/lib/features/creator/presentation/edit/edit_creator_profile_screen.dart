@@ -5,16 +5,19 @@ import 'package:go_router/go_router.dart';
 import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/core/errors/app_failure.dart';
+
 import '../profile/creator_profile_controller.dart';
 
 class EditCreatorProfileScreen extends ConsumerStatefulWidget {
   const EditCreatorProfileScreen({super.key});
 
   @override
-  ConsumerState<EditCreatorProfileScreen> createState() => _EditCreatorProfileScreenState();
+  ConsumerState<EditCreatorProfileScreen> createState() =>
+      _EditCreatorProfileScreenState();
 }
 
-class _EditCreatorProfileScreenState extends ConsumerState<EditCreatorProfileScreen> {
+class _EditCreatorProfileScreenState
+    extends ConsumerState<EditCreatorProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _profNameController = TextEditingController();
   final _bioController = TextEditingController();
@@ -43,7 +46,9 @@ class _EditCreatorProfileScreenState extends ConsumerState<EditCreatorProfileScr
       _cityController.text = profile.location.city ?? '';
       _stateController.text = profile.location.state ?? '';
       _selectedCategoryIds.addAll(profile.primaryCategories.map((c) => c.id));
-      _selectedCategoryIds.addAll(profile.additionalCategories.map((c) => c.id));
+      _selectedCategoryIds.addAll(
+        profile.additionalCategories.map((c) => c.id),
+      );
       _selectedLanguageCodes.addAll(profile.languages.map((l) => l.code));
       _initialized = true;
     }
@@ -121,7 +126,8 @@ class _EditCreatorProfileScreenState extends ConsumerState<EditCreatorProfileScr
               const SizedBox(height: AppSpacing.sm),
               categoriesAsync.when(
                 loading: () => const AppSkeleton(),
-                error: (e, _) => Text('Could not load categories: ${mapFailure(e).message}'),
+                error: (e, _) =>
+                    Text('Could not load categories: ${mapFailure(e).message}'),
                 data: (cats) => Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -151,12 +157,15 @@ class _EditCreatorProfileScreenState extends ConsumerState<EditCreatorProfileScr
               const SizedBox(height: AppSpacing.sm),
               languagesAsync.when(
                 loading: () => const AppSkeleton(),
-                error: (e, _) => Text('Could not load languages: ${mapFailure(e).message}'),
+                error: (e, _) =>
+                    Text('Could not load languages: ${mapFailure(e).message}'),
                 data: (langs) => Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: langs.map((lang) {
-                    final isSelected = _selectedLanguageCodes.contains(lang.code);
+                    final isSelected = _selectedLanguageCodes.contains(
+                      lang.code,
+                    );
                     return AppChip(
                       label: '${lang.name} (${lang.nativeName})',
                       selected: isSelected,
@@ -182,7 +191,9 @@ class _EditCreatorProfileScreenState extends ConsumerState<EditCreatorProfileScr
                 busy: busy,
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    final notifier = ref.read(creatorControllerProvider.notifier);
+                    final notifier = ref.read(
+                      creatorControllerProvider.notifier,
+                    );
                     await notifier.updateBasicProfile(
                       professionalName: _profNameController.text.trim(),
                       bio: _bioController.text.trim(),
@@ -201,9 +212,12 @@ class _EditCreatorProfileScreenState extends ConsumerState<EditCreatorProfileScr
                           ? _selectedLanguageCodes.first
                           : null,
                     );
-                    if (context.mounted && !ref.read(creatorControllerProvider).hasError) {
+                    if (context.mounted &&
+                        !ref.read(creatorControllerProvider).hasError) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Profile updated successfully!')),
+                        const SnackBar(
+                          content: Text('Profile updated successfully!'),
+                        ),
                       );
                       context.pop();
                     }

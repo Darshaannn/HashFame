@@ -41,7 +41,10 @@ class CreatorPortfolioGrid extends StatelessWidget {
           if (portfolio.isEmpty)
             const Text(
               'No portfolio items added yet. Showcase your top creations and viral videos to impress marketers.',
-              style: TextStyle(color: AppColors.muted, fontStyle: FontStyle.italic),
+              style: TextStyle(
+                color: AppColors.muted,
+                fontStyle: FontStyle.italic,
+              ),
             )
           else
             ListView.separated(
@@ -54,7 +57,9 @@ class CreatorPortfolioGrid extends StatelessWidget {
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    backgroundColor: Theme.of(context)
+                        .colorScheme
+                        .surfaceContainerHighest,
                     child: Icon(
                       item.contentType == PortfolioContentType.video
                           ? Icons.play_circle_outline
@@ -62,7 +67,10 @@ class CreatorPortfolioGrid extends StatelessWidget {
                       color: AppColors.primary,
                     ),
                   ),
-                  title: Text(item.title, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  title: Text(
+                    item.title,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                   subtitle: Text(
                     [
                       item.contentType.label,

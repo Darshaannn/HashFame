@@ -43,7 +43,10 @@ class CreatorRateCardView extends StatelessWidget {
           if (activeRates.isEmpty)
             const Text(
               'No rate items added. Defining standard rates helps brands book collaborations faster.',
-              style: TextStyle(color: AppColors.muted, fontStyle: FontStyle.italic),
+              style: TextStyle(
+                color: AppColors.muted,
+                fontStyle: FontStyle.italic,
+              ),
             )
           else
             ListView.separated(
@@ -60,12 +63,20 @@ class CreatorRateCardView extends StatelessWidget {
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                    backgroundColor: Theme.of(context)
+                        .colorScheme
+                        .primaryContainer,
                     child: const Icon(Icons.currency_rupee, size: 18),
                   ),
-                  title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  title: Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                   subtitle: rate.description?.isNotEmpty == true
-                      ? Text(rate.description!, style: const TextStyle(fontSize: 12))
+                      ? Text(
+                          rate.description!,
+                          style: const TextStyle(fontSize: 12),
+                        )
                       : null,
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,

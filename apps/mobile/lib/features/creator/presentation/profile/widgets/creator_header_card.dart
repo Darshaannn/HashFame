@@ -5,7 +5,6 @@ import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
 import 'package:ggs_mobile/features/profile_common/domain/verification.dart';
 
-
 class CreatorHeaderCard extends StatelessWidget {
   const CreatorHeaderCard({
     super.key,
@@ -21,7 +20,8 @@ class CreatorHeaderCard extends StatelessWidget {
     final name = profile.displayName.isEmpty ? 'Creator' : profile.displayName;
     final profName = profile.professionalName;
     final isVerified =
-        profile.verificationSummary.identityStatus == FieldVerificationStatus.verified;
+        profile.verificationSummary.identityStatus ==
+        FieldVerificationStatus.verified;
 
     return AppCard(
       child: Column(
@@ -47,11 +47,17 @@ class CreatorHeaderCard extends StatelessWidget {
                         ),
                         if (isVerified) ...[
                           const SizedBox(width: 4),
-                          const Icon(Icons.verified, color: AppColors.primary, size: 20),
+                          const Icon(
+                            Icons.verified,
+                            color: AppColors.primary,
+                            size: 20,
+                          ),
                         ],
                       ],
                     ),
-                    if (profName != null && profName.isNotEmpty && profName != name)
+                    if (profName != null &&
+                        profName.isNotEmpty &&
+                        profName != name)
                       Text(
                         'aka $profName',
                         style: TextStyle(
@@ -76,7 +82,11 @@ class CreatorHeaderCard extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
             Row(
               children: [
-                Icon(Icons.business_center_outlined, size: 16, color: AppColors.muted),
+                Icon(
+                  Icons.business_center_outlined,
+                  size: 16,
+                  color: AppColors.muted,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   'Represented by Talent Agency',

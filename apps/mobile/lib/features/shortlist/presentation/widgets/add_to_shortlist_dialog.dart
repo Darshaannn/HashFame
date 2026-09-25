@@ -17,7 +17,8 @@ class AddToShortlistDialog extends ConsumerStatefulWidget {
   final String creatorName;
 
   @override
-  ConsumerState<AddToShortlistDialog> createState() => _AddToShortlistDialogState();
+  ConsumerState<AddToShortlistDialog> createState() =>
+      _AddToShortlistDialogState();
 }
 
 class _AddToShortlistDialogState extends ConsumerState<AddToShortlistDialog> {
@@ -41,7 +42,9 @@ class _AddToShortlistDialogState extends ConsumerState<AddToShortlistDialog> {
     final busy = controllerState.isLoading;
 
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.card)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.card),
+      ),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: Padding(
@@ -64,7 +67,9 @@ class _AddToShortlistDialogState extends ConsumerState<AddToShortlistDialog> {
                 Row(
                   children: [
                     TextButton(
-                      onPressed: busy ? null : () => setState(() => _creatingNew = false),
+                      onPressed: busy
+                          ? null
+                          : () => setState(() => _creatingNew = false),
                       child: const Text('Choose Existing'),
                     ),
                   ],
@@ -81,7 +86,8 @@ class _AddToShortlistDialogState extends ConsumerState<AddToShortlistDialog> {
                           const SizedBox(height: AppSpacing.sm),
                           AppButton(
                             label: 'Create Shortlist',
-                            onPressed: () => setState(() => _creatingNew = true),
+                            onPressed: () =>
+                                setState(() => _creatingNew = true),
                           ),
                         ],
                       );
@@ -90,15 +96,20 @@ class _AddToShortlistDialogState extends ConsumerState<AddToShortlistDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         DropdownButtonFormField<String>(
-                          value: _selectedShortlistId ?? lists.first.id,
-                          decoration: const InputDecoration(labelText: 'Select Shortlist'),
+                          initialValue: _selectedShortlistId ?? lists.first.id,
+                          decoration: const InputDecoration(
+                            labelText: 'Select Shortlist',
+                          ),
                           items: lists.map((l) {
                             return DropdownMenuItem(
                               value: l.id,
                               child: Text('${l.name} (${l.memberCount})'),
                             );
                           }).toList(),
-                          onChanged: busy ? null : (val) => setState(() => _selectedShortlistId = val),
+                          onChanged: busy
+                              ? null
+                              : (val) =>
+                                    setState(() => _selectedShortlistId = val),
                         ),
                         const SizedBox(height: AppSpacing.xs),
                         Align(
@@ -106,7 +117,9 @@ class _AddToShortlistDialogState extends ConsumerState<AddToShortlistDialog> {
                           child: TextButton.icon(
                             icon: const Icon(Icons.add, size: 16),
                             label: const Text('Create New List'),
-                            onPressed: busy ? null : () => setState(() => _creatingNew = true),
+                            onPressed: busy
+                                ? null
+                                : () => setState(() => _creatingNew = true),
                           ),
                         ),
                       ],
@@ -116,12 +129,17 @@ class _AddToShortlistDialogState extends ConsumerState<AddToShortlistDialog> {
               ],
               const SizedBox(height: AppSpacing.sm),
               DropdownButtonFormField<ShortlistMemberStatus>(
-                value: _selectedStatus,
+                initialValue: _selectedStatus,
                 decoration: const InputDecoration(labelText: 'Workflow Status'),
                 items: ShortlistMemberStatus.values.map((s) {
                   return DropdownMenuItem(value: s, child: Text(s.label));
                 }).toList(),
-                onChanged: busy ? null : (val) => setState(() => _selectedStatus = val ?? ShortlistMemberStatus.potential),
+                onChanged: busy
+                    ? null
+                    : (val) => setState(
+                        () => _selectedStatus =
+                            val ?? ShortlistMemberStatus.potential,
+                      ),
               ),
               const SizedBox(height: AppSpacing.sm),
               AppTextField(
@@ -135,7 +153,9 @@ class _AddToShortlistDialogState extends ConsumerState<AddToShortlistDialog> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: busy ? null : () => Navigator.of(context).pop(false),
+                    onPressed: busy
+                        ? null
+                        : () => Navigator.of(context).pop(false),
                     child: const Text('Cancel'),
                   ),
                   const SizedBox(width: AppSpacing.sm),
@@ -143,17 +163,25 @@ class _AddToShortlistDialogState extends ConsumerState<AddToShortlistDialog> {
                     label: 'Save',
                     busy: busy,
                     onPressed: () async {
-                      final controller = ref.read(shortlistControllerProvider.notifier);
+                      final controller = ref.read(
+                        shortlistControllerProvider.notifier,
+                      );
                       var targetListId = _selectedShortlistId;
 
                       if (_creatingNew) {
                         final newName = _newListController.text.trim();
                         if (newName.isEmpty) return;
                         await controller.createShortlist(name: newName);
-                        final updatedLists = await ref.read(shortlistsListProvider.future);
-                        targetListId = updatedLists.where((l) => l.name == newName).firstOrNull?.id;
+                        final updatedLists = await ref.read(
+                          shortlistsListProvider.future,
+                        );
+                        targetListId = updatedLists
+                            .where((l) => l.name == newName)
+                            .firstOrNull
+                            ?.id;
                       } else if (targetListId == null) {
-                        final currentLists = shortlistsAsync.asData?.value ?? [];
+                        final currentLists =
+                            shortlistsAsync.asData?.value ?? [];
                         if (currentLists.isNotEmpty) {
                           targetListId = currentLists.first.id;
                         }
@@ -164,7 +192,9 @@ class _AddToShortlistDialogState extends ConsumerState<AddToShortlistDialog> {
                           shortlistId: targetListId,
                           creatorId: widget.creatorId,
                           status: _selectedStatus,
-                          notes: _notesController.text.trim().isNotEmpty ? _notesController.text.trim() : null,
+                          notes: _notesController.text.trim().isNotEmpty
+                              ? _notesController.text.trim()
+                              : null,
                         );
                         if (context.mounted) {
                           Navigator.of(context).pop(true);

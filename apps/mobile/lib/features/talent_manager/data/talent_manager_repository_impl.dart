@@ -60,7 +60,9 @@ class SupabaseTalentManagerDataSource implements TalentManagerDataSource {
   }
 
   @override
-  Future<TalentManagerProfile> updateProfile(TalentManagerProfile profile) async {
+  Future<TalentManagerProfile> updateProfile(
+    TalentManagerProfile profile,
+  ) async {
     await client.from('talent_manager_profiles').upsert({
       'user_id': _actor,
       'bio': profile.bio,

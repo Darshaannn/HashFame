@@ -51,18 +51,21 @@ abstract class ProfileCompletionCalculator {
     final recommendations = <MissingRecommendation>[];
 
     // 1. Profile photo (10%)
-    final hasAvatar = profile.avatarPath != null && profile.avatarPath!.isNotEmpty;
+    final hasAvatar =
+        profile.avatarPath != null && profile.avatarPath!.isNotEmpty;
     completedFields['avatar'] = hasAvatar;
     if (hasAvatar) {
       percentage += 10;
     } else {
-      recommendations.add(const MissingRecommendation(
-        key: 'avatar',
-        title: 'Add a profile photo',
-        description: 'Profiles with real photos receive significantly more partnership requests.',
-        weight: 10,
-        actionRoute: '/profile/edit',
-      ));
+      recommendations.add(
+        const MissingRecommendation(
+          key: 'avatar',
+          title: 'Add a profile photo',
+          description: 'Profiles with real photos receive significantly more partnership requests.',
+          weight: 10,
+          actionRoute: '/profile/edit',
+        ),
+      );
     }
 
     // 2. Bio (10%)
@@ -71,28 +74,35 @@ abstract class ProfileCompletionCalculator {
     if (hasBio) {
       percentage += 10;
     } else {
-      recommendations.add(const MissingRecommendation(
-        key: 'bio',
-        title: 'Add your professional bio',
-        description: 'Describe your niche, content style, and what brands you love working with.',
-        weight: 10,
-        actionRoute: '/profile/edit',
-      ));
+      recommendations.add(
+        const MissingRecommendation(
+          key: 'bio',
+          title: 'Add your professional bio',
+          description: 'Describe your niche, content style, and what brands you love working with.',
+          weight: 10,
+          actionRoute: '/profile/edit',
+        ),
+      );
     }
 
     // 3. Location (10%)
-    final hasLocation = profile.location.city != null && profile.location.city!.trim().isNotEmpty;
+    final hasLocation =
+        profile.location.city != null &&
+        profile.location.city!.trim().isNotEmpty;
     completedFields['location'] = hasLocation;
     if (hasLocation) {
       percentage += 10;
     } else {
-      recommendations.add(const MissingRecommendation(
-        key: 'location',
-        title: 'Specify your city & location',
-        description: 'Help brands find you for localized and regional campaigns.',
-        weight: 10,
-        actionRoute: '/profile/edit',
-      ));
+      recommendations.add(
+        const MissingRecommendation(
+          key: 'location',
+          title: 'Specify your city & location',
+          description:
+              'Help brands find you for localized and regional campaigns.',
+          weight: 10,
+          actionRoute: '/profile/edit',
+        ),
+      );
     }
 
     // 4. Categories (15%)
@@ -101,13 +111,16 @@ abstract class ProfileCompletionCalculator {
     if (hasCategories) {
       percentage += 15;
     } else {
-      recommendations.add(const MissingRecommendation(
-        key: 'categories',
-        title: 'Select your content categories',
-        description: 'Add your primary content domains (e.g., Tech, Fashion, Gaming).',
-        weight: 15,
-        actionRoute: '/profile/edit',
-      ));
+      recommendations.add(
+        const MissingRecommendation(
+          key: 'categories',
+          title: 'Select your content categories',
+          description:
+              'Add your primary content domains (e.g., Tech, Fashion, Gaming).',
+          weight: 15,
+          actionRoute: '/profile/edit',
+        ),
+      );
     }
 
     // 5. Languages (10%)
@@ -116,13 +129,15 @@ abstract class ProfileCompletionCalculator {
     if (hasLanguages) {
       percentage += 10;
     } else {
-      recommendations.add(const MissingRecommendation(
-        key: 'languages',
-        title: 'Add languages you create content in',
-        description: 'Highlight your multi-lingual reach to marketers.',
-        weight: 10,
-        actionRoute: '/profile/edit',
-      ));
+      recommendations.add(
+        const MissingRecommendation(
+          key: 'languages',
+          title: 'Add languages you create content in',
+          description: 'Highlight your multi-lingual reach to marketers.',
+          weight: 10,
+          actionRoute: '/profile/edit',
+        ),
+      );
     }
 
     // 6. Social Accounts (15%)
@@ -131,13 +146,15 @@ abstract class ProfileCompletionCalculator {
     if (hasSocials) {
       percentage += 15;
     } else {
-      recommendations.add(const MissingRecommendation(
-        key: 'socialAccounts',
-        title: 'Connect your social accounts',
-        description: 'Add your Instagram, YouTube, or LinkedIn handles.',
-        weight: 15,
-        actionRoute: '/profile/edit/socials',
-      ));
+      recommendations.add(
+        const MissingRecommendation(
+          key: 'socialAccounts',
+          title: 'Connect your social accounts',
+          description: 'Add your Instagram, YouTube, or LinkedIn handles.',
+          weight: 15,
+          actionRoute: '/profile/edit/socials',
+        ),
+      );
     }
 
     // 7. Rate Card (15%)
@@ -146,13 +163,16 @@ abstract class ProfileCompletionCalculator {
     if (hasRates) {
       percentage += 15;
     } else {
-      recommendations.add(const MissingRecommendation(
-        key: 'rateCard',
-        title: 'Set up your rate card',
-        description: 'List standard prices for Reels, Stories, or dedicated Videos.',
-        weight: 15,
-        actionRoute: '/profile/edit/rates',
-      ));
+      recommendations.add(
+        const MissingRecommendation(
+          key: 'rateCard',
+          title: 'Set up your rate card',
+          description:
+              'List standard prices for Reels, Stories, or dedicated Videos.',
+          weight: 15,
+          actionRoute: '/profile/edit/rates',
+        ),
+      );
     }
 
     // 8. Portfolio (10%)
@@ -161,13 +181,15 @@ abstract class ProfileCompletionCalculator {
     if (hasPortfolio) {
       percentage += 10;
     } else {
-      recommendations.add(const MissingRecommendation(
-        key: 'portfolio',
-        title: 'Add portfolio work',
-        description: 'Showcase top-performing content, viral reels, or previous brand posts.',
-        weight: 10,
-        actionRoute: '/profile/edit/portfolio',
-      ));
+      recommendations.add(
+        const MissingRecommendation(
+          key: 'portfolio',
+          title: 'Add portfolio work',
+          description: 'Showcase top-performing content, viral reels, or previous brand posts.',
+          weight: 10,
+          actionRoute: '/profile/edit/portfolio',
+        ),
+      );
     }
 
     // 9. Availability (5%)

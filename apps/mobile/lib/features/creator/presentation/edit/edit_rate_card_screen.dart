@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/core/errors/app_failure.dart';
+
 import '../../domain/rate_card.dart';
 import '../profile/creator_profile_controller.dart';
 
@@ -118,7 +119,8 @@ class _EditRateCardScreenState extends ConsumerState<EditRateCardScreen> {
                         .read(creatorControllerProvider.notifier)
                         .addRateItem(item);
 
-                    if (context.mounted && !ref.read(creatorControllerProvider).hasError) {
+                    if (context.mounted &&
+                        !ref.read(creatorControllerProvider).hasError) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Rate card item added!')),
                       );

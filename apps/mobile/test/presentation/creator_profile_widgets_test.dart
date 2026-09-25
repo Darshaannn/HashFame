@@ -47,7 +47,9 @@ void main() {
       expect(find.text('aka TechAarav'), findsOneWidget);
     });
 
-    testWidgets('shows represented badge when isRepresented is true', (tester) async {
+    testWidgets('shows represented badge when isRepresented is true', (
+      tester,
+    ) async {
       const profile = CreatorProfile(
         userId: 'test-1',
         displayName: 'Aarav Sharma',
@@ -84,10 +86,7 @@ void main() {
 
   group('CreatorRateCardView', () {
     testWidgets('shows empty state when no active rates', (tester) async {
-      const profile = CreatorProfile(
-        userId: 'test-1',
-        displayName: 'Test',
-      );
+      const profile = CreatorProfile(userId: 'test-1', displayName: 'Test');
 
       await tester.pumpWidget(
         _wrapWidget(const CreatorRateCardView(profile: profile)),
@@ -97,7 +96,9 @@ void main() {
       expect(find.textContaining('No rate items added'), findsOneWidget);
     });
 
-    testWidgets('renders active rate item with deliverable label and price', (tester) async {
+    testWidgets('renders active rate item with deliverable label and price', (
+      tester,
+    ) async {
       final profile = CreatorProfile(
         userId: 'test-1',
         displayName: 'Test',
@@ -156,14 +157,14 @@ void main() {
         _wrapWidget(const CreatorBioCard(profile: profile)),
       );
 
-      expect(find.text('I create tech review content for Indian audiences.'), findsOneWidget);
+      expect(
+        find.text('I create tech review content for Indian audiences.'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders empty state prompt when no bio', (tester) async {
-      const profile = CreatorProfile(
-        userId: 'test-1',
-        displayName: 'Test',
-      );
+      const profile = CreatorProfile(userId: 'test-1', displayName: 'Test');
 
       await tester.pumpWidget(
         _wrapWidget(const CreatorBioCard(profile: profile)),
@@ -183,10 +184,12 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _wrapWidget(CreatorAvailabilityCard(
-          profile: profile,
-          onAvailabilityChanged: (_) {},
-        )),
+        _wrapWidget(
+          CreatorAvailabilityCard(
+            profile: profile,
+            onAvailabilityChanged: (_) {},
+          ),
+        ),
       );
 
       expect(find.text(AvailabilityStatus.open.label), findsOneWidget);
@@ -196,14 +199,18 @@ void main() {
       const profile = CreatorProfile(
         userId: 'test-1',
         displayName: 'Test',
-        availability: CreatorAvailability(status: AvailabilityStatus.unavailable),
+        availability: CreatorAvailability(
+          status: AvailabilityStatus.unavailable,
+        ),
       );
 
       await tester.pumpWidget(
-        _wrapWidget(CreatorAvailabilityCard(
-          profile: profile,
-          onAvailabilityChanged: (_) {},
-        )),
+        _wrapWidget(
+          CreatorAvailabilityCard(
+            profile: profile,
+            onAvailabilityChanged: (_) {},
+          ),
+        ),
       );
 
       expect(find.text(AvailabilityStatus.unavailable.label), findsOneWidget);
@@ -215,12 +222,14 @@ void main() {
       final repo = FakeCreatorRepository();
       expect(repo.profile.rateCard, isEmpty);
 
-      await repo.addRateItem(const RateItem(
-        id: 'r1',
-        userId: 'test-1',
-        deliverableType: DeliverableType.youtubeVideo,
-        priceAmount: 75000,
-      ));
+      await repo.addRateItem(
+        const RateItem(
+          id: 'r1',
+          userId: 'test-1',
+          deliverableType: DeliverableType.youtubeVideo,
+          priceAmount: 75000,
+        ),
+      );
 
       expect(repo.profile.rateCard.length, equals(1));
       expect(repo.profile.rateCard.first.priceAmount, equals(75000));
@@ -266,8 +275,10 @@ void main() {
       await repo.setLanguages(languageCodes: ['en', 'hi', 'ta']);
 
       expect(repo.profile.languages.length, equals(3));
-      expect(repo.profile.languages.map((l) => l.code).toList(),
-          containsAll(['en', 'hi', 'ta']));
+      expect(
+        repo.profile.languages.map((l) => l.code).toList(),
+        containsAll(['en', 'hi', 'ta']),
+      );
     });
 
     test('updateAvailability persists new status', () async {
@@ -278,7 +289,10 @@ void main() {
         const CreatorAvailability(status: AvailabilityStatus.limited),
       );
 
-      expect(repo.profile.availability.status, equals(AvailabilityStatus.limited));
+      expect(
+        repo.profile.availability.status,
+        equals(AvailabilityStatus.limited),
+      );
     });
   });
 
@@ -287,7 +301,7 @@ void main() {
       final repo = FakeReferenceDataRepository();
       final cats = await repo.getCategories();
 
-      expect(cats.length, equals(2));
+      expect(cats.length, equals(3));
       expect(cats.first.slug, equals('tech'));
     });
 

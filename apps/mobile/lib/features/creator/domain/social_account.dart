@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:ggs_mobile/features/profile_common/domain/verification.dart';
 
-
 part 'social_account.freezed.dart';
 part 'social_account.g.dart';
 

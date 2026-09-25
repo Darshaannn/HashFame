@@ -8,8 +8,8 @@ import '../../profile_common/domain/verification.dart';
 part 'creator_discovery_item.freezed.dart';
 part 'creator_discovery_item.g.dart';
 
-@freezed
-class CreatorDiscoveryItem with _$CreatorDiscoveryItem {
+@Freezed(toJson: true, fromJson: true)
+abstract class CreatorDiscoveryItem with _$CreatorDiscoveryItem {
   const factory CreatorDiscoveryItem({
     required String creatorId,
     required String displayName,

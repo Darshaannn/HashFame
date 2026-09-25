@@ -62,7 +62,9 @@ class SupabaseBrandDataSource implements BrandDataSource {
   }
 
   @override
-  Future<BrandMarketerProfile> updateProfile(BrandMarketerProfile profile) async {
+  Future<BrandMarketerProfile> updateProfile(
+    BrandMarketerProfile profile,
+  ) async {
     await client.from('brand_marketer_profiles').upsert({
       'user_id': _actor,
       'job_title': profile.jobTitle,
@@ -76,29 +78,36 @@ class SupabaseBrandDataSource implements BrandDataSource {
 
   @override
   Future<CompanyBrand> createBrand(CompanyBrand brand) async {
-    final res = await client.from('company_brands').insert({
-      'organization_id': brand.organizationId,
-      'name': brand.name,
-      'logo_path': brand.logoPath,
-      'industry': brand.industry,
-      'website': brand.website,
-      'description': brand.description,
-      'headquarters': brand.headquarters,
-    }).select().single();
+    final res = await client
+        .from('company_brands')
+        .insert({
+          'organization_id': brand.organizationId,
+          'name': brand.name,
+          'logo_path': brand.logoPath,
+          'industry': brand.industry,
+          'website': brand.website,
+          'description': brand.description,
+          'headquarters': brand.headquarters,
+        })
+        .select()
+        .single();
     return CompanyBrand.fromJson(Map<String, dynamic>.from(res));
   }
 
   @override
   Future<void> updateBrand(CompanyBrand brand) async {
-    await client.from('company_brands').update({
-      'name': brand.name,
-      'logo_path': brand.logoPath,
-      'industry': brand.industry,
-      'website': brand.website,
-      'description': brand.description,
-      'headquarters': brand.headquarters,
-      'status': brand.status,
-    }).eq('id', brand.id);
+    await client
+        .from('company_brands')
+        .update({
+          'name': brand.name,
+          'logo_path': brand.logoPath,
+          'industry': brand.industry,
+          'website': brand.website,
+          'description': brand.description,
+          'headquarters': brand.headquarters,
+          'status': brand.status,
+        })
+        .eq('id', brand.id);
   }
 
   @override
@@ -131,8 +140,7 @@ class BrandRepositoryImpl implements BrandRepository {
       dataSource.createBrand(brand);
 
   @override
-  Future<void> updateBrand(CompanyBrand brand) =>
-      dataSource.updateBrand(brand);
+  Future<void> updateBrand(CompanyBrand brand) => dataSource.updateBrand(brand);
 
   @override
   Future<List<CompanyBrand>> getBrands({String? organizationId}) =>

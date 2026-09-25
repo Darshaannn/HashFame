@@ -10,10 +10,11 @@ import 'package:ggs_mobile/features/account/presentation/account_controller.dart
 import 'package:ggs_mobile/features/auth/presentation/session_controller.dart';
 import 'package:ggs_mobile/features/talent_manager/domain/talent_manager_profile.dart';
 
-final talentManagerProfileProvider = FutureProvider.autoDispose<TalentManagerProfile>((ref) async {
-  final repo = ref.watch(talentManagerRepositoryProvider);
-  return repo.getProfile();
-});
+final talentManagerProfileProvider =
+    FutureProvider.autoDispose<TalentManagerProfile>((ref) async {
+      final repo = ref.watch(talentManagerRepositoryProvider);
+      return repo.getProfile();
+    });
 
 class TalentManagerHomeScreen extends ConsumerWidget {
   const TalentManagerHomeScreen({super.key});
@@ -25,7 +26,10 @@ class TalentManagerHomeScreen extends ConsumerWidget {
     final mgrAsync = ref.watch(talentManagerProfileProvider);
 
     if (snapshot == null) {
-      return const AppScaffold(title: 'Manager Home', children: [AppSkeleton()]);
+      return const AppScaffold(
+        title: 'Manager Home',
+        children: [AppSkeleton()],
+      );
     }
 
     final account = snapshot.account;
@@ -48,8 +52,14 @@ class TalentManagerHomeScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Manager: ${account.displayName}', style: AppTypography.heading),
-                  const Text('Talent Representation Studio', style: TextStyle(color: AppColors.muted)),
+                  Text(
+                    'Manager: ${account.displayName}',
+                    style: AppTypography.heading,
+                  ),
+                  const Text(
+                    'Talent Representation Studio',
+                    style: TextStyle(color: AppColors.muted),
+                  ),
                 ],
               ),
             ),
@@ -68,7 +78,9 @@ class TalentManagerHomeScreen extends ConsumerWidget {
                 const Text('Roster Overview', style: AppTypography.heading),
                 const SizedBox(height: AppSpacing.sm),
                 Text('Company: ${mgr.companyName ?? "Independent Manager"}'),
-                Text('Represented Creators: ${mgr.representedCreatorsCount} verified active'),
+                Text(
+                  'Represented Creators: ${mgr.representedCreatorsCount} verified active',
+                ),
                 const SizedBox(height: AppSpacing.md),
                 OutlinedButton(
                   onPressed: () => context.go('/profile'),
@@ -117,11 +129,14 @@ class TalentManagerProfileScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(mgr.displayName, style: AppTypography.heading),
-                if (mgr.companyName != null) Text('Company: ${mgr.companyName}'),
+                if (mgr.companyName != null)
+                  Text('Company: ${mgr.companyName}'),
                 const SizedBox(height: AppSpacing.sm),
                 Text(mgr.bio ?? 'No management bio added.'),
                 const SizedBox(height: AppSpacing.md),
-                Text('Represented Creators Count: ${mgr.representedCreatorsCount}'),
+                Text(
+                  'Represented Creators Count: ${mgr.representedCreatorsCount}',
+                ),
               ],
             ),
           ),

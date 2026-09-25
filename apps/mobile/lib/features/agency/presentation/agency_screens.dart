@@ -10,7 +10,9 @@ import 'package:ggs_mobile/features/account/presentation/account_controller.dart
 import 'package:ggs_mobile/features/agency/domain/agency_profile.dart';
 import 'package:ggs_mobile/features/auth/presentation/session_controller.dart';
 
-final agencyProfileProvider = FutureProvider.autoDispose<AgencyProfile>((ref) async {
+final agencyProfileProvider = FutureProvider.autoDispose<AgencyProfile>((
+  ref,
+) async {
   final repo = ref.watch(agencyRepositoryProvider);
   return repo.getProfile();
 });
@@ -48,8 +50,14 @@ class AgencyHomeScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Agency: ${account.displayName}', style: AppTypography.heading),
-                  const Text('Full-Service Creator Operations', style: TextStyle(color: AppColors.muted)),
+                  Text(
+                    'Agency: ${account.displayName}',
+                    style: AppTypography.heading,
+                  ),
+                  const Text(
+                    'Full-Service Creator Operations',
+                    style: TextStyle(color: AppColors.muted),
+                  ),
                 ],
               ),
             ),
@@ -65,12 +73,21 @@ class AgencyHomeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(agency.agencyName.isEmpty ? 'Agency Setup' : agency.agencyName, style: AppTypography.heading),
+                Text(
+                  agency.agencyName.isEmpty
+                      ? 'Agency Setup'
+                      : agency.agencyName,
+                  style: AppTypography.heading,
+                ),
                 const SizedBox(height: AppSpacing.sm),
-                if (agency.location != null) Text('Location: ${agency.location}'),
+                if (agency.location != null)
+                  Text('Location: ${agency.location}'),
                 if (agency.website != null) Text('Website: ${agency.website}'),
                 const SizedBox(height: AppSpacing.sm),
-                Text(agency.description ?? 'Set up your agency capabilities and managed rosters.'),
+                Text(
+                  agency.description ??
+                      'Set up your agency capabilities and managed rosters.',
+                ),
                 const SizedBox(height: AppSpacing.md),
                 OutlinedButton(
                   onPressed: () => context.go('/profile'),
@@ -120,16 +137,22 @@ class AgencyProfileScreen extends ConsumerWidget {
               children: [
                 Text(agency.agencyName, style: AppTypography.heading),
                 if (agency.website != null) Text('Website: ${agency.website}'),
-                if (agency.location != null) Text('Location: ${agency.location}'),
+                if (agency.location != null)
+                  Text('Location: ${agency.location}'),
                 const SizedBox(height: AppSpacing.sm),
                 Text(agency.description ?? 'No agency description provided.'),
                 const SizedBox(height: AppSpacing.md),
                 if (agency.services.isNotEmpty) ...[
-                  const Text('Services Offered:', style: TextStyle(fontWeight: FontWeight.w600)),
+                  const Text(
+                    'Services Offered:',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
                   const SizedBox(height: 6),
                   Wrap(
                     spacing: 6,
-                    children: agency.services.map((s) => AppBadge(label: s)).toList(),
+                    children: agency.services
+                        .map((s) => AppBadge(label: s))
+                        .toList(),
                   ),
                 ],
               ],

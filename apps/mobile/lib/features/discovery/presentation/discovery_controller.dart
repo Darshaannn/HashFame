@@ -1,14 +1,29 @@
 import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/telemetry/analytics_service.dart';
 import '../domain/creator_discovery_item.dart';
 import '../domain/creator_search_filters.dart';
-import '../domain/discovery_repository.dart';
+
+class CreatorSearchFiltersNotifier extends Notifier<CreatorSearchFilters> {
+  @override
+  CreatorSearchFilters build() => const CreatorSearchFilters();
+
+  void update(CreatorSearchFilters Function(CreatorSearchFilters) cb) {
+    state = cb(state);
+  }
+
+  void set(CreatorSearchFilters filters) {
+    state = filters;
+  }
+}
 
 final creatorSearchFiltersProvider =
-    StateProvider.autoDispose<CreatorSearchFilters>((ref) => const CreatorSearchFilters());
+    NotifierProvider<CreatorSearchFiltersNotifier, CreatorSearchFilters>(
+      CreatorSearchFiltersNotifier.new,
+    );
 
 class DiscoveryState {
   const DiscoveryState({
@@ -48,8 +63,8 @@ class DiscoveryState {
 
 final discoveryControllerProvider =
     NotifierProvider<DiscoveryController, DiscoveryState>(
-  DiscoveryController.new,
-);
+      DiscoveryController.new,
+    );
 
 class DiscoveryController extends Notifier<DiscoveryState> {
   Timer? _debounceTimer;
@@ -86,14 +101,20 @@ class DiscoveryController extends Notifier<DiscoveryState> {
     if (initial) {
       state = state.copyWith(isLoading: true, error: null, nextOffset: 0);
       try {
-        final result = await repo.searchCreators(filters: filters, limit: 20, offset: 0);
+        final result = await repo.searchCreators(
+          filters: filters,
+          limit: 20,
+          offset: 0,
+        );
         state = state.copyWith(
           items: result.items,
           isLoading: false,
           hasMore: result.hasMore,
           nextOffset: result.nextOffset ?? 20,
         );
-        await ref.read(analyticsProvider).event(AnalyticsEvent.creatorSearchPerformed);
+        await ref
+            .read(analyticsProvider)
+            .event(AnalyticsEvent.creatorSearchPerformed);
       } catch (e) {
         state = state.copyWith(isLoading: false, error: e.toString());
       }

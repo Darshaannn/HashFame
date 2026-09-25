@@ -36,8 +36,8 @@ class ComparisonState {
 
 final comparisonControllerProvider =
     NotifierProvider<ComparisonController, ComparisonState>(
-  ComparisonController.new,
-);
+      ComparisonController.new,
+    );
 
 class ComparisonController extends Notifier<ComparisonState> {
   @override
@@ -45,13 +45,19 @@ class ComparisonController extends Notifier<ComparisonState> {
 
   Future<void> setCreators(List<String> creatorIds) async {
     final bounded = creatorIds.take(ComparisonState.maxLimit).toList();
-    state = state.copyWith(selectedCreatorIds: bounded, isLoading: true, error: null);
+    state = state.copyWith(
+      selectedCreatorIds: bounded,
+      isLoading: true,
+      error: null,
+    );
 
     try {
       final repo = ref.read(discoveryRepositoryProvider);
       final list = await repo.getCreatorsForComparison(creatorIds: bounded);
       state = state.copyWith(creators: list, isLoading: false);
-      await ref.read(analyticsProvider).event(AnalyticsEvent.creatorComparisonStarted);
+      await ref
+          .read(analyticsProvider)
+          .event(AnalyticsEvent.creatorComparisonStarted);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
@@ -60,7 +66,9 @@ class ComparisonController extends Notifier<ComparisonState> {
   Future<void> addCreator(String creatorId) async {
     if (state.selectedCreatorIds.contains(creatorId)) return;
     if (state.selectedCreatorIds.length >= ComparisonState.maxLimit) {
-      state = state.copyWith(error: 'Maximum 4 creators can be compared side-by-side.');
+      state = state.copyWith(
+        error: 'Maximum 4 creators can be compared side-by-side.',
+      );
       return;
     }
     final updated = [...state.selectedCreatorIds, creatorId];
@@ -68,7 +76,9 @@ class ComparisonController extends Notifier<ComparisonState> {
   }
 
   Future<void> removeCreator(String creatorId) async {
-    final updated = state.selectedCreatorIds.where((id) => id != creatorId).toList();
+    final updated = state.selectedCreatorIds
+        .where((id) => id != creatorId)
+        .toList();
     await setCreators(updated);
   }
 

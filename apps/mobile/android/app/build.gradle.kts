@@ -18,7 +18,7 @@ android {
         applicationId = "com.ggs.mobile"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
         // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)
@@ -41,10 +41,15 @@ android {
         }
     }
     buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+            isShrinkResources = false
+        }
         release {
             // Distribution signing is supplied by protected release automation.
             // No fallback to debug signing for production artifacts.
             isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }

@@ -25,7 +25,8 @@ class CategoryMultiSelectPicker extends StatefulWidget {
   final bool showPrimarySelector;
 
   @override
-  State<CategoryMultiSelectPicker> createState() => _CategoryMultiSelectPickerState();
+  State<CategoryMultiSelectPicker> createState() =>
+      _CategoryMultiSelectPickerState();
 }
 
 class _CategoryMultiSelectPickerState extends State<CategoryMultiSelectPicker> {
@@ -37,20 +38,23 @@ class _CategoryMultiSelectPickerState extends State<CategoryMultiSelectPicker> {
       if (_searchQuery.isEmpty) return true;
       final query = _searchQuery.toLowerCase();
       final matchName = c.name.toLowerCase().contains(query);
-      final matchSub = c.subcategories.any((sub) => sub.name.toLowerCase().contains(query));
+      final matchSub = c.subcategories.any(
+        (sub) => sub.name.toLowerCase().contains(query),
+      );
       return matchName || matchSub;
     }).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppSearchField(
-          onChanged: (val) => setState(() => _searchQuery = val),
-        ),
+        AppSearchField(onChanged: (val) => setState(() => _searchQuery = val)),
         const SizedBox(height: AppSpacing.sm),
         Text(
           'Selected ${widget.selectedCategoryIds.length} of max ${widget.maxSelections}',
-          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+          style: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: AppSpacing.sm),
         Wrap(
@@ -74,7 +78,9 @@ class _CategoryMultiSelectPickerState extends State<CategoryMultiSelectPicker> {
                 } else {
                   updated.remove(cat.id);
                   if (isPrimary && widget.onPrimaryChanged != null) {
-                    widget.onPrimaryChanged!(updated.isNotEmpty ? updated.first : null);
+                    widget.onPrimaryChanged!(
+                      updated.isNotEmpty ? updated.first : null,
+                    );
                   }
                 }
                 widget.onChanged(updated);

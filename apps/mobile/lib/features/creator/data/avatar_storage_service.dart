@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class AvatarStorageService {
@@ -26,7 +26,9 @@ class SupabaseAvatarStorageService implements AvatarStorageService {
   }) async {
     final ext = fileExtension.toLowerCase().replaceAll('.', '');
     if (!allowedExtensions.contains(ext)) {
-      throw const FormatException('Invalid image format. Only JPEG, PNG, and WebP are allowed.');
+      throw const FormatException(
+        'Invalid image format. Only JPEG, PNG, and WebP are allowed.',
+      );
     }
     if (bytes.lengthInBytes > maxFileSizeBytes) {
       throw const FormatException('Avatar image must not exceed 2MB in size.');
@@ -35,18 +37,18 @@ class SupabaseAvatarStorageService implements AvatarStorageService {
     final mimeType = ext == 'png'
         ? 'image/png'
         : ext == 'webp'
-            ? 'image/webp'
-            : 'image/jpeg';
+        ? 'image/webp'
+        : 'image/jpeg';
 
-    final fileName = '$userId/avatar_${DateTime.now().millisecondsSinceEpoch}.$ext';
+    final fileName =
+        '$userId/avatar_${DateTime.now().millisecondsSinceEpoch}.$ext';
 
-    await client.storage.from('avatars').uploadBinary(
+    await client.storage
+        .from('avatars')
+        .uploadBinary(
           fileName,
           bytes,
-          fileOptions: FileOptions(
-            contentType: mimeType,
-            upsert: true,
-          ),
+          fileOptions: FileOptions(contentType: mimeType, upsert: true),
         );
 
     return fileName;
@@ -71,7 +73,8 @@ class FakeAvatarStorageService implements AvatarStorageService {
     if (bytes.lengthInBytes > 2 * 1024 * 1024) {
       throw const FormatException('Avatar image must not exceed 2MB in size.');
     }
-    final path = '$userId/avatar_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
+    final path =
+        '$userId/avatar_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
     storage[path] = bytes;
     return path;
   }

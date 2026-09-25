@@ -28,6 +28,16 @@ enum AnalyticsEvent {
   creatorShortlisted,
   creatorRemovedFromShortlist,
   creatorComparisonStarted,
+  campaignDraftCreated,
+  campaignDraftUpdated,
+  campaignSubmitted,
+  campaignViewed,
+  campaignFilterApplied,
+  campaignApplicationStarted,
+  campaignApplicationSubmitted,
+  campaignApplicationWithdrawn,
+  applicationStatusChanged,
+  campaignClosed,
 }
 
 extension EventName on AnalyticsEvent {
@@ -51,8 +61,21 @@ extension EventName on AnalyticsEvent {
     AnalyticsEvent.creatorProfileViewed => 'creator_profile_viewed',
     AnalyticsEvent.shortlistCreated => 'shortlist_created',
     AnalyticsEvent.creatorShortlisted => 'creator_shortlisted',
-    AnalyticsEvent.creatorRemovedFromShortlist => 'creator_removed_from_shortlist',
+    AnalyticsEvent.creatorRemovedFromShortlist =>
+      'creator_removed_from_shortlist',
     AnalyticsEvent.creatorComparisonStarted => 'creator_comparison_started',
+    AnalyticsEvent.campaignDraftCreated => 'campaign_draft_created',
+    AnalyticsEvent.campaignDraftUpdated => 'campaign_draft_updated',
+    AnalyticsEvent.campaignSubmitted => 'campaign_submitted',
+    AnalyticsEvent.campaignViewed => 'campaign_viewed',
+    AnalyticsEvent.campaignFilterApplied => 'campaign_filter_applied',
+    AnalyticsEvent.campaignApplicationStarted => 'campaign_application_started',
+    AnalyticsEvent.campaignApplicationSubmitted =>
+      'campaign_application_submitted',
+    AnalyticsEvent.campaignApplicationWithdrawn =>
+      'campaign_application_withdrawn',
+    AnalyticsEvent.applicationStatusChanged => 'application_status_changed',
+    AnalyticsEvent.campaignClosed => 'campaign_closed',
   };
 }
 

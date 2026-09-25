@@ -10,79 +10,96 @@ import 'package:ggs_mobile/features/profile_common/presentation/widgets/language
 import 'package:ggs_mobile/features/shortlist/domain/shortlist_member.dart';
 import 'package:ggs_mobile/features/shortlist/presentation/shortlist_detail_screen.dart';
 import 'package:ggs_mobile/features/shortlist/presentation/shortlists_screen.dart';
+
 import '../support/fakes.dart';
 
 void main() {
-  Widget buildTestApp(Widget child, {FakeShortlistRepository? shortlistRepo, FakeDiscoveryRepository? discoveryRepo}) {
+  Widget buildTestApp(
+    Widget child, {
+    FakeShortlistRepository? shortlistRepo,
+    FakeDiscoveryRepository? discoveryRepo,
+  }) {
     return ProviderScope(
       overrides: [
-        referenceDataRepositoryProvider.overrideWithValue(FakeReferenceDataRepository()),
+        referenceDataRepositoryProvider.overrideWithValue(
+          FakeReferenceDataRepository(),
+        ),
         creatorRepositoryProvider.overrideWithValue(FakeCreatorRepository()),
-        discoveryRepositoryProvider.overrideWithValue(discoveryRepo ?? FakeDiscoveryRepository()),
-        shortlistRepositoryProvider.overrideWithValue(shortlistRepo ?? FakeShortlistRepository()),
+        discoveryRepositoryProvider.overrideWithValue(
+          discoveryRepo ?? FakeDiscoveryRepository(),
+        ),
+        shortlistRepositoryProvider.overrideWithValue(
+          shortlistRepo ?? FakeShortlistRepository(),
+        ),
       ],
-      child: MaterialApp(
-        home: child,
-      ),
+      child: MaterialApp(home: child),
     );
   }
 
   group('Category & Language MultiSelectPicker Widget Tests', () {
-    testWidgets('CategoryMultiSelectPicker renders categories and handles selection', (tester) async {
-      final fakeRef = FakeReferenceDataRepository();
-      final cats = await fakeRef.getCategories();
-      Set<String> selected = {'tech'};
+    testWidgets(
+      'CategoryMultiSelectPicker renders categories and handles selection',
+      (tester) async {
+        final fakeRef = FakeReferenceDataRepository();
+        final cats = await fakeRef.getCategories();
+        Set<String> selected = {'cat-1'};
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryMultiSelectPicker(
-              categories: cats,
-              selectedCategoryIds: selected,
-              onChanged: (val) => selected = val,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: CategoryMultiSelectPicker(
+                categories: cats,
+                selectedCategoryIds: selected,
+                onChanged: (val) => selected = val,
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpAndSettle();
-      expect(find.text('Tech & Gadgets'), findsOneWidget);
-      expect(find.text('Fashion & Style'), findsOneWidget);
+        await tester.pumpAndSettle();
+        expect(find.text('Tech & Gadgets'), findsOneWidget);
+        expect(find.text('Fashion & Style'), findsOneWidget);
 
-      await tester.tap(find.text('Fashion & Style'));
-      await tester.pumpAndSettle();
-      expect(selected.contains('fashion'), isTrue);
-    });
+        await tester.tap(find.text('Fashion & Style'));
+        await tester.pumpAndSettle();
+        expect(selected.contains('cat-2'), isTrue);
+      },
+    );
 
-    testWidgets('LanguageMultiSelectPicker renders languages and handles selection', (tester) async {
-      final fakeRef = FakeReferenceDataRepository();
-      final langs = await fakeRef.getLanguages();
-      Set<String> selected = {'en'};
+    testWidgets(
+      'LanguageMultiSelectPicker renders languages and handles selection',
+      (tester) async {
+        final fakeRef = FakeReferenceDataRepository();
+        final langs = await fakeRef.getLanguages();
+        Set<String> selected = {'en'};
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: LanguageMultiSelectPicker(
-              languages: langs,
-              selectedLanguageCodes: selected,
-              onChanged: (val) => selected = val,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: LanguageMultiSelectPicker(
+                languages: langs,
+                selectedLanguageCodes: selected,
+                onChanged: (val) => selected = val,
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpAndSettle();
-      expect(find.text('English (English)'), findsOneWidget);
-      expect(find.text('Hindi (हिन्दी)'), findsOneWidget);
+        await tester.pumpAndSettle();
+        expect(find.text('English (English)'), findsOneWidget);
+        expect(find.text('Hindi (हिन्दी)'), findsOneWidget);
 
-      await tester.tap(find.text('Hindi (हिन्दी)'));
-      await tester.pumpAndSettle();
-      expect(selected.contains('hi'), isTrue);
-    });
+        await tester.tap(find.text('Hindi (हिन्दी)'));
+        await tester.pumpAndSettle();
+        expect(selected.contains('hi'), isTrue);
+      },
+    );
   });
 
   group('Discover Screen & Card Widget Tests', () {
-    testWidgets('DiscoverScreen renders search field and creator list', (tester) async {
+    testWidgets('DiscoverScreen renders search field and creator list', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildTestApp(const DiscoverScreen()));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
@@ -91,7 +108,14 @@ void main() {
       expect(find.text('Discover Creators'), findsOneWidget);
       expect(find.text('Rohan Sharma'), findsOneWidget);
       expect(find.text('Ananya Verma'), findsOneWidget);
-      expect(find.text('Vikram Joshi'), findsOneWidget);
+
+      final vikram = find.text('Vikram Joshi');
+      await tester.scrollUntilVisible(
+        vikram,
+        100,
+        scrollable: find.byType(Scrollable).last,
+      );
+      expect(vikram, findsOneWidget);
     });
 
     testWidgets('DiscoverFilterSheet opens and applies filter', (tester) async {
@@ -100,12 +124,21 @@ void main() {
 
       expect(find.text('Filter Creators'), findsOneWidget);
       expect(find.text('Availability'), findsOneWidget);
-      expect(find.text('Apply Filters (0)'), findsOneWidget);
+
+      final applyBtn = find.text('Apply Filters (0)');
+      await tester.scrollUntilVisible(
+        applyBtn,
+        100,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(applyBtn, findsOneWidget);
     });
   });
 
   group('Shortlists Screens Widget Tests', () {
-    testWidgets('ShortlistsScreen renders empty state and create action', (tester) async {
+    testWidgets('ShortlistsScreen renders empty state and create action', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildTestApp(const ShortlistsScreen()));
       await tester.pumpAndSettle();
 
@@ -114,40 +147,52 @@ void main() {
       expect(find.text('Create First Shortlist'), findsOneWidget);
     });
 
-    testWidgets('ShortlistDetailScreen renders member status and note buttons', (tester) async {
-      final fakeShortlistRepo = FakeShortlistRepository();
-      final list = await fakeShortlistRepo.createShortlist(name: 'Festive Campaign');
-      await fakeShortlistRepo.addCreatorToShortlist(
-        shortlistId: list.id,
-        creatorId: 'c1',
-        status: ShortlistMemberStatus.potential,
-        notes: 'Initial outreach test',
-      );
+    testWidgets(
+      'ShortlistDetailScreen renders member status and note buttons',
+      (tester) async {
+        final fakeShortlistRepo = FakeShortlistRepository();
+        final list = await fakeShortlistRepo.createShortlist(
+          name: 'Festive Campaign',
+        );
+        await fakeShortlistRepo.addCreatorToShortlist(
+          shortlistId: list.id,
+          creatorId: 'c1',
+          status: ShortlistMemberStatus.potential,
+          notes: 'Initial outreach test',
+        );
 
-      await tester.pumpWidget(buildTestApp(
-        ShortlistDetailScreen(shortlistId: list.id),
-        shortlistRepo: fakeShortlistRepo,
-      ));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          buildTestApp(
+            ShortlistDetailScreen(shortlistId: list.id),
+            shortlistRepo: fakeShortlistRepo,
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('Festive Campaign'), findsOneWidget);
-      expect(find.text('Potential'), findsOneWidget);
-      expect(find.text('Note: Initial outreach test'), findsOneWidget);
-    });
+        expect(find.text('Festive Campaign'), findsOneWidget);
+        expect(find.text('Potential'), findsOneWidget);
+        expect(find.text('Note: Initial outreach test'), findsOneWidget);
+      },
+    );
   });
 
   group('Comparison Screen Widget Tests', () {
-    testWidgets('CreatorComparisonScreen shows empty state initially and compares creators', (tester) async {
-      final fakeDiscoveryRepo = FakeDiscoveryRepository();
+    testWidgets(
+      'CreatorComparisonScreen shows empty state initially and compares creators',
+      (tester) async {
+        final fakeDiscoveryRepo = FakeDiscoveryRepository();
 
-      await tester.pumpWidget(buildTestApp(
-        const CreatorComparisonScreen(),
-        discoveryRepo: fakeDiscoveryRepo,
-      ));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          buildTestApp(
+            const CreatorComparisonScreen(),
+            discoveryRepo: fakeDiscoveryRepo,
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('Compare Creators'), findsOneWidget);
-      expect(find.text('No creators selected'), findsOneWidget);
-    });
+        expect(find.text('Compare Creators'), findsOneWidget);
+        expect(find.text('No creators selected'), findsOneWidget);
+      },
+    );
   });
 }

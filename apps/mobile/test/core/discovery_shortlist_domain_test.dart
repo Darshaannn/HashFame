@@ -1,7 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ggs_mobile/features/comparison/presentation/comparison_controller.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
 import 'package:ggs_mobile/features/discovery/domain/creator_search_filters.dart';
 import 'package:ggs_mobile/features/shortlist/domain/shortlist_member.dart';
+
 import '../support/fakes.dart';
 
 void main() {
@@ -32,22 +34,33 @@ void main() {
       repo = FakeDiscoveryRepository();
     });
 
-    test('searchCreators returns default list with pagination metadata', () async {
-      final res = await repo.searchCreators(filters: const CreatorSearchFilters(), limit: 2);
-      expect(res.items.length, equals(2));
-      expect(res.hasMore, isTrue);
-      expect(res.nextOffset, equals(2));
-    });
+    test(
+      'searchCreators returns default list with pagination metadata',
+      () async {
+        final res = await repo.searchCreators(
+          filters: const CreatorSearchFilters(),
+          limit: 2,
+        );
+        expect(res.items.length, equals(2));
+        expect(res.hasMore, isTrue);
+        expect(res.nextOffset, equals(2));
+      },
+    );
 
     test('searchCreators filters by textual query against displayName and professionalName', () async {
-      final res = await repo.searchCreators(filters: const CreatorSearchFilters(query: 'ananya'));
+      final res = await repo.searchCreators(
+        filters: const CreatorSearchFilters(query: 'ananya'),
+      );
       expect(res.items.length, equals(1));
       expect(res.items.first.displayName, equals('Ananya Verma'));
     });
 
     test('searchCreators filters by city and availability', () async {
       final res = await repo.searchCreators(
-        filters: const CreatorSearchFilters(city: 'Delhi', availability: AvailabilityStatus.limited),
+        filters: const CreatorSearchFilters(
+          city: 'Delhi',
+          availability: AvailabilityStatus.limited,
+        ),
       );
       expect(res.items.length, equals(1));
       expect(res.items.first.displayName, equals('Vikram Joshi'));
@@ -61,11 +74,16 @@ void main() {
       expect(res.items.first.displayName, equals('Rohan Sharma'));
     });
 
-    test('getCreatorsForComparison returns matched items up to request', () async {
-      final list = await repo.getCreatorsForComparison(creatorIds: ['c1', 'c2']);
-      expect(list.length, equals(2));
-      expect(list.map((c) => c.creatorId), containsAll(['c1', 'c2']));
-    });
+    test(
+      'getCreatorsForComparison returns matched items up to request',
+      () async {
+        final list = await repo.getCreatorsForComparison(
+          creatorIds: ['c1', 'c2'],
+        );
+        expect(list.length, equals(2));
+        expect(list.map((c) => c.creatorId), containsAll(['c1', 'c2']));
+      },
+    );
   });
 
   group('FakeShortlistRepository Unit Tests', () {
@@ -76,7 +94,10 @@ void main() {
     });
 
     test('creates and retrieves shortlist', () async {
-      final created = await repo.createShortlist(name: 'Q3 Diwali Campaign', description: 'Tech creators');
+      final created = await repo.createShortlist(
+        name: 'Q3 Diwali Campaign',
+        description: 'Tech creators',
+      );
       expect(created.name, equals('Q3 Diwali Campaign'));
       expect(created.memberCount, equals(0));
 
@@ -85,26 +106,38 @@ void main() {
       expect(all.first.id, equals(created.id));
     });
 
-    test('adds creator to shortlist and updates member status and notes', () async {
-      final list = await repo.createShortlist(name: 'Fashion Collabs');
-      final member = await repo.addCreatorToShortlist(
-        shortlistId: list.id,
-        creatorId: 'c1',
-        status: ShortlistMemberStatus.potential,
-        notes: 'Initial outreach planned',
-      );
+    test(
+      'adds creator to shortlist and updates member status and notes',
+      () async {
+        final list = await repo.createShortlist(name: 'Fashion Collabs');
+        final member = await repo.addCreatorToShortlist(
+          shortlistId: list.id,
+          creatorId: 'c1',
+          status: ShortlistMemberStatus.potential,
+          notes: 'Initial outreach planned',
+        );
 
-      expect(member.status, equals(ShortlistMemberStatus.potential));
-      expect(member.notes, equals('Initial outreach planned'));
+        expect(member.status, equals(ShortlistMemberStatus.potential));
+        expect(member.notes, equals('Initial outreach planned'));
 
-      await repo.updateMemberStatus(memberId: member.id, status: ShortlistMemberStatus.negotiating);
-      await repo.updateMemberNotes(memberId: member.id, notes: 'Offered 25k INR');
+        await repo.updateMemberStatus(
+          memberId: member.id,
+          status: ShortlistMemberStatus.negotiating,
+        );
+        await repo.updateMemberNotes(
+          memberId: member.id,
+          notes: 'Offered 25k INR',
+        );
 
-      final updatedList = await repo.getShortlist(shortlistId: list.id);
-      expect(updatedList.memberCount, equals(1));
-      expect(updatedList.members.first.status, equals(ShortlistMemberStatus.negotiating));
-      expect(updatedList.members.first.notes, equals('Offered 25k INR'));
-    });
+        final updatedList = await repo.getShortlist(shortlistId: list.id);
+        expect(updatedList.memberCount, equals(1));
+        expect(
+          updatedList.members.first.status,
+          equals(ShortlistMemberStatus.negotiating),
+        );
+        expect(updatedList.members.first.notes, equals('Offered 25k INR'));
+      },
+    );
 
     test('prevents duplicate creator membership in same shortlist', () async {
       final list = await repo.createShortlist(name: 'Gaming Shortlist');
@@ -120,7 +153,10 @@ void main() {
       final list = await repo.createShortlist(name: 'Temporary List');
       await repo.addCreatorToShortlist(shortlistId: list.id, creatorId: 'c1');
 
-      await repo.removeCreatorFromShortlist(shortlistId: list.id, creatorId: 'c1');
+      await repo.removeCreatorFromShortlist(
+        shortlistId: list.id,
+        creatorId: 'c1',
+      );
       var updatedList = await repo.getShortlist(shortlistId: list.id);
       expect(updatedList.memberCount, equals(0));
 
@@ -140,5 +176,42 @@ void main() {
       expect(map['c1'], containsAll([l1.id, l2.id]));
       expect(map['c2'], containsAll([l2.id]));
     });
+  });
+
+  group('ComparisonController Unit Tests', () {
+    test(
+      'enforces max 4 creators limit and rejects 5th creator outside UI',
+      () {
+        var state = const ComparisonState();
+        expect(state.selectedCreatorIds.length, equals(0));
+
+        // Add 4 creators
+        for (var i = 1; i <= 4; i++) {
+          state = state.copyWith(
+            selectedCreatorIds: [...state.selectedCreatorIds, 'c$i'],
+          );
+        }
+        expect(state.selectedCreatorIds.length, equals(4));
+        expect(state.selectedCreatorIds, equals(['c1', 'c2', 'c3', 'c4']));
+
+        // Attempt 5th creator
+        if (state.selectedCreatorIds.length >= ComparisonState.maxLimit) {
+          state = state.copyWith(
+            error: 'Maximum 4 creators can be compared side-by-side.',
+          );
+        } else {
+          state = state.copyWith(
+            selectedCreatorIds: [...state.selectedCreatorIds, 'c5'],
+          );
+        }
+
+        expect(state.selectedCreatorIds.length, equals(4));
+        expect(state.selectedCreatorIds.contains('c5'), isFalse);
+        expect(
+          state.error,
+          equals('Maximum 4 creators can be compared side-by-side.'),
+        );
+      },
+    );
   });
 }

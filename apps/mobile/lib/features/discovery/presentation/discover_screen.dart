@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
 import '../../creator/presentation/profile/creator_profile_controller.dart';
-import '../domain/creator_discovery_item.dart';
 import '../domain/creator_search_filters.dart';
 import 'discovery_controller.dart';
 import 'widgets/creator_discovery_card.dart';
@@ -36,7 +35,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       ref.read(discoveryControllerProvider.notifier).search(initial: false);
     }
   }
@@ -71,11 +71,15 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
           children: [
             // Search field
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: AppSpacing.sm,
+              ),
               child: AppSearchField(
                 onChanged: (val) {
-                  ref.read(creatorSearchFiltersProvider.notifier).state =
-                      filters.copyWith(query: val.trim());
+                  ref
+                      .read(creatorSearchFiltersProvider.notifier)
+                      .set(filters.copyWith(query: val.trim()));
                 },
               ),
             ),
@@ -84,29 +88,41 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
             SizedBox(
               height: 42,
               child: categoriesAsync.when(
-                loading: () => const Center(child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))),
-                error: (_, __) => const SizedBox.shrink(),
+                loading: () => const Center(
+                  child: SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+                error: (err, stack) => const SizedBox.shrink(),
                 data: (cats) {
                   return ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.lg,
+                    ),
                     scrollDirection: Axis.horizontal,
                     itemCount: cats.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 6),
-                    itemBuilder: (_, idx) {
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 6),
+                    itemBuilder: (context, idx) {
                       final cat = cats[idx];
                       final isSelected = filters.categoryIds.contains(cat.id);
                       return ChoiceChip(
                         label: Text(cat.name),
                         selected: isSelected,
                         onSelected: (selected) {
-                          final updated = List<String>.from(filters.categoryIds);
+                          final updated = List<String>.from(
+                            filters.categoryIds,
+                          );
                           if (selected) {
                             updated.add(cat.id);
                           } else {
                             updated.remove(cat.id);
                           }
-                          ref.read(creatorSearchFiltersProvider.notifier).state =
-                              filters.copyWith(categoryIds: updated);
+                          ref
+                              .read(creatorSearchFiltersProvider.notifier)
+                              .set(filters.copyWith(categoryIds: updated));
                         },
                       );
                     },
@@ -121,11 +137,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
               child: Builder(
                 builder: (context) {
                   if (state.isLoading && state.items.isEmpty) {
-                    return ListView.separated(
-                      padding: const EdgeInsets.all(AppSpacing.lg),
-                      itemCount: 4,
-                      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.md),
-                      itemBuilder: (_, __) => const AppSkeleton(height: 120),
+                    return const Padding(
+                      padding: EdgeInsets.all(AppSpacing.lg),
+                      child: AppSkeleton(),
                     );
                   }
 
@@ -140,7 +154,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                             const SizedBox(height: AppSpacing.md),
                             AppButton(
                               label: 'Retry',
-                              onPressed: () => ref.read(discoveryControllerProvider.notifier).retry(),
+                              onPressed: () => ref
+                                  .read(discoveryControllerProvider.notifier)
+                                  .retry(),
                             ),
                           ],
                         ),
@@ -155,17 +171,29 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.search_off, size: 48, color: AppColors.outline),
+                            const Icon(
+                              Icons.search_off,
+                              size: 48,
+                              color: AppColors.outline,
+                            ),
                             const SizedBox(height: AppSpacing.sm),
-                            Text('No creators found', style: AppTypography.heading),
+                            Text(
+                              'No creators found',
+                              style: AppTypography.heading,
+                            ),
                             const SizedBox(height: AppSpacing.xs),
-                            const Text('Try adjusting your search or clearing filters.'),
+                            const Text(
+                              'Try adjusting your search or clearing filters.',
+                            ),
                             if (filters.activeFilterCount > 0) ...[
                               const SizedBox(height: AppSpacing.md),
                               OutlinedButton(
                                 onPressed: () {
-                                  ref.read(creatorSearchFiltersProvider.notifier).state =
-                                      const CreatorSearchFilters();
+                                  ref
+                                      .read(
+                                        creatorSearchFiltersProvider.notifier,
+                                      )
+                                      .set(const CreatorSearchFilters());
                                 },
                                 child: const Text('Clear Filters'),
                               ),
@@ -180,12 +208,15 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                     controller: _scrollController,
                     padding: const EdgeInsets.all(AppSpacing.lg),
                     itemCount: state.items.length + (state.hasMore ? 1 : 0),
-                    separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.md),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: AppSpacing.md),
                     itemBuilder: (context, index) {
                       if (index == state.items.length) {
                         return const Center(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
+                            padding: EdgeInsets.symmetric(
+                              vertical: AppSpacing.md,
+                            ),
                             child: CircularProgressIndicator(),
                           ),
                         );
@@ -193,7 +224,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                       final creator = state.items[index];
                       return CreatorDiscoveryCard(
                         creator: creator,
-                        onTap: () => context.push('/discover/creator/${creator.creatorId}'),
+                        onTap: () => context.push(
+                          '/discover/creator/${creator.creatorId}',
+                        ),
                       );
                     },
                   );

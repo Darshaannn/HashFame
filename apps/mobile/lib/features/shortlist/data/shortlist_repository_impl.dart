@@ -68,7 +68,10 @@ class SupabaseShortlistDataSource {
       }
 
       final statusStr = m['status'] as String? ?? 'potential';
-      final status = ShortlistMemberStatus.values.where((s) => s.name == statusStr).firstOrNull ??
+      final status =
+          ShortlistMemberStatus.values
+              .where((s) => s.name == statusStr)
+              .firstOrNull ??
           ShortlistMemberStatus.potential;
 
       return ShortlistMember(
@@ -119,15 +122,21 @@ class SupabaseShortlistDataSource {
       orgId = membership?['organization_id'] as String?;
     }
     if (orgId == null) {
-      throw const FormatException('Organization required to create a shortlist');
+      throw const FormatException(
+        'Organization required to create a shortlist',
+      );
     }
 
-    final row = await client.from('shortlists').insert({
-      'organization_id': orgId,
-      'created_by': _userId,
-      'name': name.trim(),
-      'description': description?.trim(),
-    }).select().single();
+    final row = await client
+        .from('shortlists')
+        .insert({
+          'organization_id': orgId,
+          'created_by': _userId,
+          'name': name.trim(),
+          'description': description?.trim(),
+        })
+        .select()
+        .single();
 
     return Shortlist(
       id: row['id'] as String,
@@ -181,13 +190,17 @@ class SupabaseShortlistDataSource {
     ShortlistMemberStatus status = ShortlistMemberStatus.potential,
     String? notes,
   }) async {
-    final row = await client.from('shortlist_members').insert({
-      'shortlist_id': shortlistId,
-      'creator_id': creatorId,
-      'added_by': _userId,
-      'status': status.name,
-      'notes': notes?.trim(),
-    }).select().single();
+    final row = await client
+        .from('shortlist_members')
+        .insert({
+          'shortlist_id': shortlistId,
+          'creator_id': creatorId,
+          'added_by': _userId,
+          'status': status.name,
+          'notes': notes?.trim(),
+        })
+        .select()
+        .single();
 
     return ShortlistMember(
       id: row['id'] as String,
@@ -236,19 +249,23 @@ class SupabaseShortlistDataSource {
     required String creatorId,
     String? organizationId,
   }) async {
-    final rows = await client
-        .from('shortlist_members')
-        .select('shortlist_id')
-        .eq('creator_id', creatorId) as List;
+    final rows =
+        await client
+                .from('shortlist_members')
+                .select('shortlist_id')
+                .eq('creator_id', creatorId)
+            as List;
     return rows.map((r) => r['shortlist_id'] as String).toSet();
   }
 
   Future<Map<String, List<String>>> getSavedCreatorMemberships({
     String? organizationId,
   }) async {
-    final rows = await client
-        .from('shortlist_members')
-        .select('creator_id, shortlist_id') as List;
+    final rows =
+        await client
+                .from('shortlist_members')
+                .select('creator_id, shortlist_id')
+            as List;
 
     final map = <String, List<String>>{};
     for (final r in rows) {
@@ -277,12 +294,11 @@ class ShortlistRepositoryImpl implements ShortlistRepository {
     required String name,
     String? description,
     String? organizationId,
-  }) =>
-      dataSource.createShortlist(
-        name: name,
-        description: description,
-        organizationId: organizationId,
-      );
+  }) => dataSource.createShortlist(
+    name: name,
+    description: description,
+    organizationId: organizationId,
+  );
 
   @override
   Future<Shortlist> updateShortlist({
@@ -290,13 +306,12 @@ class ShortlistRepositoryImpl implements ShortlistRepository {
     String? name,
     String? description,
     bool? isArchived,
-  }) =>
-      dataSource.updateShortlist(
-        shortlistId: shortlistId,
-        name: name,
-        description: description,
-        isArchived: isArchived,
-      );
+  }) => dataSource.updateShortlist(
+    shortlistId: shortlistId,
+    name: name,
+    description: description,
+    isArchived: isArchived,
+  );
 
   @override
   Future<void> deleteShortlist({required String shortlistId}) =>
@@ -308,51 +323,45 @@ class ShortlistRepositoryImpl implements ShortlistRepository {
     required String creatorId,
     ShortlistMemberStatus status = ShortlistMemberStatus.potential,
     String? notes,
-  }) =>
-      dataSource.addCreatorToShortlist(
-        shortlistId: shortlistId,
-        creatorId: creatorId,
-        status: status,
-        notes: notes,
-      );
+  }) => dataSource.addCreatorToShortlist(
+    shortlistId: shortlistId,
+    creatorId: creatorId,
+    status: status,
+    notes: notes,
+  );
 
   @override
   Future<void> removeCreatorFromShortlist({
     required String shortlistId,
     required String creatorId,
-  }) =>
-      dataSource.removeCreatorFromShortlist(
-        shortlistId: shortlistId,
-        creatorId: creatorId,
-      );
+  }) => dataSource.removeCreatorFromShortlist(
+    shortlistId: shortlistId,
+    creatorId: creatorId,
+  );
 
   @override
   Future<void> updateMemberStatus({
     required String memberId,
     required ShortlistMemberStatus status,
-  }) =>
-      dataSource.updateMemberStatus(memberId: memberId, status: status);
+  }) => dataSource.updateMemberStatus(memberId: memberId, status: status);
 
   @override
   Future<void> updateMemberNotes({
     required String memberId,
     required String notes,
-  }) =>
-      dataSource.updateMemberNotes(memberId: memberId, notes: notes);
+  }) => dataSource.updateMemberNotes(memberId: memberId, notes: notes);
 
   @override
   Future<Set<String>> getCreatorShortlistMemberships({
     required String creatorId,
     String? organizationId,
-  }) =>
-      dataSource.getCreatorShortlistMemberships(
-        creatorId: creatorId,
-        organizationId: organizationId,
-      );
+  }) => dataSource.getCreatorShortlistMemberships(
+    creatorId: creatorId,
+    organizationId: organizationId,
+  );
 
   @override
   Future<Map<String, List<String>>> getSavedCreatorMemberships({
     String? organizationId,
-  }) =>
-      dataSource.getSavedCreatorMemberships(organizationId: organizationId);
+  }) => dataSource.getSavedCreatorMemberships(organizationId: organizationId);
 }

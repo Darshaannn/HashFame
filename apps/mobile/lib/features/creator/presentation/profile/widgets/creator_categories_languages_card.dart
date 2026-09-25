@@ -4,7 +4,6 @@ import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
 
-
 class CreatorCategoriesLanguagesCard extends StatelessWidget {
   const CreatorCategoriesLanguagesCard({
     super.key,
@@ -17,10 +16,17 @@ class CreatorCategoriesLanguagesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final allCats = [...profile.primaryCategories, ...profile.additionalCategories];
+    final allCats = [
+      ...profile.primaryCategories,
+      ...profile.additionalCategories,
+    ];
     final langs = profile.languages;
     final loc = profile.location;
-    final locStr = [loc.city, loc.state, loc.country].where((s) => s != null && s.isNotEmpty).join(', ');
+    final locStr = [
+      loc.city,
+      loc.state,
+      loc.country,
+    ].where((s) => s != null && s.isNotEmpty).join(', ');
 
     return AppCard(
       child: Column(
@@ -38,11 +44,15 @@ class CreatorCategoriesLanguagesCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
-          
+
           // Location
           Row(
             children: [
-              const Icon(Icons.location_on_outlined, size: 18, color: AppColors.muted),
+              const Icon(
+                Icons.location_on_outlined,
+                size: 18,
+                color: AppColors.muted,
+              ),
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
@@ -57,28 +67,50 @@ class CreatorCategoriesLanguagesCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
 
           // Categories
-          const Text('Content Categories', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+          const Text(
+            'Content Categories',
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          ),
           const SizedBox(height: 6),
           if (allCats.isEmpty)
-            const Text('No categories selected', style: TextStyle(color: AppColors.muted, fontStyle: FontStyle.italic))
+            const Text(
+              'No categories selected',
+              style: TextStyle(
+                color: AppColors.muted,
+                fontStyle: FontStyle.italic,
+              ),
+            )
           else
             Wrap(
               spacing: 8,
               runSpacing: 6,
-              children: allCats.map((cat) => AppBadge(label: cat.name)).toList(),
+              children: allCats
+                  .map((cat) => AppBadge(label: cat.name))
+                  .toList(),
             ),
           const SizedBox(height: AppSpacing.md),
 
           // Languages
-          const Text('Languages', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+          const Text(
+            'Languages',
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          ),
           const SizedBox(height: 6),
           if (langs.isEmpty)
-            const Text('No languages specified', style: TextStyle(color: AppColors.muted, fontStyle: FontStyle.italic))
+            const Text(
+              'No languages specified',
+              style: TextStyle(
+                color: AppColors.muted,
+                fontStyle: FontStyle.italic,
+              ),
+            )
           else
             Wrap(
               spacing: 8,
               runSpacing: 6,
-              children: langs.map((l) => AppBadge(label: '${l.name} (${l.nativeName})')).toList(),
+              children: langs
+                  .map((l) => AppBadge(label: '${l.name} (${l.nativeName})'))
+                  .toList(),
             ),
         ],
       ),

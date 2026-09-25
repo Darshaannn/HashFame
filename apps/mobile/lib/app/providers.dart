@@ -6,6 +6,7 @@ import '../features/account/domain/account_repository.dart';
 import '../features/agency/domain/agency_repository.dart';
 import '../features/auth/domain/auth_repository.dart';
 import '../features/brand/domain/brand_repository.dart';
+import '../features/campaign/domain/campaign_repository.dart';
 import '../features/creator/domain/creator_repository.dart';
 import '../features/discovery/domain/discovery_repository.dart';
 import '../features/profile_common/domain/reference_data_repository.dart';
@@ -42,7 +43,9 @@ final discoveryRepositoryProvider = Provider<DiscoveryRepository>(
 final shortlistRepositoryProvider = Provider<ShortlistRepository>(
   (ref) => throw StateError('Bootstrap must supply shortlist repository'),
 );
+final campaignRepositoryProvider = Provider<CampaignRepository>(
+  (ref) => throw StateError('Bootstrap must supply campaign repository'),
+);
 final analyticsProvider = Provider<AnalyticsService>(
   (ref) => const NoopAnalyticsService(),
 );
-

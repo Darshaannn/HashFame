@@ -12,38 +12,42 @@ import 'package:ggs_mobile/features/creator/domain/rate_card.dart';
 import 'package:ggs_mobile/features/creator/domain/social_account.dart';
 import 'package:ggs_mobile/features/profile_common/domain/reference_data.dart';
 
-final creatorProfileProvider =
-    FutureProvider.autoDispose.family<CreatorProfile, String?>((ref, userId) async {
-  final repo = ref.watch(creatorRepositoryProvider);
-  return repo.getProfile(userId: userId);
-});
+final creatorProfileProvider = FutureProvider.autoDispose
+    .family<CreatorProfile, String?>((ref, userId) async {
+      final repo = ref.watch(creatorRepositoryProvider);
+      return repo.getProfile(userId: userId);
+    });
 
 final currentCreatorProfileProvider =
     FutureProvider.autoDispose<CreatorProfile>((ref) async {
-  final repo = ref.watch(creatorRepositoryProvider);
-  return repo.getProfile();
-});
+      final repo = ref.watch(creatorRepositoryProvider);
+      return repo.getProfile();
+    });
 
-final profileCompletionProvider =
-    Provider.autoDispose.family<ProfileCompletionReport?, CreatorProfile?>((ref, profile) {
-  if (profile == null) return null;
-  return ProfileCompletionCalculator.calculate(profile);
-});
+final profileCompletionProvider = Provider.autoDispose
+    .family<ProfileCompletionReport?, CreatorProfile?>((ref, profile) {
+      if (profile == null) return null;
+      return ProfileCompletionCalculator.calculate(profile);
+    });
 
-final referenceCategoriesProvider = FutureProvider.autoDispose<List<Category>>((ref) async {
+final referenceCategoriesProvider = FutureProvider.autoDispose<List<Category>>((
+  ref,
+) async {
   final repo = ref.watch(referenceDataRepositoryProvider);
   return repo.getCategories();
 });
 
-final referenceLanguagesProvider = FutureProvider.autoDispose<List<Language>>((ref) async {
+final referenceLanguagesProvider = FutureProvider.autoDispose<List<Language>>((
+  ref,
+) async {
   final repo = ref.watch(referenceDataRepositoryProvider);
   return repo.getLanguages();
 });
 
 final creatorControllerProvider =
     NotifierProvider<CreatorController, AsyncValue<void>>(
-  CreatorController.new,
-);
+      CreatorController.new,
+    );
 
 class CreatorController extends Notifier<AsyncValue<void>> {
   @override
@@ -80,25 +84,42 @@ class CreatorController extends Notifier<AsyncValue<void>> {
     );
     await repo.updateProfile(updated);
     ref.invalidate(currentCreatorProfileProvider);
-    await ref.read(analyticsProvider).event(AnalyticsEvent.creatorProfileUpdated);
+    await ref
+        .read(analyticsProvider)
+        .event(AnalyticsEvent.creatorProfileUpdated);
   });
 
-  Future<void> updateAvailability(CreatorAvailability availability) => _run(() async {
+  Future<void> updateAvailability(CreatorAvailability availability) =>
+      _run(() async {
+        final repo = ref.read(creatorRepositoryProvider);
+        await repo.updateAvailability(availability);
+        ref.invalidate(currentCreatorProfileProvider);
+        await ref
+            .read(analyticsProvider)
+            .event(AnalyticsEvent.availabilityChanged);
+      });
+
+  Future<void> saveCategories({
+    required List<String> categoryIds,
+    String? primaryId,
+  }) => _run(() async {
     final repo = ref.read(creatorRepositoryProvider);
-    await repo.updateAvailability(availability);
+    await repo.setCategories(
+      categoryIds: categoryIds,
+      primaryCategoryId: primaryId,
+    );
     ref.invalidate(currentCreatorProfileProvider);
-    await ref.read(analyticsProvider).event(AnalyticsEvent.availabilityChanged);
   });
 
-  Future<void> saveCategories({required List<String> categoryIds, String? primaryId}) => _run(() async {
+  Future<void> saveLanguages({
+    required List<String> languageCodes,
+    String? primaryCode,
+  }) => _run(() async {
     final repo = ref.read(creatorRepositoryProvider);
-    await repo.setCategories(categoryIds: categoryIds, primaryCategoryId: primaryId);
-    ref.invalidate(currentCreatorProfileProvider);
-  });
-
-  Future<void> saveLanguages({required List<String> languageCodes, String? primaryCode}) => _run(() async {
-    final repo = ref.read(creatorRepositoryProvider);
-    await repo.setLanguages(languageCodes: languageCodes, primaryLanguageCode: primaryCode);
+    await repo.setLanguages(
+      languageCodes: languageCodes,
+      primaryLanguageCode: primaryCode,
+    );
     ref.invalidate(currentCreatorProfileProvider);
   });
 
@@ -158,7 +179,10 @@ class CreatorController extends Notifier<AsyncValue<void>> {
     ref.invalidate(currentCreatorProfileProvider);
   });
 
-  Future<void> respondToManagerRequest(String relationshipId, ManagerRelationshipStatus status) => _run(() async {
+  Future<void> respondToManagerRequest(
+    String relationshipId,
+    ManagerRelationshipStatus status,
+  ) => _run(() async {
     final repo = ref.read(creatorRepositoryProvider);
     await repo.respondToManagerRequest(relationshipId, status);
     ref.invalidate(currentCreatorProfileProvider);

@@ -10,23 +10,23 @@ void main() {
   group('ProfileCompletionCalculator', () {
     // ─── Empty profile ─────────────────────────────────────────────────────────
 
-    test('scores 5% for a brand-new profile (availability is always counted)', () {
-      const profile = CreatorProfile(
-        userId: 'test-user',
-        displayName: 'Test',
-      );
-      final result = ProfileCompletionCalculator.calculate(profile);
+    test(
+      'scores 5% for a brand-new profile (availability is always counted)',
+      () {
+        const profile = CreatorProfile(
+          userId: 'test-user',
+          displayName: 'Test',
+        );
+        final result = ProfileCompletionCalculator.calculate(profile);
 
-      // Availability is always marked true (5 pts)
-      expect(result.percentage, equals(5));
-      expect(result.completedFields['availability'], isTrue);
-    });
+        // Availability is always marked true (5 pts)
+        expect(result.percentage, equals(5));
+        expect(result.completedFields['availability'], isTrue);
+      },
+    );
 
     test('reports all 8 missing field recommendations for empty profile', () {
-      const profile = CreatorProfile(
-        userId: 'test-user',
-        displayName: 'Test',
-      );
+      const profile = CreatorProfile(userId: 'test-user', displayName: 'Test');
       final result = ProfileCompletionCalculator.calculate(profile);
 
       final missingKeys = result.recommendations.map((r) => r.key).toSet();
@@ -118,7 +118,16 @@ void main() {
 
       expect(result.percentage, equals(35));
       final missingKeys = result.recommendations.map((r) => r.key).toSet();
-      expect(missingKeys, containsAll(['categories', 'languages', 'socialAccounts', 'rateCard', 'portfolio']));
+      expect(
+        missingKeys,
+        containsAll([
+          'categories',
+          'languages',
+          'socialAccounts',
+          'rateCard',
+          'portfolio',
+        ]),
+      );
     });
 
     test('bio shorter than 20 chars is not counted', () {

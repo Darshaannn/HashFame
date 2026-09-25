@@ -9,10 +9,7 @@ import '../domain/shortlist_member.dart';
 import 'shortlist_controller.dart';
 
 class ShortlistDetailScreen extends ConsumerWidget {
-  const ShortlistDetailScreen({
-    super.key,
-    required this.shortlistId,
-  });
+  const ShortlistDetailScreen({super.key, required this.shortlistId});
 
   final String shortlistId;
 
@@ -32,8 +29,13 @@ class ShortlistDetailScreen extends ConsumerWidget {
             onPressed: () {
               final list = shortlistAsync.asData?.value;
               if (list != null && list.members.isNotEmpty) {
-                final creatorIds = list.members.take(4).map((m) => m.creatorId).toList();
-                ref.read(comparisonControllerProvider.notifier).setCreators(creatorIds);
+                final creatorIds = list.members
+                    .take(4)
+                    .map((m) => m.creatorId)
+                    .toList();
+                ref
+                    .read(comparisonControllerProvider.notifier)
+                    .setCreators(creatorIds);
                 context.push('/compare');
               }
             },
@@ -48,16 +50,24 @@ class ShortlistDetailScreen extends ConsumerWidget {
                   title: const Text('Delete Shortlist?'),
                   content: const Text('This action cannot be undone.'),
                   actions: [
-                    TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, false),
+                      child: const Text('Cancel'),
+                    ),
                     TextButton(
                       onPressed: () => Navigator.pop(ctx, true),
-                      child: const Text('Delete', style: TextStyle(color: AppColors.error)),
+                      child: const Text(
+                        'Delete',
+                        style: TextStyle(color: AppColors.error),
+                      ),
                     ),
                   ],
                 ),
               );
               if (confirm == true) {
-                await ref.read(shortlistControllerProvider.notifier).deleteShortlist(shortlistId: shortlistId);
+                await ref
+                    .read(shortlistControllerProvider.notifier)
+                    .deleteShortlist(shortlistId: shortlistId);
                 if (context.mounted) context.pop();
               }
             },
@@ -75,7 +85,8 @@ class ShortlistDetailScreen extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.md),
                 AppButton(
                   label: 'Retry',
-                  onPressed: () => ref.invalidate(shortlistDetailProvider(shortlistId)),
+                  onPressed: () =>
+                      ref.invalidate(shortlistDetailProvider(shortlistId)),
                 ),
               ],
             ),
@@ -88,11 +99,20 @@ class ShortlistDetailScreen extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.people_outline, size: 48, color: AppColors.outline),
+                      const Icon(
+                        Icons.people_outline,
+                        size: 48,
+                        color: AppColors.outline,
+                      ),
                       const SizedBox(height: AppSpacing.sm),
-                      Text('No creators added yet', style: AppTypography.heading),
+                      Text(
+                        'No creators added yet',
+                        style: AppTypography.heading,
+                      ),
                       const SizedBox(height: AppSpacing.xs),
-                      const Text('Search creators in Discover and add them to this shortlist.'),
+                      const Text(
+                        'Search creators in Discover and add them to this shortlist.',
+                      ),
                       const SizedBox(height: AppSpacing.md),
                       AppButton(
                         label: 'Discover Creators',
@@ -107,7 +127,8 @@ class ShortlistDetailScreen extends ConsumerWidget {
             return ListView.separated(
               padding: const EdgeInsets.all(AppSpacing.lg),
               itemCount: shortlist.members.length,
-              separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.md),
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: AppSpacing.md),
               itemBuilder: (context, index) {
                 final member = shortlist.members[index];
                 return AppCard(
@@ -118,12 +139,16 @@ class ShortlistDetailScreen extends ConsumerWidget {
                         children: [
                           CircleAvatar(
                             radius: 20,
-                            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .primaryContainer,
                             child: Text(
                               member.creatorDisplayName?.isNotEmpty == true
                                   ? member.creatorDisplayName![0].toUpperCase()
                                   : 'C',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           const SizedBox(width: AppSpacing.md),
@@ -133,27 +158,40 @@ class ShortlistDetailScreen extends ConsumerWidget {
                               children: [
                                 Text(
                                   member.creatorDisplayName ?? 'Creator',
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
                                 ),
                                 if (member.creatorCity != null)
                                   Text(
                                     member.creatorCity!,
-                                    style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
                                   ),
                               ],
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.remove_circle_outline, color: AppColors.error),
+                            icon: const Icon(
+                              Icons.remove_circle_outline,
+                              color: AppColors.error,
+                            ),
                             tooltip: 'Remove',
                             onPressed: busy
                                 ? null
                                 : () => ref
-                                    .read(shortlistControllerProvider.notifier)
-                                    .removeCreatorFromShortlist(
-                                      shortlistId: shortlistId,
-                                      creatorId: member.creatorId,
-                                    ),
+                                      .read(
+                                        shortlistControllerProvider.notifier,
+                                      )
+                                      .removeCreatorFromShortlist(
+                                        shortlistId: shortlistId,
+                                        creatorId: member.creatorId,
+                                      ),
                           ),
                         ],
                       ),
@@ -162,20 +200,32 @@ class ShortlistDetailScreen extends ConsumerWidget {
                       // Status Selector
                       Row(
                         children: [
-                          const Text('Status: ', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                          const Text(
+                            'Status: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
                           const SizedBox(width: 8),
                           DropdownButton<ShortlistMemberStatus>(
                             value: member.status,
                             isDense: true,
                             items: ShortlistMemberStatus.values.map((s) {
-                              return DropdownMenuItem(value: s, child: Text(s.label));
+                              return DropdownMenuItem(
+                                value: s,
+                                child: Text(s.label),
+                              );
                             }).toList(),
                             onChanged: busy
                                 ? null
                                 : (newStatus) {
                                     if (newStatus != null) {
                                       ref
-                                          .read(shortlistControllerProvider.notifier)
+                                          .read(
+                                            shortlistControllerProvider
+                                                .notifier,
+                                          )
                                           .updateMemberStatus(
                                             shortlistId: shortlistId,
                                             memberId: member.id,
@@ -192,7 +242,10 @@ class ShortlistDetailScreen extends ConsumerWidget {
                         const SizedBox(height: AppSpacing.xs),
                         Text(
                           'Note: ${member.notes}',
-                          style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                          style: const TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 12,
+                          ),
                         ),
                       ],
 
@@ -201,11 +254,16 @@ class ShortlistDetailScreen extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () => _showNotesDialog(context, ref, member),
-                            child: Text(member.notes != null ? 'Edit Note' : 'Add Note'),
+                            onPressed: () =>
+                                _showNotesDialog(context, ref, member),
+                            child: Text(
+                              member.notes != null ? 'Edit Note' : 'Add Note',
+                            ),
                           ),
                           TextButton(
-                            onPressed: () => context.push('/discover/creator/${member.creatorId}'),
+                            onPressed: () => context.push(
+                              '/discover/creator/${member.creatorId}',
+                            ),
                             child: const Text('View Profile'),
                           ),
                         ],
@@ -221,7 +279,11 @@ class ShortlistDetailScreen extends ConsumerWidget {
     );
   }
 
-  void _showNotesDialog(BuildContext context, WidgetRef ref, ShortlistMember member) {
+  void _showNotesDialog(
+    BuildContext context,
+    WidgetRef ref,
+    ShortlistMember member,
+  ) {
     final notesCtrl = TextEditingController(text: member.notes ?? '');
     showDialog(
       context: context,
@@ -233,7 +295,10 @@ class ShortlistDetailScreen extends ConsumerWidget {
           maxLength: 1000,
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
           AppButton(
             label: 'Save',
             onPressed: () async {

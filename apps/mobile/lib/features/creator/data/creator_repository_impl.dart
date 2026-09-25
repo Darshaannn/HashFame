@@ -38,7 +38,9 @@ class SupabaseCreatorDataSource implements CreatorDataSource {
     // 2. Fetch categories
     final catRows = await client
         .from('creator_categories')
-        .select('category_id, is_primary, categories(id, parent_id, name, slug, sort_order)')
+        .select(
+          'category_id, is_primary, categories(id, parent_id, name, slug, sort_order)',
+        )
         .eq('user_id', targetId);
 
     final primaryCats = <Category>[];
@@ -46,7 +48,9 @@ class SupabaseCreatorDataSource implements CreatorDataSource {
     for (final row in (catRows as List)) {
       final catData = row['categories'];
       if (catData != null) {
-        final cat = Category.fromJson(Map<String, dynamic>.from(catData as Map));
+        final cat = Category.fromJson(
+          Map<String, dynamic>.from(catData as Map),
+        );
         if (row['is_primary'] == true) {
           primaryCats.add(cat);
         } else {
@@ -58,14 +62,18 @@ class SupabaseCreatorDataSource implements CreatorDataSource {
     // 3. Fetch languages
     final langRows = await client
         .from('creator_languages')
-        .select('language_code, is_primary, languages(code, name, native_name, sort_order)')
+        .select(
+          'language_code, is_primary, languages(code, name, native_name, sort_order)',
+        )
         .eq('user_id', targetId);
 
     final languages = <Language>[];
     for (final row in (langRows as List)) {
       final langData = row['languages'];
       if (langData != null) {
-        languages.add(Language.fromJson(Map<String, dynamic>.from(langData as Map)));
+        languages.add(
+          Language.fromJson(Map<String, dynamic>.from(langData as Map)),
+        );
       }
     }
 
@@ -103,7 +111,10 @@ class SupabaseCreatorDataSource implements CreatorDataSource {
         .select()
         .eq('user_id', targetId);
     final collabs = (collabRows as List)
-        .map((c) => PastCollaboration.fromJson(Map<String, dynamic>.from(c as Map)))
+        .map(
+          (c) =>
+              PastCollaboration.fromJson(Map<String, dynamic>.from(c as Map)),
+        )
         .toList();
 
     // 8. Fetch manager relationships
@@ -112,7 +123,11 @@ class SupabaseCreatorDataSource implements CreatorDataSource {
         .select()
         .eq('creator_id', targetId);
     final managerRels = (managerRows as List)
-        .map((m) => CreatorManagerRelationship.fromJson(Map<String, dynamic>.from(m as Map)))
+        .map(
+          (m) => CreatorManagerRelationship.fromJson(
+            Map<String, dynamic>.from(m as Map),
+          ),
+        )
         .toList();
 
     // 9. Fetch field verifications
@@ -121,7 +136,10 @@ class SupabaseCreatorDataSource implements CreatorDataSource {
         .select()
         .eq('user_id', targetId);
     final verifs = (verifRows as List)
-        .map((v) => FieldVerification.fromJson(Map<String, dynamic>.from(v as Map)))
+        .map(
+          (v) =>
+              FieldVerification.fromJson(Map<String, dynamic>.from(v as Map)),
+        )
         .toList();
 
     var summary = const VerificationSummary();
@@ -154,7 +172,8 @@ class SupabaseCreatorDataSource implements CreatorDataSource {
       );
     }
 
-    final availabilityStatusStr = creatorRow['availability_status'] as String? ?? 'open';
+    final availabilityStatusStr =
+        creatorRow['availability_status'] as String? ?? 'open';
     final availStatus = AvailabilityStatus.values.firstWhere(
       (s) => s.name == availabilityStatusStr,
       orElse: () => AvailabilityStatus.open,
@@ -208,7 +227,10 @@ class SupabaseCreatorDataSource implements CreatorDataSource {
       'state': profile.location.state,
       'country': profile.location.country,
       'availability_status': profile.availability.status.name,
-      'available_from': profile.availability.availableFrom?.toIso8601String().split('T').first,
+      'available_from': profile.availability.availableFrom
+          ?.toIso8601String()
+          .split('T')
+          .first,
       'is_represented': profile.isRepresented,
       'onboarding_step': profile.onboardingStep,
       'onboarding_completed': profile.onboardingCompleted,
@@ -229,182 +251,261 @@ class SupabaseCreatorDataSource implements CreatorDataSource {
   }
 
   @override
-  Future<CreatorProfile> updateAvailability(CreatorAvailability availability) async {
+  Future<CreatorProfile> updateAvailability(
+    CreatorAvailability availability,
+  ) async {
     await client.from('creator_profiles').upsert({
       'user_id': _actor,
       'availability_status': availability.status.name,
-      'available_from': availability.availableFrom?.toIso8601String().split('T').first,
+      'available_from': availability.availableFrom
+          ?.toIso8601String()
+          .split('T')
+          .first,
     });
     return getProfile();
   }
 
   @override
-  Future<void> setCategories({required List<String> categoryIds, String? primaryCategoryId}) async {
+  Future<void> setCategories({
+    required List<String> categoryIds,
+    String? primaryCategoryId,
+  }) async {
     await client.from('creator_categories').delete().eq('user_id', _actor);
     if (categoryIds.isNotEmpty) {
-      final inserts = categoryIds.map((cid) => {
-        'user_id': _actor,
-        'category_id': cid,
-        'is_primary': cid == primaryCategoryId,
-      }).toList();
+      final inserts = categoryIds
+          .map(
+            (cid) => {
+              'user_id': _actor,
+              'category_id': cid,
+              'is_primary': cid == primaryCategoryId,
+            },
+          )
+          .toList();
       await client.from('creator_categories').insert(inserts);
     }
   }
 
   @override
-  Future<void> setLanguages({required List<String> languageCodes, String? primaryLanguageCode}) async {
+  Future<void> setLanguages({
+    required List<String> languageCodes,
+    String? primaryLanguageCode,
+  }) async {
     await client.from('creator_languages').delete().eq('user_id', _actor);
     if (languageCodes.isNotEmpty) {
-      final inserts = languageCodes.map((code) => {
-        'user_id': _actor,
-        'language_code': code,
-        'is_primary': code == primaryLanguageCode,
-      }).toList();
+      final inserts = languageCodes
+          .map(
+            (code) => {
+              'user_id': _actor,
+              'language_code': code,
+              'is_primary': code == primaryLanguageCode,
+            },
+          )
+          .toList();
       await client.from('creator_languages').insert(inserts);
     }
   }
 
   @override
   Future<SocialAccount> addSocialAccount(SocialAccount account) async {
-    final res = await client.from('creator_social_accounts').insert({
-      'user_id': _actor,
-      'platform': account.platform.name,
-      'handle': account.handle,
-      'profile_url': account.profileUrl,
-      'user_provided_follower_count': account.userProvidedFollowerCount,
-      'connection_status': account.connectionStatus.name,
-    }).select().single();
+    final res = await client
+        .from('creator_social_accounts')
+        .insert({
+          'user_id': _actor,
+          'platform': account.platform.name,
+          'handle': account.handle,
+          'profile_url': account.profileUrl,
+          'user_provided_follower_count': account.userProvidedFollowerCount,
+          'connection_status': account.connectionStatus.name,
+        })
+        .select()
+        .single();
     return SocialAccount.fromJson(Map<String, dynamic>.from(res));
   }
 
   @override
   Future<void> updateSocialAccount(SocialAccount account) async {
-    await client.from('creator_social_accounts').update({
-      'platform': account.platform.name,
-      'handle': account.handle,
-      'profile_url': account.profileUrl,
-      'user_provided_follower_count': account.userProvidedFollowerCount,
-    }).eq('id', account.id).eq('user_id', _actor);
+    await client
+        .from('creator_social_accounts')
+        .update({
+          'platform': account.platform.name,
+          'handle': account.handle,
+          'profile_url': account.profileUrl,
+          'user_provided_follower_count': account.userProvidedFollowerCount,
+        })
+        .eq('id', account.id)
+        .eq('user_id', _actor);
   }
 
   @override
   Future<void> deleteSocialAccount(String id) async {
-    await client.from('creator_social_accounts').delete().eq('id', id).eq('user_id', _actor);
+    await client
+        .from('creator_social_accounts')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', _actor);
   }
 
   @override
   Future<RateItem> addRateItem(RateItem item) async {
-    final res = await client.from('creator_rate_items').insert({
-      'user_id': _actor,
-      'deliverable_type': item.deliverableType.name,
-      'custom_title': item.customTitle,
-      'price_amount': item.priceAmount,
-      'currency': item.currency,
-      'description': item.description,
-      'is_active': item.isActive,
-    }).select().single();
+    final res = await client
+        .from('creator_rate_items')
+        .insert({
+          'user_id': _actor,
+          'deliverable_type': item.deliverableType.name,
+          'custom_title': item.customTitle,
+          'price_amount': item.priceAmount,
+          'currency': item.currency,
+          'description': item.description,
+          'is_active': item.isActive,
+        })
+        .select()
+        .single();
     return RateItem.fromJson(Map<String, dynamic>.from(res));
   }
 
   @override
   Future<void> updateRateItem(RateItem item) async {
-    await client.from('creator_rate_items').update({
-      'deliverable_type': item.deliverableType.name,
-      'custom_title': item.customTitle,
-      'price_amount': item.priceAmount,
-      'currency': item.currency,
-      'description': item.description,
-      'is_active': item.isActive,
-    }).eq('id', item.id).eq('user_id', _actor);
+    await client
+        .from('creator_rate_items')
+        .update({
+          'deliverable_type': item.deliverableType.name,
+          'custom_title': item.customTitle,
+          'price_amount': item.priceAmount,
+          'currency': item.currency,
+          'description': item.description,
+          'is_active': item.isActive,
+        })
+        .eq('id', item.id)
+        .eq('user_id', _actor);
   }
 
   @override
   Future<void> deleteRateItem(String id) async {
-    await client.from('creator_rate_items').delete().eq('id', id).eq('user_id', _actor);
+    await client
+        .from('creator_rate_items')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', _actor);
   }
 
   @override
   Future<PortfolioItem> addPortfolioItem(PortfolioItem item) async {
-    final res = await client.from('creator_portfolio_items').insert({
-      'user_id': _actor,
-      'title': item.title,
-      'description': item.description,
-      'platform': item.platform?.name,
-      'content_url': item.contentUrl,
-      'media_path': item.mediaPath,
-      'brand_name': item.brandName,
-      'published_date': item.publishedDate?.toIso8601String().split('T').first,
-      'content_type': item.contentType.name,
-      'sort_order': item.sortOrder,
-    }).select().single();
+    final res = await client
+        .from('creator_portfolio_items')
+        .insert({
+          'user_id': _actor,
+          'title': item.title,
+          'description': item.description,
+          'platform': item.platform?.name,
+          'content_url': item.contentUrl,
+          'media_path': item.mediaPath,
+          'brand_name': item.brandName,
+          'published_date': item.publishedDate
+              ?.toIso8601String()
+              .split('T')
+              .first,
+          'content_type': item.contentType.name,
+          'sort_order': item.sortOrder,
+        })
+        .select()
+        .single();
     return PortfolioItem.fromJson(Map<String, dynamic>.from(res));
   }
 
   @override
   Future<void> updatePortfolioItem(PortfolioItem item) async {
-    await client.from('creator_portfolio_items').update({
-      'title': item.title,
-      'description': item.description,
-      'platform': item.platform?.name,
-      'content_url': item.contentUrl,
-      'media_path': item.mediaPath,
-      'brand_name': item.brandName,
-      'published_date': item.publishedDate?.toIso8601String().split('T').first,
-      'content_type': item.contentType.name,
-    }).eq('id', item.id).eq('user_id', _actor);
+    await client
+        .from('creator_portfolio_items')
+        .update({
+          'title': item.title,
+          'description': item.description,
+          'platform': item.platform?.name,
+          'content_url': item.contentUrl,
+          'media_path': item.mediaPath,
+          'brand_name': item.brandName,
+          'published_date': item.publishedDate
+              ?.toIso8601String()
+              .split('T')
+              .first,
+          'content_type': item.contentType.name,
+        })
+        .eq('id', item.id)
+        .eq('user_id', _actor);
   }
 
   @override
   Future<void> deletePortfolioItem(String id) async {
-    await client.from('creator_portfolio_items').delete().eq('id', id).eq('user_id', _actor);
+    await client
+        .from('creator_portfolio_items')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', _actor);
   }
 
   @override
   Future<PastCollaboration> addCollaboration(PastCollaboration collab) async {
-    final res = await client.from('creator_collaborations').insert({
-      'user_id': _actor,
-      'brand_name': collab.brandName,
-      'campaign_name': collab.campaignName,
-      'collaboration_year': collab.collaborationYear,
-      'deliverable_type': collab.deliverableType.name,
-      'proof_url': collab.proofUrl,
-    }).select().single();
+    final res = await client
+        .from('creator_collaborations')
+        .insert({
+          'user_id': _actor,
+          'brand_name': collab.brandName,
+          'campaign_name': collab.campaignName,
+          'collaboration_year': collab.collaborationYear,
+          'deliverable_type': collab.deliverableType.name,
+          'proof_url': collab.proofUrl,
+        })
+        .select()
+        .single();
     return PastCollaboration.fromJson(Map<String, dynamic>.from(res));
   }
 
   @override
   Future<void> updateCollaboration(PastCollaboration collab) async {
-    await client.from('creator_collaborations').update({
-      'brand_name': collab.brandName,
-      'campaign_name': collab.campaignName,
-      'collaboration_year': collab.collaborationYear,
-      'deliverable_type': collab.deliverableType.name,
-      'proof_url': collab.proofUrl,
-    }).eq('id', collab.id).eq('user_id', _actor);
+    await client
+        .from('creator_collaborations')
+        .update({
+          'brand_name': collab.brandName,
+          'campaign_name': collab.campaignName,
+          'collaboration_year': collab.collaborationYear,
+          'deliverable_type': collab.deliverableType.name,
+          'proof_url': collab.proofUrl,
+        })
+        .eq('id', collab.id)
+        .eq('user_id', _actor);
   }
 
   @override
   Future<void> deleteCollaboration(String id) async {
-    await client.from('creator_collaborations').delete().eq('id', id).eq('user_id', _actor);
+    await client
+        .from('creator_collaborations')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', _actor);
   }
 
   @override
   Future<List<CreatorManagerRelationship>> getManagerRelationships() async {
     final rows = await client
         .from('creator_manager_relationships')
-        .select('*, talent_manager_profiles(company_name, profiles(display_name))')
+        .select(
+          '*, talent_manager_profiles(company_name, profiles(display_name))',
+        )
         .eq('creator_id', _actor);
     return (rows as List).map((r) {
       final mgrProfile = r['talent_manager_profiles'];
       final displayName = mgrProfile?['profiles']?['display_name'] as String?;
       final compName = mgrProfile?['company_name'] as String?;
-      return CreatorManagerRelationship.fromJson(Map<String, dynamic>.from(r as Map))
-          .copyWith(managerName: displayName, managerCompany: compName);
+      return CreatorManagerRelationship.fromJson(
+        Map<String, dynamic>.from(r as Map),
+      ).copyWith(managerName: displayName, managerCompany: compName);
     }).toList();
   }
 
   @override
-  Future<void> respondToManagerRequest(String relationshipId, ManagerRelationshipStatus status) async {
+  Future<void> respondToManagerRequest(
+    String relationshipId,
+    ManagerRelationshipStatus status,
+  ) async {
     await client
         .from('creator_manager_relationships')
         .update({'status': status.name})
@@ -434,12 +535,22 @@ class CreatorRepositoryImpl implements CreatorRepository {
       dataSource.updateAvailability(availability);
 
   @override
-  Future<void> setCategories({required List<String> categoryIds, String? primaryCategoryId}) =>
-      dataSource.setCategories(categoryIds: categoryIds, primaryCategoryId: primaryCategoryId);
+  Future<void> setCategories({
+    required List<String> categoryIds,
+    String? primaryCategoryId,
+  }) => dataSource.setCategories(
+    categoryIds: categoryIds,
+    primaryCategoryId: primaryCategoryId,
+  );
 
   @override
-  Future<void> setLanguages({required List<String> languageCodes, String? primaryLanguageCode}) =>
-      dataSource.setLanguages(languageCodes: languageCodes, primaryLanguageCode: primaryLanguageCode);
+  Future<void> setLanguages({
+    required List<String> languageCodes,
+    String? primaryLanguageCode,
+  }) => dataSource.setLanguages(
+    languageCodes: languageCodes,
+    primaryLanguageCode: primaryLanguageCode,
+  );
 
   @override
   Future<SocialAccount> addSocialAccount(SocialAccount account) =>
@@ -454,16 +565,13 @@ class CreatorRepositoryImpl implements CreatorRepository {
       dataSource.deleteSocialAccount(id);
 
   @override
-  Future<RateItem> addRateItem(RateItem item) =>
-      dataSource.addRateItem(item);
+  Future<RateItem> addRateItem(RateItem item) => dataSource.addRateItem(item);
 
   @override
-  Future<void> updateRateItem(RateItem item) =>
-      dataSource.updateRateItem(item);
+  Future<void> updateRateItem(RateItem item) => dataSource.updateRateItem(item);
 
   @override
-  Future<void> deleteRateItem(String id) =>
-      dataSource.deleteRateItem(id);
+  Future<void> deleteRateItem(String id) => dataSource.deleteRateItem(id);
 
   @override
   Future<PortfolioItem> addPortfolioItem(PortfolioItem item) =>
@@ -494,6 +602,8 @@ class CreatorRepositoryImpl implements CreatorRepository {
       dataSource.getManagerRelationships();
 
   @override
-  Future<void> respondToManagerRequest(String relationshipId, ManagerRelationshipStatus status) =>
-      dataSource.respondToManagerRequest(relationshipId, status);
+  Future<void> respondToManagerRequest(
+    String relationshipId,
+    ManagerRelationshipStatus status,
+  ) => dataSource.respondToManagerRequest(relationshipId, status);
 }

@@ -23,7 +23,8 @@ class LanguageMultiSelectPicker extends StatefulWidget {
   final int maxSelections;
 
   @override
-  State<LanguageMultiSelectPicker> createState() => _LanguageMultiSelectPickerState();
+  State<LanguageMultiSelectPicker> createState() =>
+      _LanguageMultiSelectPickerState();
 }
 
 class _LanguageMultiSelectPickerState extends State<LanguageMultiSelectPicker> {
@@ -42,13 +43,14 @@ class _LanguageMultiSelectPickerState extends State<LanguageMultiSelectPicker> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppSearchField(
-          onChanged: (val) => setState(() => _searchQuery = val),
-        ),
+        AppSearchField(onChanged: (val) => setState(() => _searchQuery = val)),
         const SizedBox(height: AppSpacing.sm),
         Text(
           'Selected ${widget.selectedLanguageCodes.length} of max ${widget.maxSelections}',
-          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+          style: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: AppSpacing.sm),
         Wrap(
@@ -59,7 +61,9 @@ class _LanguageMultiSelectPickerState extends State<LanguageMultiSelectPicker> {
             final isPrimary = widget.primaryLanguageCode == lang.code;
 
             return AppChip(
-              label: isPrimary ? '${lang.name} (${lang.nativeName}) - Primary' : '${lang.name} (${lang.nativeName})',
+              label: isPrimary
+                  ? '${lang.name} (${lang.nativeName}) - Primary'
+                  : '${lang.name} (${lang.nativeName})',
               selected: isSelected,
               onSelected: (selected) {
                 final updated = Set<String>.from(widget.selectedLanguageCodes);
@@ -72,7 +76,9 @@ class _LanguageMultiSelectPickerState extends State<LanguageMultiSelectPicker> {
                 } else {
                   updated.remove(lang.code);
                   if (isPrimary && widget.onPrimaryChanged != null) {
-                    widget.onPrimaryChanged!(updated.isNotEmpty ? updated.first : null);
+                    widget.onPrimaryChanged!(
+                      updated.isNotEmpty ? updated.first : null,
+                    );
                   }
                 }
                 widget.onChanged(updated);

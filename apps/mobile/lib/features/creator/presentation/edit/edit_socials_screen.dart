@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/core/errors/app_failure.dart';
+
 import '../../domain/social_account.dart';
 import '../profile/creator_profile_controller.dart';
 
@@ -95,7 +96,9 @@ class _EditSocialsScreenState extends ConsumerState<EditSocialsScreen> {
                 busy: busy,
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    final count = int.tryParse(_followersController.text.trim());
+                    final count = int.tryParse(
+                      _followersController.text.trim(),
+                    );
                     final newAcc = SocialAccount(
                       id: '',
                       userId: '',
@@ -110,7 +113,8 @@ class _EditSocialsScreenState extends ConsumerState<EditSocialsScreen> {
                         .read(creatorControllerProvider.notifier)
                         .addSocialAccount(newAcc);
 
-                    if (context.mounted && !ref.read(creatorControllerProvider).hasError) {
+                    if (context.mounted &&
+                        !ref.read(creatorControllerProvider).hasError) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Social account added!')),
                       );

@@ -24,20 +24,23 @@ import 'package:ggs_mobile/features/shortlist/domain/shortlist_member.dart';
 import 'package:ggs_mobile/features/shortlist/domain/shortlist_repository.dart';
 import 'package:ggs_mobile/features/talent_manager/domain/talent_manager_profile.dart';
 import 'package:ggs_mobile/features/talent_manager/domain/talent_manager_repository.dart';
+import 'package:ggs_mobile/features/campaign/domain/campaign.dart';
+import 'package:ggs_mobile/features/campaign/domain/campaign_application.dart';
+import 'package:ggs_mobile/features/campaign/domain/campaign_opportunity_item.dart';
+import 'package:ggs_mobile/features/campaign/domain/campaign_repository.dart';
 
 // ─── Sample helpers ────────────────────────────────────────────────────────────
 
 Account sampleAccount({
   ProfessionalRole? role = ProfessionalRole.creator,
   AccountState state = AccountState.active,
-}) =>
-    Account(
-      id: '11111111-1111-4111-8111-111111111111',
-      displayName: 'Test Creator',
-      primaryRoleLabel: role,
-      accountState: state,
-      updatedAt: DateTime.utc(2026, 1, 1),
-    );
+}) => Account(
+  id: '11111111-1111-4111-8111-111111111111',
+  displayName: 'Test Creator',
+  primaryRoleLabel: role,
+  accountState: state,
+  updatedAt: DateTime.utc(2026, 1, 1),
+);
 
 // ─── Auth ──────────────────────────────────────────────────────────────────────
 
@@ -148,7 +151,8 @@ class FakeAccounts implements AccountRepository {
 class FakeReferenceDataRepository implements ReferenceDataRepository {
   List<Category> categoriesList = const [
     Category(id: 'cat-1', name: 'Tech & Gadgets', slug: 'tech'),
-    Category(id: 'cat-2', name: 'Lifestyle & Vlogs', slug: 'lifestyle'),
+    Category(id: 'cat-2', name: 'Fashion & Style', slug: 'fashion'),
+    Category(id: 'cat-3', name: 'Lifestyle & Vlogs', slug: 'lifestyle'),
   ];
   List<Language> languagesList = const [
     Language(code: 'en', name: 'English', nativeName: 'English'),
@@ -198,7 +202,9 @@ class FakeCreatorRepository implements CreatorRepository {
   }
 
   @override
-  Future<CreatorProfile> updateAvailability(CreatorAvailability availability) async {
+  Future<CreatorProfile> updateAvailability(
+    CreatorAvailability availability,
+  ) async {
     profile = profile.copyWith(availability: availability);
     return profile;
   }
@@ -315,8 +321,9 @@ class FakeCreatorRepository implements CreatorRepository {
   @override
   Future<void> deleteCollaboration(String id) async {
     profile = profile.copyWith(
-      pastCollaborations:
-          profile.pastCollaborations.where((c) => c.id != id).toList(),
+      pastCollaborations: profile.pastCollaborations
+          .where((c) => c.id != id)
+          .toList(),
     );
   }
 
@@ -347,7 +354,9 @@ class FakeBrandRepository implements BrandRepository {
   Future<BrandMarketerProfile> getProfile({String? userId}) async => profile;
 
   @override
-  Future<BrandMarketerProfile> updateProfile(BrandMarketerProfile newProfile) async {
+  Future<BrandMarketerProfile> updateProfile(
+    BrandMarketerProfile newProfile,
+  ) async {
     profile = newProfile;
     return newProfile;
   }
@@ -401,7 +410,9 @@ class FakeTalentManagerRepository implements TalentManagerRepository {
   Future<TalentManagerProfile> getProfile({String? userId}) async => profile;
 
   @override
-  Future<TalentManagerProfile> updateProfile(TalentManagerProfile newProfile) async {
+  Future<TalentManagerProfile> updateProfile(
+    TalentManagerProfile newProfile,
+  ) async {
     profile = newProfile;
     return newProfile;
   }
@@ -413,47 +424,49 @@ class FakeDiscoveryRepository implements DiscoveryRepository {
   List<CreatorDiscoveryItem> creators = [];
 
   FakeDiscoveryRepository({List<CreatorDiscoveryItem>? creators}) {
-    this.creators = creators ?? [
-      const CreatorDiscoveryItem(
-        creatorId: 'c1',
-        displayName: 'Rohan Sharma',
-        professionalName: 'rohan_vlogs',
-        city: 'Mumbai',
-        state: 'Maharashtra',
-        primaryCategoryNames: ['Tech & Gadgets'],
-        primaryPlatform: SocialPlatform.youtube,
-        totalFollowers: 150000,
-        startingRate: 25000,
-        startingRateDeliverable: DeliverableType.youtubeVideo,
-        availabilityStatus: AvailabilityStatus.open,
-      ),
-      const CreatorDiscoveryItem(
-        creatorId: 'c2',
-        displayName: 'Ananya Verma',
-        professionalName: 'ananyafit',
-        city: 'Bengaluru',
-        state: 'Karnataka',
-        primaryCategoryNames: ['Health & Fitness', 'Lifestyle'],
-        primaryPlatform: SocialPlatform.instagram,
-        totalFollowers: 85000,
-        startingRate: 12000,
-        startingRateDeliverable: DeliverableType.instagramReel,
-        availabilityStatus: AvailabilityStatus.open,
-      ),
-      const CreatorDiscoveryItem(
-        creatorId: 'c3',
-        displayName: 'Vikram Joshi',
-        professionalName: 'vikram_gaming',
-        city: 'Delhi',
-        state: 'Delhi',
-        primaryCategoryNames: ['Gaming & Esports'],
-        primaryPlatform: SocialPlatform.youtube,
-        totalFollowers: 320000,
-        startingRate: 40000,
-        startingRateDeliverable: DeliverableType.youtubeVideo,
-        availabilityStatus: AvailabilityStatus.limited,
-      ),
-    ];
+    this.creators =
+        creators ??
+        [
+          const CreatorDiscoveryItem(
+            creatorId: 'c1',
+            displayName: 'Rohan Sharma',
+            professionalName: 'rohan_vlogs',
+            city: 'Mumbai',
+            state: 'Maharashtra',
+            primaryCategoryNames: ['Tech & Gadgets'],
+            primaryPlatform: SocialPlatform.youtube,
+            totalFollowers: 150000,
+            startingRate: 25000,
+            startingRateDeliverable: DeliverableType.youtubeVideo,
+            availabilityStatus: AvailabilityStatus.open,
+          ),
+          const CreatorDiscoveryItem(
+            creatorId: 'c2',
+            displayName: 'Ananya Verma',
+            professionalName: 'ananyafit',
+            city: 'Bengaluru',
+            state: 'Karnataka',
+            primaryCategoryNames: ['Health & Fitness', 'Lifestyle'],
+            primaryPlatform: SocialPlatform.instagram,
+            totalFollowers: 85000,
+            startingRate: 12000,
+            startingRateDeliverable: DeliverableType.instagramReel,
+            availabilityStatus: AvailabilityStatus.open,
+          ),
+          const CreatorDiscoveryItem(
+            creatorId: 'c3',
+            displayName: 'Vikram Joshi',
+            professionalName: 'vikram_gaming',
+            city: 'Delhi',
+            state: 'Delhi',
+            primaryCategoryNames: ['Gaming & Esports'],
+            primaryPlatform: SocialPlatform.youtube,
+            totalFollowers: 320000,
+            startingRate: 40000,
+            startingRateDeliverable: DeliverableType.youtubeVideo,
+            availabilityStatus: AvailabilityStatus.limited,
+          ),
+        ];
   }
 
   @override
@@ -465,20 +478,27 @@ class FakeDiscoveryRepository implements DiscoveryRepository {
     var filtered = creators.where((c) {
       if (filters.query.isNotEmpty) {
         final q = filters.query.toLowerCase();
-        final matchName = c.displayName.toLowerCase().contains(q) ||
+        final matchName =
+            c.displayName.toLowerCase().contains(q) ||
             (c.professionalName?.toLowerCase().contains(q) ?? false);
         if (!matchName) return false;
       }
       if (filters.city != null && filters.city!.isNotEmpty) {
-        if (c.city?.toLowerCase().contains(filters.city!.toLowerCase()) != true) return false;
+        if (c.city?.toLowerCase().contains(filters.city!.toLowerCase()) !=
+            true) {
+          return false;
+        }
       }
-      if (filters.availability != null && c.availabilityStatus != filters.availability) {
+      if (filters.availability != null &&
+          c.availabilityStatus != filters.availability) {
         return false;
       }
-      if (filters.minRate != null && (c.startingRate == null || c.startingRate! < filters.minRate!)) {
+      if (filters.minRate != null &&
+          (c.startingRate == null || c.startingRate! < filters.minRate!)) {
         return false;
       }
-      if (filters.maxRate != null && (c.startingRate == null || c.startingRate! > filters.maxRate!)) {
+      if (filters.maxRate != null &&
+          (c.startingRate == null || c.startingRate! > filters.maxRate!)) {
         return false;
       }
       return true;
@@ -494,7 +514,9 @@ class FakeDiscoveryRepository implements DiscoveryRepository {
   }
 
   @override
-  Future<CreatorDiscoveryItem?> getCreatorDiscoveryDetail({required String creatorId}) async {
+  Future<CreatorDiscoveryItem?> getCreatorDiscoveryDetail({
+    required String creatorId,
+  }) async {
     return creators.where((c) => c.creatorId == creatorId).firstOrNull;
   }
 
@@ -509,6 +531,9 @@ class FakeDiscoveryRepository implements DiscoveryRepository {
 // ─── Shortlists ───────────────────────────────────────────────────────────────
 
 class FakeShortlistRepository implements ShortlistRepository {
+  static int _shortlistSeq = 0;
+  static int _memberSeq = 0;
+
   final List<Shortlist> shortlists = [];
   final Map<String, List<ShortlistMember>> membersByShortlist = {};
 
@@ -540,8 +565,9 @@ class FakeShortlistRepository implements ShortlistRepository {
     String? description,
     String? organizationId,
   }) async {
+    _shortlistSeq++;
     final list = Shortlist(
-      id: 'sl_${DateTime.now().millisecondsSinceEpoch}',
+      id: 'sl_${DateTime.now().millisecondsSinceEpoch}_$_shortlistSeq',
       organizationId: organizationId ?? 'org_1',
       createdBy: 'user_1',
       name: name,
@@ -591,8 +617,9 @@ class FakeShortlistRepository implements ShortlistRepository {
     if (list.any((m) => m.creatorId == creatorId)) {
       throw Exception('Creator already in this shortlist');
     }
+    _memberSeq++;
     final member = ShortlistMember(
-      id: 'sm_${DateTime.now().millisecondsSinceEpoch}',
+      id: 'sm_${DateTime.now().millisecondsSinceEpoch}_$_memberSeq',
       shortlistId: shortlistId,
       creatorId: creatorId,
       addedBy: 'user_1',
@@ -611,7 +638,9 @@ class FakeShortlistRepository implements ShortlistRepository {
     required String shortlistId,
     required String creatorId,
   }) async {
-    membersByShortlist[shortlistId]?.removeWhere((m) => m.creatorId == creatorId);
+    membersByShortlist[shortlistId]?.removeWhere(
+      (m) => m.creatorId == creatorId,
+    );
   }
 
   @override
@@ -622,7 +651,10 @@ class FakeShortlistRepository implements ShortlistRepository {
     for (final members in membersByShortlist.values) {
       final idx = members.indexWhere((m) => m.id == memberId);
       if (idx != -1) {
-        members[idx] = members[idx].copyWith(status: status, updatedAt: DateTime.now());
+        members[idx] = members[idx].copyWith(
+          status: status,
+          updatedAt: DateTime.now(),
+        );
         break;
       }
     }
@@ -636,7 +668,10 @@ class FakeShortlistRepository implements ShortlistRepository {
     for (final members in membersByShortlist.values) {
       final idx = members.indexWhere((m) => m.id == memberId);
       if (idx != -1) {
-        members[idx] = members[idx].copyWith(notes: notes, updatedAt: DateTime.now());
+        members[idx] = members[idx].copyWith(
+          notes: notes,
+          updatedAt: DateTime.now(),
+        );
         break;
       }
     }
@@ -670,3 +705,536 @@ class FakeShortlistRepository implements ShortlistRepository {
   }
 }
 
+// ─── Campaigns (Phase 2C) ──────────────────────────────────────────────────
+
+class FakeCampaignRepository implements CampaignRepository {
+  final Map<String, Campaign> campaigns = {};
+  final Map<String, List<CampaignDeliverable>> deliverables = {};
+  final Map<String, CampaignApplication> applications = {};
+  final Map<String, List<CampaignApplicationStatusHistory>> statusHistories =
+      {};
+  int _counter = 0;
+
+  @override
+  Future<Campaign> createDraft({
+    required String organizationId,
+    required String title,
+    required String description,
+    String? objective,
+    CampaignCompensationType compensationType = CampaignCompensationType.paid,
+    String currency = 'INR',
+    double? budgetMin,
+    double? budgetMax,
+    double? barterValue,
+    String? barterDescription,
+    int creatorSlots = 1,
+    String? targetCity,
+    String? targetState,
+    String targetCountry = 'IN',
+    int? minFollowers,
+    int? maxFollowers,
+    List<String> categoryIds = const [],
+    List<String> languageCodes = const [],
+    List<CampaignDeliverable> deliverables = const [],
+    CampaignUsageRights usageRights = const CampaignUsageRights(),
+    DateTime? applicationDeadline,
+    DateTime? contentDeadline,
+    DateTime? campaignStartDate,
+    DateTime? campaignEndDate,
+    String? additionalRequirements,
+  }) async {
+    _counter++;
+    final id = 'camp_$_counter';
+    final now = DateTime.now();
+    final saved = Campaign(
+      id: id,
+      organizationId: organizationId,
+      title: title,
+      description: description,
+      objective: objective,
+      status: CampaignStatus.draft,
+      compensationType: compensationType,
+      currency: currency,
+      budgetMin: budgetMin,
+      budgetMax: budgetMax,
+      barterValue: barterValue,
+      barterDescription: barterDescription,
+      creatorSlots: creatorSlots,
+      targetCity: targetCity,
+      targetState: targetState,
+      targetCountry: targetCountry,
+      minFollowers: minFollowers,
+      maxFollowers: maxFollowers,
+      categoryIds: categoryIds,
+      categoryNames: categoryIds,
+      languageCodes: languageCodes,
+      languageNames: languageCodes,
+      deliverables: deliverables,
+      usageRights: usageRights,
+      applicationDeadline: applicationDeadline,
+      contentDeadline: contentDeadline,
+      campaignStartDate: campaignStartDate,
+      campaignEndDate: campaignEndDate,
+      additionalRequirements: additionalRequirements,
+      createdAt: now,
+      updatedAt: now,
+    );
+    campaigns[id] = saved;
+    this.deliverables[id] = List.from(deliverables);
+    return saved;
+  }
+
+  @override
+  Future<Campaign> updateDraft({
+    required String campaignId,
+    String? title,
+    String? description,
+    String? objective,
+    CampaignCompensationType? compensationType,
+    String? currency,
+    double? budgetMin,
+    double? budgetMax,
+    double? barterValue,
+    String? barterDescription,
+    int? creatorSlots,
+    String? targetCity,
+    String? targetState,
+    String? targetCountry,
+    int? minFollowers,
+    int? maxFollowers,
+    List<String>? categoryIds,
+    List<String>? languageCodes,
+    List<CampaignDeliverable>? deliverables,
+    CampaignUsageRights? usageRights,
+    DateTime? applicationDeadline,
+    DateTime? contentDeadline,
+    DateTime? campaignStartDate,
+    DateTime? campaignEndDate,
+    String? additionalRequirements,
+  }) async {
+    final existing = campaigns[campaignId];
+    if (existing == null) throw Exception('Campaign not found');
+    if (existing.status != CampaignStatus.draft &&
+        existing.status != CampaignStatus.rejected) {
+      throw Exception('Only draft or rejected campaigns can be edited');
+    }
+    final updated = existing.copyWith(
+      title: title ?? existing.title,
+      description: description ?? existing.description,
+      objective: objective ?? existing.objective,
+      compensationType: compensationType ?? existing.compensationType,
+      currency: currency ?? existing.currency,
+      budgetMin: budgetMin ?? existing.budgetMin,
+      budgetMax: budgetMax ?? existing.budgetMax,
+      barterValue: barterValue ?? existing.barterValue,
+      barterDescription: barterDescription ?? existing.barterDescription,
+      creatorSlots: creatorSlots ?? existing.creatorSlots,
+      targetCity: targetCity ?? existing.targetCity,
+      targetState: targetState ?? existing.targetState,
+      targetCountry: targetCountry ?? existing.targetCountry,
+      minFollowers: minFollowers ?? existing.minFollowers,
+      maxFollowers: maxFollowers ?? existing.maxFollowers,
+      categoryIds: categoryIds ?? existing.categoryIds,
+      categoryNames: categoryIds ?? existing.categoryNames,
+      languageCodes: languageCodes ?? existing.languageCodes,
+      languageNames: languageCodes ?? existing.languageNames,
+      deliverables: deliverables ?? existing.deliverables,
+      usageRights: usageRights ?? existing.usageRights,
+      applicationDeadline: applicationDeadline ?? existing.applicationDeadline,
+      contentDeadline: contentDeadline ?? existing.contentDeadline,
+      campaignStartDate: campaignStartDate ?? existing.campaignStartDate,
+      campaignEndDate: campaignEndDate ?? existing.campaignEndDate,
+      additionalRequirements:
+          additionalRequirements ?? existing.additionalRequirements,
+      updatedAt: DateTime.now(),
+    );
+    campaigns[campaignId] = updated;
+    if (deliverables != null) {
+      this.deliverables[campaignId] = List.from(deliverables);
+    }
+    return updated;
+  }
+
+  @override
+  Future<Campaign> getCampaign(String campaignId) async {
+    final campaign = campaigns[campaignId];
+    if (campaign == null) throw Exception('Campaign not found');
+    return campaign.copyWith(deliverables: deliverables[campaignId] ?? []);
+  }
+
+  @override
+  Future<List<Campaign>> listOrganizationCampaigns({
+    required String organizationId,
+    CampaignStatus? status,
+  }) async {
+    var list = campaigns.values
+        .where((c) => c.organizationId == organizationId)
+        .toList();
+    if (status != null) {
+      list = list.where((c) => c.status == status).toList();
+    }
+    return list
+        .map((c) => c.copyWith(deliverables: deliverables[c.id] ?? []))
+        .toList();
+  }
+
+  @override
+  Future<CampaignOpportunitySearchResult> searchLiveCampaigns({
+    required CampaignSearchFilters filters,
+    int limit = 20,
+    int offset = 0,
+    String? creatorId,
+  }) async {
+    var list = campaigns.values
+        .where((c) => c.status == CampaignStatus.live)
+        .toList();
+
+    if (filters.query.isNotEmpty) {
+      final q = filters.query.toLowerCase();
+      list = list
+          .where(
+            (c) =>
+                c.title.toLowerCase().contains(q) ||
+                c.description.toLowerCase().contains(q),
+          )
+          .toList();
+    }
+    if (filters.categoryIds.isNotEmpty) {
+      list = list
+          .where(
+            (c) => c.categoryIds.any((id) => filters.categoryIds.contains(id)),
+          )
+          .toList();
+    }
+    if (filters.compensationType != null) {
+      list = list
+          .where((c) => c.compensationType == filters.compensationType)
+          .toList();
+    }
+
+    final totalCount = list.length;
+    final paged = list.skip(offset).take(limit).toList();
+    final items = paged
+        .map(
+          (c) => CampaignOpportunityItem(
+            campaignId: c.id,
+            organizationId: c.organizationId,
+            title: c.title,
+            brandName: c.brandName ?? 'Test Brand',
+            compensationType: c.compensationType,
+            currency: c.currency,
+            budgetMin: c.budgetMin,
+            budgetMax: c.budgetMax,
+            barterDescription: c.barterDescription,
+            categoryNames: c.categoryNames,
+            deliverableCount: (deliverables[c.id] ?? []).length,
+            creatorSlots: c.creatorSlots,
+            applicationDeadline: c.applicationDeadline,
+            contentDeadline: c.contentDeadline,
+            myApplicationStatus: applications.values
+                .firstWhere(
+                  (a) =>
+                      a.campaignId == c.id &&
+                      a.creatorId == creatorId &&
+                      a.status != CampaignApplicationStatus.withdrawn,
+                  orElse: () => CampaignApplication(
+                    id: '',
+                    campaignId: '',
+                    creatorId: '',
+                    pitch: '',
+                    createdAt: DateTime.now(),
+                  ),
+                )
+                .status
+                .wire,
+          ),
+        )
+        .toList();
+
+    return CampaignOpportunitySearchResult(
+      items: items,
+      totalCount: totalCount,
+      hasMore: offset + limit < totalCount,
+    );
+  }
+
+  @override
+  Future<Campaign> submitForReview(String campaignId) async {
+    final campaign = campaigns[campaignId];
+    if (campaign == null) throw Exception('Campaign not found');
+    if (campaign.status != CampaignStatus.draft) {
+      throw Exception('Only draft campaigns can be submitted for review');
+    }
+    final updated = campaign.copyWith(
+      status: CampaignStatus.pendingReview,
+      updatedAt: DateTime.now(),
+    );
+    campaigns[campaignId] = updated;
+    return updated;
+  }
+
+  @override
+  Future<Campaign> moderateCampaign({
+    required String campaignId,
+    required String action,
+    String? reason,
+  }) async {
+    final campaign = campaigns[campaignId];
+    if (campaign == null) throw Exception('Campaign not found');
+    if (campaign.status != CampaignStatus.pendingReview) {
+      throw Exception('Only pendingReview campaigns can be moderated');
+    }
+    final targetStatus = action == 'approve'
+        ? CampaignStatus.live
+        : CampaignStatus.rejected;
+    final now = DateTime.now();
+    final updated = campaign.copyWith(
+      status: targetStatus,
+      publishedAt: targetStatus == CampaignStatus.live
+          ? now
+          : campaign.publishedAt,
+      rejectionReason: reason,
+      updatedAt: now,
+    );
+    campaigns[campaignId] = updated;
+    return updated;
+  }
+
+  @override
+  Future<Campaign> pauseCampaign(String campaignId) async {
+    final campaign = campaigns[campaignId];
+    if (campaign == null) throw Exception('Campaign not found');
+    if (campaign.status != CampaignStatus.live) {
+      throw Exception('Only live campaigns can be paused');
+    }
+    final updated = campaign.copyWith(
+      status: CampaignStatus.paused,
+      updatedAt: DateTime.now(),
+    );
+    campaigns[campaignId] = updated;
+    return updated;
+  }
+
+  @override
+  Future<Campaign> resumeCampaign(String campaignId) async {
+    final campaign = campaigns[campaignId];
+    if (campaign == null) throw Exception('Campaign not found');
+    if (campaign.status != CampaignStatus.paused) {
+      throw Exception('Only paused campaigns can be resumed');
+    }
+    final updated = campaign.copyWith(
+      status: CampaignStatus.live,
+      updatedAt: DateTime.now(),
+    );
+    campaigns[campaignId] = updated;
+    return updated;
+  }
+
+  @override
+  Future<Campaign> closeCampaign(String campaignId) async {
+    final campaign = campaigns[campaignId];
+    if (campaign == null) throw Exception('Campaign not found');
+    final updated = campaign.copyWith(
+      status: CampaignStatus.closed,
+      closedAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+    campaigns[campaignId] = updated;
+    return updated;
+  }
+
+  @override
+  Future<void> deleteDraft(String campaignId) async {
+    campaigns.remove(campaignId);
+    deliverables.remove(campaignId);
+  }
+
+  @override
+  Future<CampaignApplication> submitApplication({
+    required String campaignId,
+    required String creatorId,
+    required String pitch,
+    double? proposedRate,
+    String currency = 'INR',
+  }) async {
+    final campaign = campaigns[campaignId];
+    if (campaign == null) throw Exception('Campaign not found');
+    if (campaign.status != CampaignStatus.live) {
+      throw Exception('Campaign is not live');
+    }
+    if (campaign.applicationDeadline != null &&
+        campaign.applicationDeadline!.isBefore(DateTime.now())) {
+      throw Exception('Application deadline has passed');
+    }
+
+    final existing = applications.values.firstWhere(
+      (a) =>
+          a.campaignId == campaignId &&
+          a.creatorId == creatorId &&
+          a.status != CampaignApplicationStatus.withdrawn,
+      orElse: () => CampaignApplication(
+        id: '',
+        campaignId: '',
+        creatorId: '',
+        pitch: '',
+        createdAt: DateTime.now(),
+      ),
+    );
+    if (existing.id.isNotEmpty) {
+      throw Exception('You have already applied to this campaign');
+    }
+
+    _counter++;
+    final appId = 'app_$_counter';
+    final now = DateTime.now();
+    final app = CampaignApplication(
+      id: appId,
+      campaignId: campaignId,
+      creatorId: creatorId,
+      status: CampaignApplicationStatus.submitted,
+      pitch: pitch,
+      proposedRate: proposedRate,
+      currency: currency,
+      createdAt: now,
+      updatedAt: now,
+      campaignTitle: campaign.title,
+      brandName: campaign.brandName ?? 'Test Brand',
+      creatorDisplayName: 'Creator $creatorId',
+    );
+
+    applications[appId] = app;
+    statusHistories[appId] = [
+      CampaignApplicationStatusHistory(
+        id: 'hist_$_counter',
+        applicationId: appId,
+        fromStatus: null,
+        toStatus: CampaignApplicationStatus.submitted,
+        changedBy: creatorId,
+        createdAt: now,
+      ),
+    ];
+    return app;
+  }
+
+  @override
+  Future<CampaignApplication> getApplication(String applicationId) async {
+    final app = applications[applicationId];
+    if (app == null) throw Exception('Application not found');
+    return app.copyWith(statusHistory: statusHistories[applicationId] ?? []);
+  }
+
+  @override
+  Future<List<CampaignApplication>> getCreatorApplications(
+    String creatorId,
+  ) async {
+    return applications.values.where((a) => a.creatorId == creatorId).toList();
+  }
+
+  @override
+  Future<List<CampaignApplication>> getCampaignApplicants({
+    required String campaignId,
+    CampaignApplicationStatus? status,
+  }) async {
+    var list = applications.values
+        .where((a) => a.campaignId == campaignId)
+        .toList();
+    if (status != null) {
+      list = list.where((a) => a.status == status).toList();
+    }
+    return list;
+  }
+
+  @override
+  Future<CampaignApplication> transitionApplicationStatus({
+    required String applicationId,
+    required CampaignApplicationStatus newStatus,
+    String? reason,
+  }) async {
+    final app = applications[applicationId];
+    if (app == null) throw Exception('Application not found');
+    final campaign = campaigns[app.campaignId];
+
+    // Slot capacity check when selecting
+    if (newStatus == CampaignApplicationStatus.selected && campaign != null) {
+      final selectedCount = applications.values
+          .where(
+            (a) =>
+                a.campaignId == app.campaignId &&
+                a.status == CampaignApplicationStatus.selected,
+          )
+          .length;
+      if (selectedCount >= campaign.creatorSlots) {
+        throw Exception(
+          'Campaign creator slot capacity reached (${campaign.creatorSlots})',
+        );
+      }
+    }
+
+    final oldStatus = app.status;
+    final now = DateTime.now();
+    final updated = app.copyWith(
+      status: newStatus,
+      reviewedAt: now,
+      updatedAt: now,
+    );
+    applications[applicationId] = updated;
+
+    _counter++;
+    statusHistories
+        .putIfAbsent(applicationId, () => [])
+        .add(
+          CampaignApplicationStatusHistory(
+            id: 'hist_$_counter',
+            applicationId: applicationId,
+            fromStatus: oldStatus,
+            toStatus: newStatus,
+            changedBy: 'brand_reviewer',
+            reason: reason,
+            createdAt: now,
+          ),
+        );
+    return updated;
+  }
+
+  @override
+  Future<CampaignApplication> withdrawApplication(String applicationId) async {
+    final app = applications[applicationId];
+    if (app == null) throw Exception('Application not found');
+    if (app.status == CampaignApplicationStatus.selected ||
+        app.status == CampaignApplicationStatus.rejected) {
+      throw Exception(
+        'Cannot withdraw an application that has already been decided',
+      );
+    }
+
+    final oldStatus = app.status;
+    final now = DateTime.now();
+    final updated = app.copyWith(
+      status: CampaignApplicationStatus.withdrawn,
+      withdrawnAt: now,
+      updatedAt: now,
+    );
+    applications[applicationId] = updated;
+
+    _counter++;
+    statusHistories
+        .putIfAbsent(applicationId, () => [])
+        .add(
+          CampaignApplicationStatusHistory(
+            id: 'hist_$_counter',
+            applicationId: applicationId,
+            fromStatus: oldStatus,
+            toStatus: CampaignApplicationStatus.withdrawn,
+            changedBy: app.creatorId,
+            createdAt: now,
+          ),
+        );
+    return updated;
+  }
+
+  Future<List<CampaignApplicationStatusHistory>> getApplicationHistory(
+    String applicationId,
+  ) async {
+    return statusHistories[applicationId] ?? [];
+  }
+}

@@ -3,7 +3,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../creator/domain/creator_profile.dart';
 import '../../creator/domain/rate_card.dart';
 import '../../creator/domain/social_account.dart';
-import '../../profile_common/domain/verification.dart';
 import '../domain/creator_discovery_item.dart';
 import '../domain/creator_search_filters.dart';
 import '../domain/discovery_repository.dart';
@@ -18,9 +17,7 @@ class SupabaseDiscoveryDataSource {
     int offset = 0,
   }) async {
     // 1. Query creator profiles join profiles
-    var query = client
-        .from('creator_profiles')
-        .select('''
+    var query = client.from('creator_profiles').select('''
           user_id,
           professional_name,
           city,
@@ -38,7 +35,9 @@ class SupabaseDiscoveryDataSource {
 
     if (filters.query.isNotEmpty) {
       final q = '%${filters.query}%';
-      query = query.or('professional_name.ilike.$q,profiles.display_name.ilike.$q');
+      query = query.or(
+        'professional_name.ilike.$q,profiles.display_name.ilike.$q',
+      );
     }
 
     if (filters.city != null && filters.city!.isNotEmpty) {
@@ -59,7 +58,9 @@ class SupabaseDiscoveryDataSource {
 
     final items = <CreatorDiscoveryItem>[];
     for (final row in rows) {
-      final item = _mapRowToDiscoveryItem(Map<String, dynamic>.from(row as Map));
+      final item = _mapRowToDiscoveryItem(
+        Map<String, dynamic>.from(row as Map),
+      );
       if (_matchesInMemoryFilters(item, filters)) {
         items.add(item);
       }
@@ -75,20 +76,31 @@ class SupabaseDiscoveryDataSource {
     );
   }
 
-  bool _matchesInMemoryFilters(CreatorDiscoveryItem item, CreatorSearchFilters filters) {
-    if (filters.minFollowers != null && (item.totalFollowers == null || item.totalFollowers! < filters.minFollowers!)) {
+  bool _matchesInMemoryFilters(
+    CreatorDiscoveryItem item,
+    CreatorSearchFilters filters,
+  ) {
+    if (filters.minFollowers != null &&
+        (item.totalFollowers == null ||
+            item.totalFollowers! < filters.minFollowers!)) {
       return false;
     }
-    if (filters.maxFollowers != null && (item.totalFollowers == null || item.totalFollowers! > filters.maxFollowers!)) {
+    if (filters.maxFollowers != null &&
+        (item.totalFollowers == null ||
+            item.totalFollowers! > filters.maxFollowers!)) {
       return false;
     }
-    if (filters.minRate != null && (item.startingRate == null || item.startingRate! < filters.minRate!)) {
+    if (filters.minRate != null &&
+        (item.startingRate == null || item.startingRate! < filters.minRate!)) {
       return false;
     }
-    if (filters.maxRate != null && (item.startingRate == null || item.startingRate! > filters.maxRate!)) {
+    if (filters.maxRate != null &&
+        (item.startingRate == null || item.startingRate! > filters.maxRate!)) {
       return false;
     }
-    if (filters.platforms.isNotEmpty && (item.primaryPlatform == null || !filters.platforms.contains(item.primaryPlatform))) {
+    if (filters.platforms.isNotEmpty &&
+        (item.primaryPlatform == null ||
+            !filters.platforms.contains(item.primaryPlatform))) {
       return false;
     }
     return true;
@@ -142,13 +154,19 @@ class SupabaseDiscoveryDataSource {
         if (amount != null && (startRate == null || amount < startRate)) {
           startRate = amount;
           final dStr = r['deliverable_type'] as String?;
-          rateDeliverable = DeliverableType.values.where((v) => v.name == dStr).firstOrNull;
+          rateDeliverable = DeliverableType.values
+              .where((v) => v.name == dStr)
+              .firstOrNull;
         }
       }
     }
 
     final availStr = row['availability_status'] as String? ?? 'open';
-    final avail = AvailabilityStatus.values.where((v) => v.name == availStr).firstOrNull ?? AvailabilityStatus.open;
+    final avail =
+        AvailabilityStatus.values
+            .where((v) => v.name == availStr)
+            .firstOrNull ??
+        AvailabilityStatus.open;
 
     return CreatorDiscoveryItem(
       creatorId: row['user_id'] as String,
@@ -181,11 +199,17 @@ class DiscoveryRepositoryImpl implements DiscoveryRepository {
     int limit = 20,
     int offset = 0,
   }) {
-    return dataSource.searchCreators(filters: filters, limit: limit, offset: offset);
+    return dataSource.searchCreators(
+      filters: filters,
+      limit: limit,
+      offset: offset,
+    );
   }
 
   @override
-  Future<CreatorDiscoveryItem?> getCreatorDiscoveryDetail({required String creatorId}) async {
+  Future<CreatorDiscoveryItem?> getCreatorDiscoveryDetail({
+    required String creatorId,
+  }) async {
     final result = await dataSource.searchCreators(
       filters: CreatorSearchFilters(query: creatorId),
       limit: 1,

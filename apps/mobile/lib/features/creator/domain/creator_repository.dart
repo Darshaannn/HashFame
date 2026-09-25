@@ -10,10 +10,16 @@ abstract interface class CreatorRepository {
   Future<CreatorProfile> updateProfile(CreatorProfile profile);
   Future<CreatorProfile> updateOnboardingStep(int step, bool completed);
   Future<CreatorProfile> updateAvailability(CreatorAvailability availability);
-  
+
   // Categories & Languages
-  Future<void> setCategories({required List<String> categoryIds, String? primaryCategoryId});
-  Future<void> setLanguages({required List<String> languageCodes, String? primaryLanguageCode});
+  Future<void> setCategories({
+    required List<String> categoryIds,
+    String? primaryCategoryId,
+  });
+  Future<void> setLanguages({
+    required List<String> languageCodes,
+    String? primaryLanguageCode,
+  });
 
   // Social accounts
   Future<SocialAccount> addSocialAccount(SocialAccount account);
@@ -37,7 +43,10 @@ abstract interface class CreatorRepository {
 
   // Manager relationships
   Future<List<CreatorManagerRelationship>> getManagerRelationships();
-  Future<void> respondToManagerRequest(String relationshipId, ManagerRelationshipStatus status);
+  Future<void> respondToManagerRequest(
+    String relationshipId,
+    ManagerRelationshipStatus status,
+  );
 }
 
 abstract interface class CreatorDataSource {
@@ -46,8 +55,14 @@ abstract interface class CreatorDataSource {
   Future<CreatorProfile> updateProfile(CreatorProfile profile);
   Future<CreatorProfile> updateOnboardingStep(int step, bool completed);
   Future<CreatorProfile> updateAvailability(CreatorAvailability availability);
-  Future<void> setCategories({required List<String> categoryIds, String? primaryCategoryId});
-  Future<void> setLanguages({required List<String> languageCodes, String? primaryLanguageCode});
+  Future<void> setCategories({
+    required List<String> categoryIds,
+    String? primaryCategoryId,
+  });
+  Future<void> setLanguages({
+    required List<String> languageCodes,
+    String? primaryLanguageCode,
+  });
 
   Future<SocialAccount> addSocialAccount(SocialAccount account);
   Future<void> updateSocialAccount(SocialAccount account);
@@ -66,5 +81,8 @@ abstract interface class CreatorDataSource {
   Future<void> deleteCollaboration(String id);
 
   Future<List<CreatorManagerRelationship>> getManagerRelationships();
-  Future<void> respondToManagerRequest(String relationshipId, ManagerRelationshipStatus status);
+  Future<void> respondToManagerRequest(
+    String relationshipId,
+    ManagerRelationshipStatus status,
+  );
 }

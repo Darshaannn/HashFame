@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/errors/app_failure.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
+
 import 'creator_profile_controller.dart';
 import 'widgets/creator_availability_card.dart';
 import 'widgets/creator_bio_card.dart';
@@ -30,17 +31,17 @@ class CreatorProfileScreen extends ConsumerWidget {
         : ref.watch(creatorProfileProvider(userId));
 
     return profileAsync.when(
-      loading: () => const AppScaffold(
-        title: 'Creator Profile',
-        children: [AppLoader()],
-      ),
+      loading: () =>
+          const AppScaffold(title: 'Creator Profile', children: [AppLoader()]),
       error: (e, s) => AppScaffold(
         title: 'Creator Profile',
         children: [
           AppErrorState(
             message: mapFailure(e).message,
             onRetry: () => ref.invalidate(
-              isOwn ? currentCreatorProfileProvider : creatorProfileProvider(userId),
+              isOwn
+                  ? currentCreatorProfileProvider
+                  : creatorProfileProvider(userId),
             ),
           ),
         ],
@@ -83,38 +84,46 @@ class CreatorProfileScreen extends ConsumerWidget {
             ),
           CreatorSocialAccountsCard(
             profile: profile,
-            onAddPressed: isOwn ? () => context.go('/profile/edit/socials') : null,
+            onAddPressed: isOwn
+                ? () => context.go('/profile/edit/socials')
+                : null,
             onDeletePressed: isOwn
                 ? (id) => ref
-                    .read(creatorControllerProvider.notifier)
-                    .deleteSocialAccount(id)
+                      .read(creatorControllerProvider.notifier)
+                      .deleteSocialAccount(id)
                 : null,
           ),
           CreatorRateCardView(
             profile: profile,
-            onAddPressed: isOwn ? () => context.go('/profile/edit/rates') : null,
+            onAddPressed: isOwn
+                ? () => context.go('/profile/edit/rates')
+                : null,
             onDeleteItemPressed: isOwn
                 ? (id) => ref
-                    .read(creatorControllerProvider.notifier)
-                    .deleteRateItem(id)
+                      .read(creatorControllerProvider.notifier)
+                      .deleteRateItem(id)
                 : null,
           ),
           CreatorPortfolioGrid(
             profile: profile,
-            onAddPressed: isOwn ? () => context.go('/profile/edit/portfolio') : null,
+            onAddPressed: isOwn
+                ? () => context.go('/profile/edit/portfolio')
+                : null,
             onDeleteItemPressed: isOwn
                 ? (id) => ref
-                    .read(creatorControllerProvider.notifier)
-                    .deletePortfolioItem(id)
+                      .read(creatorControllerProvider.notifier)
+                      .deletePortfolioItem(id)
                 : null,
           ),
           CreatorCollaborationsList(
             profile: profile,
-            onAddPressed: isOwn ? () => context.go('/profile/edit/collabs') : null,
+            onAddPressed: isOwn
+                ? () => context.go('/profile/edit/collabs')
+                : null,
             onDeleteItemPressed: isOwn
                 ? (id) => ref
-                    .read(creatorControllerProvider.notifier)
-                    .deleteCollaboration(id)
+                      .read(creatorControllerProvider.notifier)
+                      .deleteCollaboration(id)
                 : null,
           ),
           CreatorVerificationCard(profile: profile),

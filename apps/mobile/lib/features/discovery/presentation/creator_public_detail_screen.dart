@@ -18,10 +18,7 @@ import '../../creator/presentation/profile/widgets/creator_verification_card.dar
 import '../../shortlist/presentation/widgets/add_to_shortlist_dialog.dart';
 
 class CreatorPublicDetailScreen extends ConsumerWidget {
-  const CreatorPublicDetailScreen({
-    super.key,
-    required this.creatorId,
-  });
+  const CreatorPublicDetailScreen({super.key, required this.creatorId});
 
   final String creatorId;
 
@@ -61,62 +58,42 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
               const SizedBox(height: AppSpacing.md),
               AppButton(
                 label: 'Retry',
-                onPressed: () => ref.invalidate(creatorProfileProvider(creatorId)),
+                onPressed: () =>
+                    ref.invalidate(creatorProfileProvider(creatorId)),
               ),
             ],
           ),
         ),
         data: (profile) {
           // Log viewed
-          ref.read(analyticsProvider).event(AnalyticsEvent.creatorProfileViewed);
+          ref
+              .read(analyticsProvider)
+              .event(AnalyticsEvent.creatorProfileViewed);
 
           return SafeArea(
             child: ListView(
               padding: const EdgeInsets.all(AppSpacing.lg),
               children: [
-                CreatorHeaderCard(
-                  profile: profile,
-                  showEdit: false,
-                ),
+                CreatorHeaderCard(profile: profile),
                 const SizedBox(height: AppSpacing.md),
-                CreatorBioCard(
-                  profile: profile,
-                  showEdit: false,
-                ),
+                CreatorBioCard(profile: profile),
                 const SizedBox(height: AppSpacing.md),
-                CreatorCategoriesLanguagesCard(
-                  profile: profile,
-                  showEdit: false,
-                ),
+                CreatorCategoriesLanguagesCard(profile: profile),
                 const SizedBox(height: AppSpacing.md),
-                CreatorSocialAccountsCard(
-                  profile: profile,
-                  showEdit: false,
-                ),
+                CreatorSocialAccountsCard(profile: profile),
                 const SizedBox(height: AppSpacing.md),
-                CreatorRateCardView(
-                  profile: profile,
-                  showEdit: false,
-                ),
+                CreatorRateCardView(profile: profile),
                 const SizedBox(height: AppSpacing.md),
-                CreatorPortfolioGrid(
-                  profile: profile,
-                  showEdit: false,
-                ),
+                CreatorPortfolioGrid(profile: profile),
                 const SizedBox(height: AppSpacing.md),
-                CreatorCollaborationsList(
-                  profile: profile,
-                  showEdit: false,
-                ),
+                CreatorCollaborationsList(profile: profile),
                 const SizedBox(height: AppSpacing.md),
                 CreatorAvailabilityCard(
                   profile: profile,
-                  showEdit: false,
+                  onAvailabilityChanged: (_) {},
                 ),
                 const SizedBox(height: AppSpacing.md),
-                CreatorVerificationCard(
-                  profile: profile,
-                ),
+                CreatorVerificationCard(profile: profile),
                 const SizedBox(height: AppSpacing.xl),
                 AppButton(
                   label: 'Add to Shortlist',

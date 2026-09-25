@@ -22,7 +22,10 @@ class CreatorAvailabilityCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Collaboration Availability', style: AppTypography.heading),
+          const Text(
+            'Collaboration Availability',
+            style: AppTypography.heading,
+          ),
           const SizedBox(height: AppSpacing.sm),
           const Text(
             'Signal your readiness for brand campaigns and creator collaborations.',

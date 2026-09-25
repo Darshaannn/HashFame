@@ -44,8 +44,12 @@ class CreatorCompletionCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: pct / 100.0,
               minHeight: 10,
-              backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              backgroundColor: Theme.of(context)
+                  .colorScheme
+                  .surfaceContainerHighest,
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                AppColors.primary,
+              ),
             ),
           ),
           if (report.recommendations.isNotEmpty) ...[
@@ -62,10 +66,17 @@ class CreatorCompletionCard extends StatelessWidget {
                   onTap: () => onRecommendationTap(rec),
                   borderRadius: BorderRadius.circular(AppRadius.control),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 6,
+                    ),
                     child: Row(
                       children: [
-                        const Icon(Icons.add_circle_outline, size: 16, color: AppColors.primary),
+                        const Icon(
+                          Icons.add_circle_outline,
+                          size: 16,
+                          color: AppColors.primary,
+                        ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -77,7 +88,11 @@ class CreatorCompletionCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const Icon(Icons.chevron_right, size: 16, color: AppColors.muted),
+                        const Icon(
+                          Icons.chevron_right,
+                          size: 16,
+                          color: AppColors.muted,
+                        ),
                       ],
                     ),
                   ),

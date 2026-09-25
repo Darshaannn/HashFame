@@ -7,8 +7,8 @@ import '../../profile_common/domain/verification.dart';
 part 'creator_search_filters.freezed.dart';
 part 'creator_search_filters.g.dart';
 
-@freezed
-class CreatorSearchFilters with _$CreatorSearchFilters {
+@Freezed(toJson: true, fromJson: true)
+abstract class CreatorSearchFilters with _$CreatorSearchFilters {
   const CreatorSearchFilters._();
 
   const factory CreatorSearchFilters({

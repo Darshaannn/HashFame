@@ -4,35 +4,39 @@ import '../../../app/providers.dart';
 import '../../../core/telemetry/analytics_service.dart';
 import '../domain/shortlist.dart';
 import '../domain/shortlist_member.dart';
-import '../domain/shortlist_repository.dart';
 
-final shortlistsListProvider = FutureProvider.autoDispose<List<Shortlist>>((ref) async {
+final shortlistsListProvider = FutureProvider.autoDispose<List<Shortlist>>((
+  ref,
+) async {
   final repo = ref.watch(shortlistRepositoryProvider);
   return repo.listShortlists();
 });
 
-final shortlistDetailProvider =
-    FutureProvider.autoDispose.family<Shortlist, String>((ref, id) async {
-  final repo = ref.watch(shortlistRepositoryProvider);
-  return repo.getShortlist(shortlistId: id);
-});
+final shortlistDetailProvider = FutureProvider.autoDispose
+    .family<Shortlist, String>((ref, id) async {
+      final repo = ref.watch(shortlistRepositoryProvider);
+      return repo.getShortlist(shortlistId: id);
+    });
 
 final savedCreatorMembershipsProvider =
     FutureProvider.autoDispose<Map<String, List<String>>>((ref) async {
-  final repo = ref.watch(shortlistRepositoryProvider);
-  return repo.getSavedCreatorMemberships();
-});
+      final repo = ref.watch(shortlistRepositoryProvider);
+      return repo.getSavedCreatorMemberships();
+    });
 
 final shortlistControllerProvider =
     NotifierProvider<ShortlistController, AsyncValue<void>>(
-  ShortlistController.new,
-);
+      ShortlistController.new,
+    );
 
 class ShortlistController extends Notifier<AsyncValue<void>> {
   @override
   AsyncValue<void> build() => const AsyncData(null);
 
-  Future<void> createShortlist({required String name, String? description}) async {
+  Future<void> createShortlist({
+    required String name,
+    String? description,
+  }) async {
     state = const AsyncLoading();
     try {
       final repo = ref.read(shortlistRepositoryProvider);
@@ -100,7 +104,9 @@ class ShortlistController extends Notifier<AsyncValue<void>> {
       ref.invalidate(shortlistDetailProvider(shortlistId));
       ref.invalidate(savedCreatorMembershipsProvider);
       ref.invalidate(shortlistsListProvider);
-      await ref.read(analyticsProvider).event(AnalyticsEvent.creatorShortlisted);
+      await ref
+          .read(analyticsProvider)
+          .event(AnalyticsEvent.creatorShortlisted);
       state = const AsyncData(null);
     } catch (e, st) {
       state = AsyncError(e, st);
@@ -121,7 +127,9 @@ class ShortlistController extends Notifier<AsyncValue<void>> {
       ref.invalidate(shortlistDetailProvider(shortlistId));
       ref.invalidate(savedCreatorMembershipsProvider);
       ref.invalidate(shortlistsListProvider);
-      await ref.read(analyticsProvider).event(AnalyticsEvent.creatorRemovedFromShortlist);
+      await ref
+          .read(analyticsProvider)
+          .event(AnalyticsEvent.creatorRemovedFromShortlist);
       state = const AsyncData(null);
     } catch (e, st) {
       state = AsyncError(e, st);

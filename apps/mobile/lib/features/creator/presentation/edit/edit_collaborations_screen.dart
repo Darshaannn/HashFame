@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/core/errors/app_failure.dart';
+
 import '../../domain/collaboration.dart';
 import '../../domain/rate_card.dart';
 import '../profile/creator_profile_controller.dart';
@@ -13,10 +14,12 @@ class EditCollaborationsScreen extends ConsumerStatefulWidget {
   const EditCollaborationsScreen({super.key});
 
   @override
-  ConsumerState<EditCollaborationsScreen> createState() => _EditCollaborationsScreenState();
+  ConsumerState<EditCollaborationsScreen> createState() =>
+      _EditCollaborationsScreenState();
 }
 
-class _EditCollaborationsScreenState extends ConsumerState<EditCollaborationsScreen> {
+class _EditCollaborationsScreenState
+    extends ConsumerState<EditCollaborationsScreen> {
   final _formKey = GlobalKey<FormState>();
   DeliverableType _selectedType = DeliverableType.instagramReel;
   final _brandNameController = TextEditingController();
@@ -125,7 +128,8 @@ class _EditCollaborationsScreenState extends ConsumerState<EditCollaborationsScr
                         .read(creatorControllerProvider.notifier)
                         .addCollaboration(collab);
 
-                    if (context.mounted && !ref.read(creatorControllerProvider).hasError) {
+                    if (context.mounted &&
+                        !ref.read(creatorControllerProvider).hasError) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Collaboration added!')),
                       );

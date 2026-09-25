@@ -13,6 +13,7 @@ import 'package:ggs_mobile/features/auth/presentation/session_controller.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
 import 'package:ggs_mobile/features/creator/domain/rate_card.dart';
 import 'package:ggs_mobile/features/creator/domain/social_account.dart';
+
 import '../../../profile_common/presentation/widgets/category_multi_select_picker.dart';
 import '../../../profile_common/presentation/widgets/language_multi_select_picker.dart';
 import '../profile/creator_profile_controller.dart';
@@ -21,10 +22,12 @@ class CreatorOnboardingScreen extends ConsumerStatefulWidget {
   const CreatorOnboardingScreen({super.key});
 
   @override
-  ConsumerState<CreatorOnboardingScreen> createState() => _CreatorOnboardingScreenState();
+  ConsumerState<CreatorOnboardingScreen> createState() =>
+      _CreatorOnboardingScreenState();
 }
 
-class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScreen> {
+class _CreatorOnboardingScreenState
+    extends ConsumerState<CreatorOnboardingScreen> {
   int _currentStep = 0;
   final _displayNameController = TextEditingController();
   final _profNameController = TextEditingController();
@@ -91,7 +94,9 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
           child: LinearProgressIndicator(
             value: (_currentStep + 1) / steps.length,
             minHeight: 6,
-            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+            backgroundColor: Theme.of(context)
+                .colorScheme
+                .surfaceContainerHighest,
             valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
           ),
         ),
@@ -133,14 +138,17 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
           const SizedBox(height: AppSpacing.sm),
           categoriesAsync.when(
             loading: () => const AppSkeleton(),
-            error: (e, _) => Text('Error loading categories: ${mapFailure(e).message}'),
+            error: (e, _) =>
+                Text('Error loading categories: ${mapFailure(e).message}'),
             data: (cats) => CategoryMultiSelectPicker(
               categories: cats,
               selectedCategoryIds: _selectedCategoryIds,
-              onChanged: busy ? (_) {} : (updated) => setState(() {
-                _selectedCategoryIds.clear();
-                _selectedCategoryIds.addAll(updated);
-              }),
+              onChanged: busy
+                  ? (_) {}
+                  : (updated) => setState(() {
+                      _selectedCategoryIds.clear();
+                      _selectedCategoryIds.addAll(updated);
+                    }),
             ),
           ),
         ] else if (_currentStep == 3) ...[
@@ -166,18 +174,24 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          const Text('Content Languages:', style: TextStyle(fontWeight: FontWeight.w600)),
+          const Text(
+            'Content Languages:',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
           const SizedBox(height: AppSpacing.sm),
           languagesAsync.when(
             loading: () => const AppSkeleton(),
-            error: (e, _) => Text('Error loading languages: ${mapFailure(e).message}'),
+            error: (e, _) =>
+                Text('Error loading languages: ${mapFailure(e).message}'),
             data: (langs) => LanguageMultiSelectPicker(
               languages: langs,
               selectedLanguageCodes: _selectedLanguageCodes,
-              onChanged: busy ? (_) {} : (updated) => setState(() {
-                _selectedLanguageCodes.clear();
-                _selectedLanguageCodes.addAll(updated);
-              }),
+              onChanged: busy
+                  ? (_) {}
+                  : (updated) => setState(() {
+                      _selectedLanguageCodes.clear();
+                      _selectedLanguageCodes.addAll(updated);
+                    }),
             ),
           ),
         ] else if (_currentStep == 4) ...[
@@ -185,13 +199,20 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
           const SizedBox(height: AppSpacing.sm),
           Wrap(
             spacing: 8,
-            children: [SocialPlatform.instagram, SocialPlatform.youtube, SocialPlatform.linkedin].map((p) {
-              return AppChip(
-                label: p.label,
-                selected: _socialPlatform == p,
-                onSelected: busy ? null : (_) => setState(() => _socialPlatform = p),
-              );
-            }).toList(),
+            children:
+                [
+                  SocialPlatform.instagram,
+                  SocialPlatform.youtube,
+                  SocialPlatform.linkedin,
+                ].map((p) {
+                  return AppChip(
+                    label: p.label,
+                    selected: _socialPlatform == p,
+                    onSelected: busy
+                        ? null
+                        : (_) => setState(() => _socialPlatform = p),
+                  );
+                }).toList(),
           ),
           const SizedBox(height: AppSpacing.sm),
           AppTextField(
@@ -200,17 +221,26 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
             enabled: !busy,
           ),
         ] else if (_currentStep == 5) ...[
-          const Text('Set an initial starting rate for your primary deliverable.'),
+          const Text(
+            'Set an initial starting rate for your primary deliverable.',
+          ),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
             spacing: 8,
-            children: [DeliverableType.instagramReel, DeliverableType.youtubeVideo, DeliverableType.ugcVideo].map((t) {
-              return AppChip(
-                label: t.label,
-                selected: _rateDeliverable == t,
-                onSelected: busy ? null : (_) => setState(() => _rateDeliverable = t),
-              );
-            }).toList(),
+            children:
+                [
+                  DeliverableType.instagramReel,
+                  DeliverableType.youtubeVideo,
+                  DeliverableType.ugcVideo,
+                ].map((t) {
+                  return AppChip(
+                    label: t.label,
+                    selected: _rateDeliverable == t,
+                    onSelected: busy
+                        ? null
+                        : (_) => setState(() => _rateDeliverable = t),
+                  );
+                }).toList(),
           ),
           const SizedBox(height: AppSpacing.sm),
           AppTextField(
@@ -228,7 +258,9 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
               return AppChip(
                 label: s.label,
                 selected: _availabilityStatus == s,
-                onSelected: busy ? null : (_) => setState(() => _availabilityStatus = s),
+                onSelected: busy
+                    ? null
+                    : (_) => setState(() => _availabilityStatus = s),
               );
             }).toList(),
           ),
@@ -239,15 +271,24 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Name: ${_displayNameController.text}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                  'Name: ${_displayNameController.text}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
                 if (_profNameController.text.isNotEmpty)
                   Text('Professional Name: ${_profNameController.text}'),
                 if (_cityController.text.isNotEmpty)
-                  Text('Location: ${_cityController.text}, ${_stateController.text}'),
+                  Text(
+                    'Location: ${_cityController.text}, ${_stateController.text}',
+                  ),
                 if (_socialHandleController.text.isNotEmpty)
-                  Text('Primary Social: ${_socialPlatform.label} (@${_socialHandleController.text})'),
+                  Text(
+                    'Primary Social: ${_socialPlatform.label} (@${_socialHandleController.text})',
+                  ),
                 if (_ratePriceController.text.isNotEmpty)
-                  Text('Starting Rate: ₹${_ratePriceController.text} (${_rateDeliverable.label})'),
+                  Text(
+                    'Starting Rate: ₹${_ratePriceController.text} (${_rateDeliverable.label})',
+                  ),
                 Text('Availability: ${_availabilityStatus.label}'),
               ],
             ),
@@ -269,7 +310,9 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
               const SizedBox.shrink(),
 
             AppButton(
-              label: _currentStep == steps.length - 1 ? 'Complete Setup' : 'Continue',
+              label: _currentStep == steps.length - 1
+                  ? 'Complete Setup'
+                  : 'Continue',
               busy: busy,
               onPressed: () async {
                 if (_currentStep < steps.length - 1) {
@@ -283,10 +326,14 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
                   }
 
                   // 1. Complete base account onboarding
-                  await ref.read(accountActionProvider.notifier).onboard(name, ProfessionalRole.creator);
+                  await ref
+                      .read(accountActionProvider.notifier)
+                      .onboard(name, ProfessionalRole.creator);
 
                   // 2. Save creator profile details
-                  final creatorNotifier = ref.read(creatorControllerProvider.notifier);
+                  final creatorNotifier = ref.read(
+                    creatorControllerProvider.notifier,
+                  );
                   await creatorNotifier.updateBasicProfile(
                     professionalName: _profNameController.text.trim(),
                     bio: _bioController.text.trim(),
@@ -306,25 +353,38 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
                     );
                   }
                   if (_socialHandleController.text.trim().isNotEmpty) {
-                    await creatorNotifier.addSocialAccount(SocialAccount(
-                      id: '',
-                      userId: '',
-                      platform: _socialPlatform,
-                      handle: _socialHandleController.text.trim().replaceAll('@', ''),
-                    ));
+                    await creatorNotifier.addSocialAccount(
+                      SocialAccount(
+                        id: '',
+                        userId: '',
+                        platform: _socialPlatform,
+                        handle: _socialHandleController.text.trim().replaceAll(
+                          '@',
+                          '',
+                        ),
+                      ),
+                    );
                   }
-                  final price = double.tryParse(_ratePriceController.text.trim());
+                  final price = double.tryParse(
+                    _ratePriceController.text.trim(),
+                  );
                   if (price != null && price > 0) {
-                    await creatorNotifier.addRateItem(RateItem(
-                      id: '',
-                      userId: '',
-                      deliverableType: _rateDeliverable,
-                      priceAmount: price,
-                    ));
+                    await creatorNotifier.addRateItem(
+                      RateItem(
+                        id: '',
+                        userId: '',
+                        deliverableType: _rateDeliverable,
+                        priceAmount: price,
+                      ),
+                    );
                   }
-                  await creatorNotifier.updateAvailability(CreatorAvailability(status: _availabilityStatus));
+                  await creatorNotifier.updateAvailability(
+                    CreatorAvailability(status: _availabilityStatus),
+                  );
 
-                  await ref.read(analyticsProvider).event(AnalyticsEvent.creatorOnboardingCompleted);
+                  await ref
+                      .read(analyticsProvider)
+                      .event(AnalyticsEvent.creatorOnboardingCompleted);
 
                   if (context.mounted) {
                     context.go('/home/creator');
@@ -338,7 +398,9 @@ class _CreatorOnboardingScreenState extends ConsumerState<CreatorOnboardingScree
         const SizedBox(height: AppSpacing.sm),
         Center(
           child: TextButton(
-            onPressed: busy ? null : () => ref.read(accountActionProvider.notifier).logout(),
+            onPressed: busy
+                ? null
+                : () => ref.read(accountActionProvider.notifier).logout(),
             child: const Text('Save & Sign Out'),
           ),
         ),

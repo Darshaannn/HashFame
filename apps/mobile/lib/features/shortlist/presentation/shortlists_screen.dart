@@ -51,11 +51,17 @@ class ShortlistsScreen extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.bookmark_border, size: 48, color: AppColors.outline),
+                      const Icon(
+                        Icons.bookmark_border,
+                        size: 48,
+                        color: AppColors.outline,
+                      ),
                       const SizedBox(height: AppSpacing.sm),
                       Text('No shortlists yet', style: AppTypography.heading),
                       const SizedBox(height: AppSpacing.xs),
-                      const Text('Create shortlists to organize creators for your brand or agency.'),
+                      const Text(
+                        'Create shortlists to organize creators for your brand or agency.',
+                      ),
                       const SizedBox(height: AppSpacing.md),
                       AppButton(
                         label: 'Create First Shortlist',
@@ -70,7 +76,8 @@ class ShortlistsScreen extends ConsumerWidget {
             return ListView.separated(
               padding: const EdgeInsets.all(AppSpacing.lg),
               itemCount: lists.length,
-              separatorBuilder: (context, index) => const SizedBox(height: AppSpacing.md),
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: AppSpacing.md),
               itemBuilder: (context, index) {
                 final list = lists[index];
                 return InkWell(
@@ -80,25 +87,47 @@ class ShortlistsScreen extends ConsumerWidget {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                          child: Icon(Icons.folder_outlined, color: Theme.of(context).colorScheme.onPrimaryContainer),
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .primaryContainer,
+                          child: Icon(
+                            Icons.folder_outlined,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
                         ),
                         const SizedBox(width: AppSpacing.md),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(list.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                              if (list.description != null && list.description!.isNotEmpty)
+                              Text(
+                                list.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              if (list.description != null &&
+                                  list.description!.isNotEmpty)
                                 Text(
                                   list.description!,
-                                  style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               Text(
                                 '${list.memberCount} creator${list.memberCount == 1 ? '' : 's'}',
-                                style: const TextStyle(fontSize: 12, color: AppColors.primary),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: AppColors.primary,
+                                ),
                               ),
                             ],
                           ),
@@ -133,15 +162,22 @@ class ShortlistsScreen extends ConsumerWidget {
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogCtx), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogCtx),
+            child: const Text('Cancel'),
+          ),
           AppButton(
             label: 'Create',
             onPressed: () async {
               final name = nameCtrl.text.trim();
               if (name.isNotEmpty) {
-                await ref.read(shortlistControllerProvider.notifier).createShortlist(
+                await ref
+                    .read(shortlistControllerProvider.notifier)
+                    .createShortlist(
                       name: name,
-                      description: descCtrl.text.trim().isNotEmpty ? descCtrl.text.trim() : null,
+                      description: descCtrl.text.trim().isNotEmpty
+                          ? descCtrl.text.trim()
+                          : null,
                     );
                 if (dialogCtx.mounted) Navigator.pop(dialogCtx);
               }

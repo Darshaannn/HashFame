@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'shortlist_member.dart';
 
 part 'shortlist.freezed.dart';
 part 'shortlist.g.dart';
 
-@freezed
-class Shortlist with _$Shortlist {
+@Freezed(toJson: true, fromJson: true)
+abstract class Shortlist with _$Shortlist {
   const factory Shortlist({
     required String id,
     required String organizationId,

@@ -20,7 +20,10 @@ class CreatorHomeScreen extends ConsumerWidget {
     final profileAsync = ref.watch(currentCreatorProfileProvider);
 
     if (snapshot == null) {
-      return const AppScaffold(title: 'Creator Home', children: [AppSkeleton()]);
+      return const AppScaffold(
+        title: 'Creator Home',
+        children: [AppSkeleton()],
+      );
     }
 
     final account = snapshot.account;
@@ -44,8 +47,14 @@ class CreatorHomeScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Welcome, ${account.displayName}', style: AppTypography.heading),
-                  const Text('Creator Studio', style: TextStyle(color: AppColors.muted)),
+                  Text(
+                    'Welcome, ${account.displayName}',
+                    style: AppTypography.heading,
+                  ),
+                  const Text(
+                    'Creator Studio',
+                    style: TextStyle(color: AppColors.muted),
+                  ),
                 ],
               ),
             ),

@@ -51,7 +51,10 @@ class CreatorSocialAccountsCard extends StatelessWidget {
           if (socials.isEmpty)
             const Text(
               'No social platforms connected yet. Add your social handles to showcase your online presence.',
-              style: TextStyle(color: AppColors.muted, fontStyle: FontStyle.italic),
+              style: TextStyle(
+                color: AppColors.muted,
+                fontStyle: FontStyle.italic,
+              ),
             )
           else
             ListView.separated(
@@ -67,7 +70,10 @@ class CreatorSocialAccountsCard extends StatelessWidget {
 
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: Icon(_platformIcon(acc.platform), color: AppColors.primary),
+                  leading: Icon(
+                    _platformIcon(acc.platform),
+                    color: AppColors.primary,
+                  ),
                   title: Row(
                     children: [
                       Flexible(
@@ -78,7 +84,11 @@ class CreatorSocialAccountsCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       if (isVerified)
-                        const Icon(Icons.verified, color: AppColors.primary, size: 16),
+                        const Icon(
+                          Icons.verified,
+                          color: AppColors.primary,
+                          size: 16,
+                        ),
                     ],
                   ),
                   subtitle: Text(

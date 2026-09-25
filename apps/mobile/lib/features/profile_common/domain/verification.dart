@@ -60,12 +60,18 @@ abstract class FieldVerification with _$FieldVerification {
 @Freezed(toJson: true, fromJson: true)
 abstract class VerificationSummary with _$VerificationSummary {
   const factory VerificationSummary({
-    @Default(FieldVerificationStatus.notStarted) FieldVerificationStatus identityStatus,
-    @Default(FieldVerificationStatus.notStarted) FieldVerificationStatus emailStatus,
-    @Default(FieldVerificationStatus.notStarted) FieldVerificationStatus phoneStatus,
-    @Default(FieldVerificationStatus.notStarted) FieldVerificationStatus socialStatus,
-    @Default(FieldVerificationStatus.notStarted) FieldVerificationStatus managerStatus,
-    @Default(FieldVerificationStatus.notStarted) FieldVerificationStatus companyStatus,
+    @Default(FieldVerificationStatus.notStarted)
+    FieldVerificationStatus identityStatus,
+    @Default(FieldVerificationStatus.notStarted)
+    FieldVerificationStatus emailStatus,
+    @Default(FieldVerificationStatus.notStarted)
+    FieldVerificationStatus phoneStatus,
+    @Default(FieldVerificationStatus.notStarted)
+    FieldVerificationStatus socialStatus,
+    @Default(FieldVerificationStatus.notStarted)
+    FieldVerificationStatus managerStatus,
+    @Default(FieldVerificationStatus.notStarted)
+    FieldVerificationStatus companyStatus,
     @Default([]) List<FieldVerification> items,
   }) = _VerificationSummary;
 

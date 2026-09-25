@@ -4,13 +4,8 @@ import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
 
-
 class CreatorBioCard extends StatelessWidget {
-  const CreatorBioCard({
-    super.key,
-    required this.profile,
-    this.onEditPressed,
-  });
+  const CreatorBioCard({super.key, required this.profile, this.onEditPressed});
 
   final CreatorProfile profile;
   final VoidCallback? onEditPressed;

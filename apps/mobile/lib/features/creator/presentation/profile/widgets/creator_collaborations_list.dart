@@ -40,7 +40,10 @@ class CreatorCollaborationsList extends StatelessWidget {
           if (collabs.isEmpty)
             const Text(
               'No past brand collaborations added. Add verified or previous work with brands.',
-              style: TextStyle(color: AppColors.muted, fontStyle: FontStyle.italic),
+              style: TextStyle(
+                color: AppColors.muted,
+                fontStyle: FontStyle.italic,
+              ),
             )
           else
             ListView.separated(
@@ -55,12 +58,17 @@ class CreatorCollaborationsList extends StatelessWidget {
                   leading: const CircleAvatar(
                     child: Icon(Icons.handshake_outlined, size: 20),
                   ),
-                  title: Text(c.brandName, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  title: Text(
+                    c.brandName,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                   subtitle: Text(
                     [
-                      if (c.campaignName != null && c.campaignName!.isNotEmpty) c.campaignName!,
+                      if (c.campaignName != null && c.campaignName!.isNotEmpty)
+                        c.campaignName!,
                       c.deliverableType.label,
-                      if (c.collaborationYear != null) c.collaborationYear.toString(),
+                      if (c.collaborationYear != null)
+                        c.collaborationYear.toString(),
                       c.proofType.label,
                     ].join(' • '),
                     style: const TextStyle(fontSize: 12),

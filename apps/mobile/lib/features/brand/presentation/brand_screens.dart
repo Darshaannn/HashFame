@@ -10,7 +10,9 @@ import 'package:ggs_mobile/features/account/presentation/account_controller.dart
 import 'package:ggs_mobile/features/auth/presentation/session_controller.dart';
 import 'package:ggs_mobile/features/brand/domain/brand_profile.dart';
 
-final brandProfileProvider = FutureProvider.autoDispose<BrandMarketerProfile>((ref) async {
+final brandProfileProvider = FutureProvider.autoDispose<BrandMarketerProfile>((
+  ref,
+) async {
   final repo = ref.watch(brandRepositoryProvider);
   return repo.getProfile();
 });
@@ -48,8 +50,14 @@ class BrandHomeScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Hello, ${account.displayName}', style: AppTypography.heading),
-                  const Text('Marketer Workspace', style: TextStyle(color: AppColors.muted)),
+                  Text(
+                    'Hello, ${account.displayName}',
+                    style: AppTypography.heading,
+                  ),
+                  const Text(
+                    'Marketer Workspace',
+                    style: TextStyle(color: AppColors.muted),
+                  ),
                 ],
               ),
             ),
@@ -66,9 +74,14 @@ class BrandHomeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Company & Brand Profile', style: AppTypography.heading),
+                const Text(
+                  'Company & Brand Profile',
+                  style: AppTypography.heading,
+                ),
                 const SizedBox(height: AppSpacing.sm),
-                Text('Organization: ${profile.organizationName ?? 'Not yet linked to legal org'}'),
+                Text(
+                  'Organization: ${profile.organizationName ?? 'Not yet linked to legal org'}',
+                ),
                 if (profile.jobTitle != null && profile.jobTitle!.isNotEmpty)
                   Text('Role: ${profile.jobTitle}'),
                 const SizedBox(height: AppSpacing.sm),
@@ -99,7 +112,11 @@ class BrandHomeScreen extends ConsumerWidget {
                     label: 'Discover Creators',
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Creator search and discovery opens in Phase 2B.')),
+                        const SnackBar(
+                          content: Text(
+                            'Creator search and discovery opens in Phase 2B.',
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -156,11 +173,13 @@ class BrandProfileScreen extends ConsumerWidget {
                   children: [
                     Text(profile.displayName, style: AppTypography.heading),
                     if (profile.jobTitle != null)
-                      Text(profile.jobTitle!, style: const TextStyle(fontWeight: FontWeight.w500)),
+                      Text(
+                        profile.jobTitle!,
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
                     if (profile.workEmail != null)
                       Text('Work Email: ${profile.workEmail}'),
-                    if (profile.phone != null)
-                      Text('Phone: ${profile.phone}'),
+                    if (profile.phone != null) Text('Phone: ${profile.phone}'),
                     const SizedBox(height: AppSpacing.sm),
                     Text(profile.bio ?? 'No professional bio added.'),
                   ],
@@ -171,21 +190,37 @@ class BrandProfileScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Organization / Brands', style: AppTypography.heading),
+                    const Text(
+                      'Organization / Brands',
+                      style: AppTypography.heading,
+                    ),
                     const SizedBox(height: AppSpacing.sm),
-                    Text('Organization Name: ${profile.organizationName ?? "Independent Marketer"}'),
+                    Text(
+                      'Organization Name: ${profile.organizationName ?? "Independent Marketer"}',
+                    ),
                     const SizedBox(height: AppSpacing.sm),
                     if (profile.managedBrands.isEmpty)
                       const Text(
                         'No specific brands registered under this organization.',
-                        style: TextStyle(fontStyle: FontStyle.italic, color: AppColors.muted),
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: AppColors.muted,
+                        ),
                       )
                     else
                       for (final b in profile.managedBrands)
                         ListTile(
                           contentPadding: EdgeInsets.zero,
-                          title: Text(b.name, style: const TextStyle(fontWeight: FontWeight.w600)),
-                          subtitle: Text([b.industry, b.headquarters].whereType<String>().join(' • ')),
+                          title: Text(
+                            b.name,
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          subtitle: Text(
+                            [
+                              b.industry,
+                              b.headquarters,
+                            ].whereType<String>().join(' • '),
+                          ),
                         ),
                   ],
                 ),

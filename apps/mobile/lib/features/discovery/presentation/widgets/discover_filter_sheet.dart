@@ -13,7 +13,8 @@ class DiscoverFilterSheet extends ConsumerStatefulWidget {
   const DiscoverFilterSheet({super.key});
 
   @override
-  ConsumerState<DiscoverFilterSheet> createState() => _DiscoverFilterSheetState();
+  ConsumerState<DiscoverFilterSheet> createState() =>
+      _DiscoverFilterSheetState();
 }
 
 class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
@@ -31,10 +32,18 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
     _filters = ref.read(creatorSearchFiltersProvider);
     _cityController.text = _filters.city ?? '';
     _stateController.text = _filters.state ?? '';
-    if (_filters.minFollowers != null) _minFollowersController.text = _filters.minFollowers.toString();
-    if (_filters.maxFollowers != null) _maxFollowersController.text = _filters.maxFollowers.toString();
-    if (_filters.minRate != null) _minRateController.text = _filters.minRate!.toStringAsFixed(0);
-    if (_filters.maxRate != null) _maxRateController.text = _filters.maxRate!.toStringAsFixed(0);
+    if (_filters.minFollowers != null) {
+      _minFollowersController.text = _filters.minFollowers.toString();
+    }
+    if (_filters.maxFollowers != null) {
+      _maxFollowersController.text = _filters.maxFollowers.toString();
+    }
+    if (_filters.minRate != null) {
+      _minRateController.text = _filters.minRate!.toStringAsFixed(0);
+    }
+    if (_filters.maxRate != null) {
+      _maxRateController.text = _filters.maxRate!.toStringAsFixed(0);
+    }
   }
 
   @override
@@ -51,7 +60,6 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
   @override
   Widget build(BuildContext context) {
     final categoriesAsync = ref.watch(referenceCategoriesProvider);
-    final languagesAsync = ref.watch(referenceLanguagesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -100,22 +108,32 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
             const SizedBox(height: AppSpacing.xs),
             Wrap(
               spacing: 8,
-              children: [SocialPlatform.instagram, SocialPlatform.youtube, SocialPlatform.linkedin].map((p) {
-                final selected = _filters.platforms.contains(p);
-                return AppChip(
-                  label: p.label,
-                  selected: selected,
-                  onSelected: (sel) {
-                    final updated = List<SocialPlatform>.from(_filters.platforms);
-                    if (sel) {
-                      updated.add(p);
-                    } else {
-                      updated.remove(p);
-                    }
-                    setState(() => _filters = _filters.copyWith(platforms: updated));
-                  },
-                );
-              }).toList(),
+              children:
+                  [
+                    SocialPlatform.instagram,
+                    SocialPlatform.youtube,
+                    SocialPlatform.linkedin,
+                  ].map((p) {
+                    final selected = _filters.platforms.contains(p);
+                    return AppChip(
+                      label: p.label,
+                      selected: selected,
+                      onSelected: (sel) {
+                        final updated = List<SocialPlatform>.from(
+                          _filters.platforms,
+                        );
+                        if (sel) {
+                          updated.add(p);
+                        } else {
+                          updated.remove(p);
+                        }
+                        setState(
+                          () =>
+                              _filters = _filters.copyWith(platforms: updated),
+                        );
+                      },
+                    );
+                  }).toList(),
             ),
             const SizedBox(height: AppSpacing.md),
 
@@ -141,7 +159,11 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
                         } else {
                           updated.remove(c.id);
                         }
-                        setState(() => _filters = _filters.copyWith(categoryIds: updated));
+                        setState(
+                          () => _filters = _filters.copyWith(
+                            categoryIds: updated,
+                          ),
+                        );
                       },
                     );
                   }).toList(),
@@ -159,7 +181,9 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
                   child: AppTextField(
                     label: 'City',
                     controller: _cityController,
-                    onChanged: (v) => _filters = _filters.copyWith(city: v.trim().isNotEmpty ? v.trim() : null),
+                    onChanged: (v) => _filters = _filters.copyWith(
+                      city: v.trim().isNotEmpty ? v.trim() : null,
+                    ),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
@@ -167,7 +191,9 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
                   child: AppTextField(
                     label: 'State',
                     controller: _stateController,
-                    onChanged: (v) => _filters = _filters.copyWith(state: v.trim().isNotEmpty ? v.trim() : null),
+                    onChanged: (v) => _filters = _filters.copyWith(
+                      state: v.trim().isNotEmpty ? v.trim() : null,
+                    ),
                   ),
                 ),
               ],
@@ -184,7 +210,9 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
                     label: 'Min Price',
                     controller: _minRateController,
                     keyboardType: TextInputType.number,
-                    onChanged: (v) => _filters = _filters.copyWith(minRate: double.tryParse(v.trim())),
+                    onChanged: (v) => _filters = _filters.copyWith(
+                      minRate: double.tryParse(v.trim()),
+                    ),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
@@ -193,7 +221,9 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
                     label: 'Max Price',
                     controller: _maxRateController,
                     keyboardType: TextInputType.number,
-                    onChanged: (v) => _filters = _filters.copyWith(maxRate: double.tryParse(v.trim())),
+                    onChanged: (v) => _filters = _filters.copyWith(
+                      maxRate: double.tryParse(v.trim()),
+                    ),
                   ),
                 ),
               ],
@@ -210,14 +240,18 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
                   label: 'Agency/Manager Represented',
                   selected: _filters.isRepresented == true,
                   onSelected: (sel) => setState(() {
-                    _filters = _filters.copyWith(isRepresented: sel ? true : null);
+                    _filters = _filters.copyWith(
+                      isRepresented: sel ? true : null,
+                    );
                   }),
                 ),
                 AppChip(
                   label: 'Self Managed',
                   selected: _filters.isRepresented == false,
                   onSelected: (sel) => setState(() {
-                    _filters = _filters.copyWith(isRepresented: sel ? false : null);
+                    _filters = _filters.copyWith(
+                      isRepresented: sel ? false : null,
+                    );
                   }),
                 ),
               ],
@@ -228,7 +262,7 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
             AppButton(
               label: 'Apply Filters (${_filters.activeFilterCount})',
               onPressed: () {
-                ref.read(creatorSearchFiltersProvider.notifier).state = _filters;
+                ref.read(creatorSearchFiltersProvider.notifier).set(_filters);
                 Navigator.of(context).pop();
               },
             ),

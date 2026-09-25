@@ -26,6 +26,7 @@ import 'features/account/data/account_repository_impl.dart';
 import 'features/agency/data/agency_repository_impl.dart';
 import 'features/auth/data/supabase_auth_repository.dart';
 import 'features/brand/data/brand_repository_impl.dart';
+import 'features/campaign/data/campaign_repository_impl.dart';
 import 'features/creator/data/creator_repository_impl.dart';
 import 'features/discovery/data/discovery_repository_impl.dart';
 import 'features/profile_common/data/reference_data_repository_impl.dart';
@@ -121,6 +122,11 @@ Future<void> main() async {
           shortlistRepositoryProvider.overrideWithValue(
             ShortlistRepositoryImpl(
               SupabaseShortlistDataSource(Supabase.instance.client),
+            ),
+          ),
+          campaignRepositoryProvider.overrideWithValue(
+            CampaignRepositoryImpl(
+              SupabaseCampaignDataSource(Supabase.instance.client),
             ),
           ),
         ],

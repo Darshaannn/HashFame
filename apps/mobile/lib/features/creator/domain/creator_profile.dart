@@ -8,7 +8,6 @@ import 'package:ggs_mobile/features/creator/domain/social_account.dart';
 import 'package:ggs_mobile/features/profile_common/domain/reference_data.dart';
 import 'package:ggs_mobile/features/profile_common/domain/verification.dart';
 
-
 part 'creator_profile.freezed.dart';
 part 'creator_profile.g.dart';
 
@@ -21,6 +20,12 @@ enum AvailabilityStatus {
     open => 'Open to Collaborations',
     limited => 'Limited Availability',
     unavailable => 'Currently Unavailable',
+  };
+
+  String get wire => switch (this) {
+    open => 'open',
+    limited => 'limited',
+    unavailable => 'unavailable',
   };
 }
 

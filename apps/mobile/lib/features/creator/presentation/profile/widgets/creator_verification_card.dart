@@ -6,10 +6,7 @@ import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
 import 'package:ggs_mobile/features/profile_common/domain/verification.dart';
 
 class CreatorVerificationCard extends StatelessWidget {
-  const CreatorVerificationCard({
-    super.key,
-    required this.profile,
-  });
+  const CreatorVerificationCard({super.key, required this.profile});
 
   final CreatorProfile profile;
 
@@ -58,11 +55,18 @@ class CreatorVerificationCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
+                  Text(
+                    label,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(_statusIcon(status), size: 16, color: _statusColor(status)),
+                      Icon(
+                        _statusIcon(status),
+                        size: 16,
+                        color: _statusColor(status),
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         status.label,

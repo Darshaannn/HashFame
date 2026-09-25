@@ -14,9 +14,11 @@ class SupabaseReferenceDataSource implements ReferenceDataSource {
         .select('id,parent_id,name,slug,sort_order')
         .order('sort_order');
     final rawList = List<Map<String, dynamic>>.from(response as List);
-    
+
     // Group subcategories under parents
-    final rootCategories = rawList.where((c) => c['parent_id'] == null).map((c) {
+    final rootCategories = rawList.where((c) => c['parent_id'] == null).map((
+      c,
+    ) {
       final subList = rawList
           .where((sub) => sub['parent_id'] == c['id'])
           .map((sub) => Category.fromJson(sub))

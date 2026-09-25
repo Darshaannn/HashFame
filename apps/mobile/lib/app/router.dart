@@ -27,6 +27,13 @@ import '../features/shortlist/presentation/shortlist_detail_screen.dart';
 import '../features/shortlist/presentation/shortlists_screen.dart';
 import '../features/comparison/presentation/creator_comparison_screen.dart';
 import '../features/talent_manager/presentation/talent_manager_screens.dart';
+import '../features/campaign/presentation/brand_campaigns_screen.dart';
+import '../features/campaign/presentation/campaign_applicant_dashboard_screen.dart';
+import '../features/campaign/presentation/campaign_creation_screen.dart';
+import '../features/campaign/presentation/campaign_detail_screen.dart';
+import '../features/campaign/presentation/creator_application_detail_screen.dart';
+import '../features/campaign/presentation/creator_applications_screen.dart';
+import '../features/campaign/presentation/creator_opportunities_screen.dart';
 import 'providers.dart';
 
 String homePath(ProfessionalRole role) => '/home/${role.wire}';
@@ -55,6 +62,13 @@ String? routeRedirect(
               path == '/shortlists' ||
               path.startsWith('/shortlists/') ||
               path == '/compare' ||
+              path == '/opportunities' ||
+              path.startsWith('/opportunities/') ||
+              path == '/applications' ||
+              path.startsWith('/applications/') ||
+              path == '/campaigns' ||
+              path == '/campaigns/new' ||
+              path.startsWith('/campaigns/') ||
               (path == '/settings' && session.snapshot?.offline == false) ||
               (path == '/gallery' && galleryAllowed))
           ? path
@@ -127,12 +141,17 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/profile',
         name: 'profile',
         builder: (context, state) {
-          final primaryRole = ref.read(sessionProvider).snapshot?.account.primaryRoleLabel;
+          final primaryRole = ref
+              .read(sessionProvider)
+              .snapshot
+              ?.account
+              .primaryRoleLabel;
           return switch (primaryRole) {
             ProfessionalRole.creator => const CreatorProfileScreen(),
             ProfessionalRole.brandMarketer => const BrandProfileScreen(),
             ProfessionalRole.agency => const AgencyProfileScreen(),
-            ProfessionalRole.talentManager => const TalentManagerProfileScreen(),
+            ProfessionalRole.talentManager =>
+              const TalentManagerProfileScreen(),
             _ => const ProfileScreen(),
           };
         },
@@ -203,6 +222,65 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'compare',
         builder: (_, state) => const CreatorComparisonScreen(),
       ),
+
+      // Phase 2C: Creator Opportunities & Applications
+      GoRoute(
+        path: '/opportunities',
+        name: 'opportunities',
+        builder: (_, state) => const CreatorOpportunitiesScreen(),
+      ),
+      GoRoute(
+        path: '/opportunities/:campaignId',
+        name: 'opportunity_detail',
+        builder: (_, state) => CampaignDetailScreen(
+          campaignId: state.pathParameters['campaignId']!,
+        ),
+      ),
+      GoRoute(
+        path: '/applications',
+        name: 'my_applications',
+        builder: (_, state) => const CreatorApplicationsScreen(),
+      ),
+      GoRoute(
+        path: '/applications/:applicationId',
+        name: 'application_detail',
+        builder: (_, state) => CreatorApplicationDetailScreen(
+          applicationId: state.pathParameters['applicationId']!,
+        ),
+      ),
+
+      // Phase 2C: Brand Campaigns & Applicant Management
+      GoRoute(
+        path: '/campaigns',
+        name: 'brand_campaigns',
+        builder: (_, state) => const BrandCampaignsScreen(),
+      ),
+      GoRoute(
+        path: '/campaigns/new',
+        name: 'campaign_create',
+        builder: (_, state) => const CampaignCreationScreen(),
+      ),
+      GoRoute(
+        path: '/campaigns/:campaignId/edit',
+        name: 'campaign_edit',
+        builder: (_, state) => CampaignCreationScreen(
+          draftCampaignId: state.pathParameters['campaignId'],
+        ),
+      ),
+      GoRoute(
+        path: '/campaigns/:campaignId',
+        name: 'brand_campaign_detail',
+        builder: (_, state) => CampaignDetailScreen(
+          campaignId: state.pathParameters['campaignId']!,
+        ),
+      ),
+      GoRoute(
+        path: '/campaigns/:campaignId/applicants',
+        name: 'campaign_applicants',
+        builder: (_, state) => CampaignApplicantDashboardScreen(
+          campaignId: state.pathParameters['campaignId']!,
+        ),
+      ),
       GoRoute(
         path: homePath(ProfessionalRole.creator),
         name: 'home_creator',
@@ -210,7 +288,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           currentIndex: 0,
           onNavigationIndexChanged: (idx) {
             if (idx == 0) return;
-            if (idx == 4) {
+            if (idx == 1) {
+              context.push('/opportunities');
+            } else if (idx == 4) {
               context.go('/profile');
             }
           },
@@ -228,6 +308,8 @@ final routerProvider = Provider<GoRouter>((ref) {
               context.push('/discover');
             } else if (idx == 2) {
               context.push('/shortlists');
+            } else if (idx == 3) {
+              context.push('/campaigns');
             } else if (idx == 4) {
               context.go('/profile');
             }
@@ -241,8 +323,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => GenericRoleShell(
           currentIndex: 0,
           destinations: const [
-            NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.business_outlined), label: 'Profile'),
+            NavigationDestination(
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.business_outlined),
+              label: 'Profile',
+            ),
           ],
           onNavigationIndexChanged: (idx) {
             if (idx == 1) context.go('/profile');
@@ -256,8 +344,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => GenericRoleShell(
           currentIndex: 0,
           destinations: const [
-            NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.person_outline), label: 'Profile'),
+            NavigationDestination(
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.person_outline),
+              label: 'Profile',
+            ),
           ],
           onNavigationIndexChanged: (idx) {
             if (idx == 1) context.go('/profile');
@@ -268,7 +362,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: homePath(ProfessionalRole.admin),
         name: 'home_admin',
-        builder: (_, state) => const RoleHomeScreen(role: ProfessionalRole.admin),
+        builder: (_, state) =>
+            const RoleHomeScreen(role: ProfessionalRole.admin),
       ),
       GoRoute(
         path: '/callback',

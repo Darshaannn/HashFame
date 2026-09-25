@@ -25,9 +25,8 @@ class SupabaseAgencyDataSource implements AgencyDataSource {
       return AgencyProfile(userId: targetId, agencyName: '');
     }
 
-    final servicesList = (agencyRow['services'] as List?)
-            ?.map((e) => e.toString())
-            .toList() ??
+    final servicesList =
+        (agencyRow['services'] as List?)?.map((e) => e.toString()).toList() ??
         [];
 
     return AgencyProfile(

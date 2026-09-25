@@ -23,8 +23,8 @@ enum ShortlistMemberStatus {
   String get wire => name;
 }
 
-@freezed
-class ShortlistMember with _$ShortlistMember {
+@Freezed(toJson: true, fromJson: true)
+abstract class ShortlistMember with _$ShortlistMember {
   const factory ShortlistMember({
     required String id,
     required String shortlistId,

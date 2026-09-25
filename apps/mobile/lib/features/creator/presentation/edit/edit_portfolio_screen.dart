@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/core/errors/app_failure.dart';
+
 import '../../domain/portfolio.dart';
 import '../../domain/social_account.dart';
 import '../profile/creator_profile_controller.dart';
@@ -13,7 +14,8 @@ class EditPortfolioScreen extends ConsumerStatefulWidget {
   const EditPortfolioScreen({super.key});
 
   @override
-  ConsumerState<EditPortfolioScreen> createState() => _EditPortfolioScreenState();
+  ConsumerState<EditPortfolioScreen> createState() =>
+      _EditPortfolioScreenState();
 }
 
 class _EditPortfolioScreenState extends ConsumerState<EditPortfolioScreen> {
@@ -126,7 +128,8 @@ class _EditPortfolioScreenState extends ConsumerState<EditPortfolioScreen> {
                         .read(creatorControllerProvider.notifier)
                         .addPortfolioItem(item);
 
-                    if (context.mounted && !ref.read(creatorControllerProvider).hasError) {
+                    if (context.mounted &&
+                        !ref.read(creatorControllerProvider).hasError) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Portfolio work added!')),
                       );

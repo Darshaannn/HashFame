@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ggs_mobile/app/app.dart';
 import 'package:ggs_mobile/app/providers.dart';
 import 'package:ggs_mobile/core/config/app_config.dart';
+import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/features/account/domain/account.dart';
 
 import '../support/fakes.dart';
@@ -41,6 +42,9 @@ void main() {
             brandRepositoryProvider.overrideWithValue(brandRepo),
             agencyRepositoryProvider.overrideWithValue(agencyRepo),
             talentManagerRepositoryProvider.overrideWithValue(tmRepo),
+            campaignRepositoryProvider.overrideWithValue(
+              FakeCampaignRepository(),
+            ),
           ],
           child: const FoundationApp(),
         ),
@@ -72,22 +76,28 @@ void main() {
       expect(find.textContaining('Creator Setup'), findsOneWidget);
       expect(find.text('Basic Identity'), findsOneWidget);
 
-      final nameField = find.widgetWithText(TextFormField, 'Display Name (Required)');
+      final nameField = find.widgetWithText(
+        TextFormField,
+        'Display Name (Required)',
+      );
       await tester.enterText(nameField, 'New Creator');
       await tester.pumpAndSettle();
       await tester.tap(find.text('Continue'));
       await tester.pumpAndSettle();
 
       // Steps 2–7: Tap Continue through all remaining optional steps
-      for (int i = 2; i <= 7; i++) {
-        // Allow async providers (categories, languages) to settle
+      while (find.text('Review & Launch').evaluate().isEmpty) {
         await tester.pump(const Duration(milliseconds: 100));
         await tester.pumpAndSettle();
 
-        final continueButton = find.text('Continue');
-        if (continueButton.evaluate().isNotEmpty) {
-          await tester.tap(continueButton);
+        final continueBtn = find.widgetWithText(AppButton, 'Continue');
+        if (continueBtn.evaluate().isNotEmpty) {
+          await tester.ensureVisible(continueBtn.first);
           await tester.pumpAndSettle();
+          await tester.tap(continueBtn.first);
+          await tester.pumpAndSettle();
+        } else {
+          break;
         }
       }
 
