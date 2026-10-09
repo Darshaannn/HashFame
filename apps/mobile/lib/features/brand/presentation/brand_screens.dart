@@ -8,6 +8,10 @@ import '../../../core/design_system/tokens.dart';
 import '../../../core/errors/app_failure.dart';
 import '../../auth/presentation/session_controller.dart';
 import '../../brand/domain/brand_profile.dart';
+import '../../campaign/domain/campaign.dart';
+import '../../campaign/presentation/campaign_controller.dart';
+import '../../collaboration/domain/active_collaboration.dart';
+import '../../collaboration/presentation/collaboration_controller.dart';
 import '../../profile_common/presentation/widgets/unified_profile_widgets.dart';
 import 'brand_shell.dart';
 
@@ -34,6 +38,10 @@ class BrandHomeScreen extends ConsumerWidget {
     final account = snapshot.account;
     final brand = brandAsync.value;
     final orgName = brand?.organizationName ?? 'Nova Beauty India';
+    final campaignsAsync = ref.watch(organizationCampaignsProvider(account.id));
+    final collabsAsync = ref.watch(
+      organizationCollaborationsProvider(account.id),
+    );
 
     return BrandShell(
       currentIndex: 0,
@@ -61,6 +69,92 @@ class BrandHomeScreen extends ConsumerWidget {
             organization: orgName,
             isVerified: true,
             onEditPressed: () => context.push('/profile/edit/brand'),
+          ),
+
+          // Live Marketplace Metrics
+          Row(
+            children: [
+              Expanded(
+                child: AppCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Active Campaigns',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.muted,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${campaignsAsync.value?.where((c) => c.status == CampaignStatus.live).length ?? 0}',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: AppCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Collaborations',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.muted,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${collabsAsync.value?.where((c) => c.status != ActiveCollaborationStatus.completed && c.status != ActiveCollaborationStatus.cancelled).length ?? 0}',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.accent,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: AppCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Pending Review',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.muted,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${collabsAsync.value?.where((c) => c.status == ActiveCollaborationStatus.submitted).length ?? 0}',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.success,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
 
           // Quick Actions

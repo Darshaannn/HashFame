@@ -7,6 +7,10 @@ import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/core/errors/app_failure.dart';
 import 'package:ggs_mobile/features/account/presentation/account_controller.dart';
 import 'package:ggs_mobile/features/auth/presentation/session_controller.dart';
+import 'package:ggs_mobile/features/campaign/domain/campaign_application.dart';
+import 'package:ggs_mobile/features/campaign/presentation/campaign_controller.dart';
+import 'package:ggs_mobile/features/collaboration/domain/active_collaboration.dart';
+import 'package:ggs_mobile/features/collaboration/presentation/collaboration_controller.dart';
 import 'package:ggs_mobile/features/creator/presentation/profile/creator_profile_controller.dart';
 import 'package:ggs_mobile/features/creator/presentation/profile/widgets/creator_completion_card.dart';
 import 'package:ggs_mobile/features/profile_common/presentation/widgets/unified_profile_widgets.dart';
@@ -93,6 +97,136 @@ class CreatorHomeScreen extends ConsumerWidget {
               profile: p,
               onRecommendationTap: (rec) => context.push(rec.actionRoute),
             ),
+          ),
+
+          // Live Creator Metrics
+          Builder(
+            builder: (context) {
+              final appsAsync = ref.watch(
+                creatorApplicationsProvider(account.id),
+              );
+              final collabsAsync = ref.watch(
+                userCollaborationsProvider(account.id),
+              );
+
+              final activeAppsCount =
+                  appsAsync.value
+                      ?.where(
+                        (a) =>
+                            a.status == CampaignApplicationStatus.submitted ||
+                            a.status == CampaignApplicationStatus.underReview ||
+                            a.status == CampaignApplicationStatus.shortlisted,
+                      )
+                      .length ??
+                  0;
+              final activeCollabsCount =
+                  collabsAsync.value
+                      ?.where(
+                        (c) =>
+                            c.status != ActiveCollaborationStatus.completed &&
+                            c.status != ActiveCollaborationStatus.cancelled,
+                      )
+                      .length ??
+                  0;
+              final revisionsCount =
+                  collabsAsync.value
+                      ?.where(
+                        (c) =>
+                            c.status ==
+                            ActiveCollaborationStatus.revisionRequested,
+                      )
+                      .length ??
+                  0;
+
+              return Row(
+                children: [
+                  Expanded(
+                    child: AppCard(
+                      onTap: () => context.go('/applications'),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Applications',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.muted,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '$activeAppsCount Active',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: AppCard(
+                      onTap: () => context.go('/activity'),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Collaborations',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.muted,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '$activeCollabsCount Live',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.accent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: AppCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Revisions',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.muted,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '$revisionsCount Action',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: revisionsCount > 0
+                                  ? AppColors.error
+                                  : AppColors.muted,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
 
           // Quick Actions
