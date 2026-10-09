@@ -13,6 +13,9 @@ import '../features/profile_common/domain/reference_data_repository.dart';
 import '../features/shortlist/domain/shortlist_repository.dart';
 import '../features/talent_manager/domain/talent_manager_repository.dart';
 
+import '../features/activity/domain/activity_repository.dart';
+import '../features/collaboration/domain/collaboration_repository.dart';
+
 final configProvider = Provider<AppConfig>(
   (ref) => throw StateError('Bootstrap must supply configuration'),
 );
@@ -45,6 +48,12 @@ final shortlistRepositoryProvider = Provider<ShortlistRepository>(
 );
 final campaignRepositoryProvider = Provider<CampaignRepository>(
   (ref) => throw StateError('Bootstrap must supply campaign repository'),
+);
+final collaborationRepositoryProvider = Provider<CollaborationRepository>(
+  (ref) => throw StateError('Bootstrap must supply collaboration repository'),
+);
+final activityRepositoryProvider = Provider<ActivityRepository>(
+  (ref) => throw StateError('Bootstrap must supply activity repository'),
 );
 final analyticsProvider = Provider<AnalyticsService>(
   (ref) => const NoopAnalyticsService(),

@@ -432,6 +432,7 @@ class CampaignActionController extends Notifier<AsyncValue<void>> {
       );
       unawaited(analytics.event(AnalyticsEvent.applicationStatusChanged));
       ref.invalidate(campaignApplicantsProvider(campaignId));
+      ref.invalidate(campaignDetailProvider(campaignId));
       ref.invalidate(applicationDetailProvider(applicationId));
       state = const AsyncData(null);
       return true;

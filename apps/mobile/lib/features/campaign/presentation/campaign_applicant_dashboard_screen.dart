@@ -232,6 +232,16 @@ class _CampaignApplicantDashboardScreenState
                                     ),
                                     child: const Text('Shortlist'),
                                   ),
+                                if (applicant.status ==
+                                    CampaignApplicationStatus.selected)
+                                  FilledButton.tonal(
+                                    onPressed: () => context.push(
+                                      '/collaborations/collab_${applicant.id}',
+                                    ),
+                                    child: const Text(
+                                      'Collaboration Workspace',
+                                    ),
+                                  ),
                                 if (applicant.status !=
                                         CampaignApplicationStatus.selected &&
                                     applicant.status !=

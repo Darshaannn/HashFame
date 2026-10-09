@@ -3,6 +3,8 @@ import 'package:ggs_mobile/features/agency/domain/agency_profile.dart';
 import 'package:ggs_mobile/features/brand/domain/brand_profile.dart';
 import 'package:ggs_mobile/features/campaign/domain/campaign.dart';
 import 'package:ggs_mobile/features/campaign/domain/campaign_application.dart';
+import 'package:ggs_mobile/features/activity/domain/activity_event.dart';
+import 'package:ggs_mobile/features/collaboration/domain/active_collaboration.dart';
 import 'package:ggs_mobile/features/creator/domain/collaboration.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
 import 'package:ggs_mobile/features/creator/domain/portfolio.dart';
@@ -38,6 +40,10 @@ class DemoStore {
   final Map<String, CampaignApplication> applications = {};
   final Map<String, List<CampaignApplicationStatusHistory>>
   applicationHistories = {};
+  final Map<String, ActiveCollaboration> collaborations = {};
+  final Map<String, List<CollaborationDeliverableSubmission>> submissions = {};
+  final Map<String, List<CollaborationMessage>> messages = {};
+  final Map<String, List<ActivityEvent>> userActivities = {};
 
   // User Accounts for switching
   late Account brandAccount;
@@ -56,6 +62,10 @@ class DemoStore {
     campaigns.clear();
     applications.clear();
     applicationHistories.clear();
+    collaborations.clear();
+    submissions.clear();
+    messages.clear();
+    userActivities.clear();
 
     _seedReferenceData();
     _seedAccounts();
@@ -63,6 +73,8 @@ class DemoStore {
     _seedShortlists();
     _seedCampaigns();
     _seedApplications();
+    _seedCollaborations();
+    _seedActivityFeed();
   }
 
   void _seedReferenceData() {
@@ -1479,6 +1491,133 @@ class DemoStore {
     applications[app3.id] = app3;
     applications[app4.id] = app4;
     applications[app5.id] = app5;
+  }
+
+  void _seedCollaborations() {
+    final collab1 = ActiveCollaboration(
+      id: 'collab_aisha_glow',
+      organizationId: 'demo_brand_user_id',
+      campaignId: 'camp_glow_festive',
+      applicationId: 'app_aisha_glow',
+      creatorId: 'demo_creator_user_id',
+      status: ActiveCollaborationStatus.active,
+      compensationAmount: 25000,
+      currency: 'INR',
+      dueDate: DateTime.utc(2026, 3, 20),
+      createdAt: DateTime.utc(2026, 2, 25),
+      campaignTitle: 'Glow Forward — Festive Beauty Creator Campaign',
+      brandName: 'Nova Beauty India',
+      creatorDisplayName: 'Aisha Mehta',
+      creatorCity: 'Mumbai',
+      deliverableRequirements: [
+        '1x 60s Instagram Reel showing 3-step festive skincare prep',
+        '3x Story frames linking to exclusive discount code',
+      ],
+      submissions: [
+        CollaborationDeliverableSubmission(
+          id: 'sub_1',
+          collaborationId: 'collab_aisha_glow',
+          deliverableTitle: 'Instagram Reel Draft 1',
+          contentLink:
+              'https://drive.google.com/file/d/demo-aisha-glow-v1/view',
+          creatorNotes: 'Focused on golden festive lighting as requested. Color grading done to match Nova Glow palette.',
+          status: DeliverableSubmissionStatus.submitted,
+          submittedAt: DateTime.utc(2026, 2, 27, 14, 30),
+          version: 1,
+        ),
+      ],
+      messages: [
+        CollaborationMessage(
+          id: 'msg_1',
+          collaborationId: 'collab_aisha_glow',
+          senderId: 'demo_brand_user_id',
+          senderName: 'Sarah Jenkins (Nova Beauty)',
+          content: 'Hi Aisha! Thrilled to have you on board for Glow Forward. The product package has been dispatched to your Mumbai studio.',
+          createdAt: DateTime.utc(2026, 2, 25, 10, 0),
+        ),
+        CollaborationMessage(
+          id: 'msg_2',
+          collaborationId: 'collab_aisha_glow',
+          senderId: 'demo_creator_user_id',
+          senderName: 'Aisha Mehta',
+          content: 'Thanks Sarah! Received the hamper today. The serums smell incredible. I will share the draft Reel link here for review shortly.',
+          createdAt: DateTime.utc(2026, 2, 26, 12, 15),
+        ),
+        CollaborationMessage(
+          id: 'msg_3',
+          collaborationId: 'collab_aisha_glow',
+          senderId: 'demo_creator_user_id',
+          senderName: 'Aisha Mehta',
+          content: 'Just uploaded Draft 1 in the Deliverables tab! Let me know if any tweaks are needed.',
+          createdAt: DateTime.utc(2026, 2, 27, 14, 35),
+        ),
+      ],
+    );
+
+    collaborations[collab1.id] = collab1;
+    submissions[collab1.id] = List.from(collab1.submissions);
+    messages[collab1.id] = List.from(collab1.messages);
+  }
+
+  void _seedActivityFeed() {
+    userActivities['demo_creator_user_id'] = [
+      ActivityEvent(
+        id: 'act_1',
+        userId: 'demo_creator_user_id',
+        collaborationId: 'collab_aisha_glow',
+        title: 'Application Selected 🎉',
+        subtitle: 'Nova Beauty India selected your application for Glow Forward — Festive Beauty!',
+        activityType: 'application_selected',
+        route: '/collaborations/collab_aisha_glow',
+        isRead: false,
+        createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+      ),
+      ActivityEvent(
+        id: 'act_2',
+        userId: 'demo_creator_user_id',
+        title: 'Shortlisted by Brand',
+        subtitle: 'You were added to "Summer Beauty Launch" shortlist by Nova Consumer Brands.',
+        activityType: 'shortlisted',
+        route: '/profile',
+        isRead: true,
+        createdAt: DateTime.now().subtract(const Duration(days: 1)),
+      ),
+      ActivityEvent(
+        id: 'act_3',
+        userId: 'demo_creator_user_id',
+        title: 'New Campaign Matched',
+        subtitle: 'Nova Active posted a new campaign matching your Health & Fitness category.',
+        activityType: 'new_match',
+        route: '/opportunities',
+        isRead: true,
+        createdAt: DateTime.now().subtract(const Duration(days: 2)),
+      ),
+    ];
+
+    userActivities['demo_brand_user_id'] = [
+      ActivityEvent(
+        id: 'act_b1',
+        userId: 'demo_brand_user_id',
+        collaborationId: 'collab_aisha_glow',
+        title: 'Deliverable Submitted 🎬',
+        subtitle:
+            'Aisha Mehta submitted "Instagram Reel Draft 1" for your review.',
+        activityType: 'deliverable_submitted',
+        route: '/collaborations/collab_aisha_glow',
+        isRead: false,
+        createdAt: DateTime.now().subtract(const Duration(hours: 1)),
+      ),
+      ActivityEvent(
+        id: 'act_b2',
+        userId: 'demo_brand_user_id',
+        title: 'New Creator Application',
+        subtitle: 'Riya Kapoor applied to Glow Forward — Festive Beauty.',
+        activityType: 'application_received',
+        route: '/campaigns/camp_glow_festive/applicants',
+        isRead: true,
+        createdAt: DateTime.now().subtract(const Duration(hours: 5)),
+      ),
+    ];
   }
 }
 

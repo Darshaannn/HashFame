@@ -15,6 +15,7 @@ import '../features/auth/presentation/auth_screens.dart';
 import '../features/auth/presentation/session_controller.dart';
 import '../features/brand/presentation/brand_screens.dart';
 import '../features/brand/presentation/edit_brand_profile_screen.dart';
+import '../features/collaboration/presentation/collaboration_workspace_screen.dart';
 import '../features/creator/presentation/edit/edit_collaborations_screen.dart';
 import '../features/creator/presentation/edit/edit_creator_profile_screen.dart';
 import '../features/creator/presentation/edit/edit_portfolio_screen.dart';
@@ -70,6 +71,8 @@ String? routeRedirect(
               path.startsWith('/opportunities/') ||
               path == '/applications' ||
               path.startsWith('/applications/') ||
+              path == '/collaborations' ||
+              path.startsWith('/collaborations/') ||
               path == '/activity' ||
               path == '/talent' ||
               path == '/campaigns' ||
@@ -269,6 +272,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'application_detail',
         builder: (_, state) => CreatorApplicationDetailScreen(
           applicationId: state.pathParameters['applicationId']!,
+        ),
+      ),
+      GoRoute(
+        path: '/collaborations/:collaborationId',
+        name: 'collaboration_workspace',
+        builder: (_, state) => CollaborationWorkspaceScreen(
+          collaborationId: state.pathParameters['collaborationId']!,
         ),
       ),
       GoRoute(

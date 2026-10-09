@@ -2,76 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/providers.dart';
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
+import '../../auth/presentation/session_controller.dart';
 import '../../creator/presentation/creator_shell.dart';
-
-class ActivityItem {
-  const ActivityItem({
-    required this.id,
-    required this.title,
-    required this.subtitle,
-    required this.timeAgo,
-    required this.icon,
-    required this.iconColor,
-    this.route,
-  });
-
-  final String id;
-  final String title;
-  final String subtitle;
-  final String timeAgo;
-  final IconData icon;
-  final Color iconColor;
-  final String? route;
-}
+import 'activity_controller.dart';
 
 class ActivityScreen extends ConsumerWidget {
   const ActivityScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDemo = ref.watch(configProvider).name == 'GGs Demo';
-
-    final demoActivities = [
-      const ActivityItem(
-        id: 'act_1',
-        title: 'Application Selected',
-        subtitle: 'Nova Beauty India selected your application for Glow Forward — Festive Beauty!',
-        timeAgo: '2 hours ago',
-        icon: Icons.check_circle_outline,
-        iconColor: AppColors.success,
-        route: '/applications',
-      ),
-      const ActivityItem(
-        id: 'act_2',
-        title: 'Shortlisted by Brand',
-        subtitle: 'You were added to "Summer Beauty Launch" shortlist by Nova Consumer Brands.',
-        timeAgo: '1 day ago',
-        icon: Icons.bookmark_added_outlined,
-        iconColor: AppColors.primary,
-        route: '/profile',
-      ),
-      const ActivityItem(
-        id: 'act_3',
-        title: 'New Campaign Matched',
-        subtitle: 'Nova Active posted a new campaign matching your Health & Fitness category.',
-        timeAgo: '2 days ago',
-        icon: Icons.campaign_outlined,
-        iconColor: AppColors.accent,
-        route: '/opportunities',
-      ),
-      const ActivityItem(
-        id: 'act_4',
-        title: 'Profile Updated',
-        subtitle: 'Your rate card and deliverable pricing were successfully synchronized.',
-        timeAgo: '3 days ago',
-        icon: Icons.person_outline,
-        iconColor: AppColors.inkSecondary,
-        route: '/profile/edit/rates',
-      ),
-    ];
+    final session = ref.watch(sessionProvider);
+    final userId = session.snapshot?.account.id ?? '';
+    final activityAsync = ref.watch(userActivityProvider(userId));
 
     return CreatorShell(
       currentIndex: 3,
@@ -85,90 +29,155 @@ class ActivityScreen extends ConsumerWidget {
       child: AppScaffold(
         title: 'Activity Feed',
         children: [
-          if (!isDemo)
-            const AppEmptyState(
-              title: 'No activity yet',
-              message: 'Live notifications and campaign activity updates will appear here in Phase 2D.',
-            )
-          else ...[
-            Padding(
-              padding: const EdgeInsets.only(left: 4, bottom: 4),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.notifications_active_outlined,
-                    size: 16,
-                    color: AppColors.primary,
-                  ),
-                  const SizedBox(width: 6),
-                  const Text(
-                    'Recent Updates & Alerts',
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 4),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.notifications_active_outlined,
+                  size: 16,
+                  color: AppColors.primary,
+                ),
+                const SizedBox(width: 6),
+                const Expanded(
+                  child: Text(
+                    'Recent Updates & Collaboration Alerts',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: AppColors.inkSecondary,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            for (final act in demoActivities)
-              AppCard(
-                onTap: act.route != null ? () => context.go(act.route!) : null,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: act.iconColor.withValues(alpha: 0.12),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(act.icon, size: 20, color: act.iconColor),
-                    ),
-                    const SizedBox(width: AppSpacing.md),
-                    Expanded(
-                      child: Column(
+          ),
+          activityAsync.when(
+            loading: () => const AppSkeleton(count: 3),
+            error: (e, _) => AppErrorState(
+              message: e.toString(),
+              onRetry: () => ref.invalidate(userActivityProvider(userId)),
+            ),
+            data: (activities) {
+              if (activities.isEmpty) {
+                return const AppEmptyState(
+                  title: 'No activity yet',
+                  message: 'Updates on your applications, deliverable reviews, and brand messages will appear here.',
+                );
+              }
+
+              return Column(
+                children: [
+                  for (final act in activities)
+                    AppCard(
+                      onTap: () {
+                        if (!act.isRead) {
+                          ref
+                              .read(activityActionControllerProvider.notifier)
+                              .markAsRead(act.id, userId);
+                        }
+                        if (act.route != null && act.route!.isNotEmpty) {
+                          context.push(act.route!);
+                        }
+                      },
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                act.title,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14,
-                                  color: AppColors.ink,
-                                ),
-                              ),
-                              Text(
-                                act.timeAgo,
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  color: AppColors.muted,
-                                ),
-                              ),
-                            ],
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: _iconColorFor(act.activityType)
+                                  .withValues(alpha: 0.12),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              _iconFor(act.activityType),
+                              size: 20,
+                              color: _iconColorFor(act.activityType),
+                            ),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            act.subtitle,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.inkSecondary,
-                              height: 1.3,
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        act.title,
+                                        style: TextStyle(
+                                          fontWeight: act.isRead
+                                              ? FontWeight.w600
+                                              : FontWeight.bold,
+                                          fontSize: 14,
+                                          color: AppColors.ink,
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      _formatTimeAgo(act.createdAt),
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: AppColors.muted,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  act.subtitle,
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    color: AppColors.inkSecondary,
+                                    height: 1.3,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-          ],
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
+  }
+
+  IconData _iconFor(String type) {
+    return switch (type) {
+      'application_selected' => Icons.check_circle_outline,
+      'deliverable_approved' => Icons.verified_outlined,
+      'revision_requested' => Icons.edit_note_outlined,
+      'collaboration_completed' => Icons.emoji_events_outlined,
+      'shortlisted' => Icons.bookmark_added_outlined,
+      'new_message' => Icons.chat_bubble_outline,
+      _ => Icons.notifications_none,
+    };
+  }
+
+  Color _iconColorFor(String type) {
+    return switch (type) {
+      'application_selected' ||
+      'deliverable_approved' ||
+      'collaboration_completed' => AppColors.success,
+      'revision_requested' => AppColors.accent,
+      'shortlisted' || 'new_message' => AppColors.primary,
+      _ => AppColors.inkSecondary,
+    };
+  }
+
+  String _formatTimeAgo(DateTime dt) {
+    final diff = DateTime.now().difference(dt);
+    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
+    if (diff.inHours < 24) return '${diff.inHours}h ago';
+    return '${diff.inDays}d ago';
   }
 }

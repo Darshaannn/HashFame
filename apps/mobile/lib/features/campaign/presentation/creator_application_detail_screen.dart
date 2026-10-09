@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
@@ -123,6 +124,17 @@ class CreatorApplicationDetailScreen extends ConsumerWidget {
                           color: AppColors.muted,
                         ),
                       ),
+                      if (app.status == CampaignApplicationStatus.selected) ...[
+                        const SizedBox(height: AppSpacing.md),
+                        FilledButton.icon(
+                          onPressed: () =>
+                              context.push('/collaborations/collab_${app.id}'),
+                          icon: const Icon(Icons.handshake_outlined),
+                          label: const Text(
+                            'Open Active Collaboration Workspace',
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

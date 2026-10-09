@@ -30,6 +30,8 @@ import 'features/campaign/data/campaign_repository_impl.dart';
 import 'features/creator/data/creator_repository_impl.dart';
 import 'features/discovery/data/discovery_repository_impl.dart';
 import 'features/profile_common/data/reference_data_repository_impl.dart';
+import 'features/activity/data/activity_repository_impl.dart';
+import 'features/collaboration/data/collaboration_repository_impl.dart';
 import 'features/shortlist/data/shortlist_repository_impl.dart';
 import 'features/talent_manager/data/talent_manager_repository_impl.dart';
 
@@ -127,6 +129,16 @@ Future<void> main() async {
           campaignRepositoryProvider.overrideWithValue(
             CampaignRepositoryImpl(
               SupabaseCampaignDataSource(Supabase.instance.client),
+            ),
+          ),
+          collaborationRepositoryProvider.overrideWithValue(
+            CollaborationRepositoryImpl(
+              SupabaseCollaborationDataSource(Supabase.instance.client),
+            ),
+          ),
+          activityRepositoryProvider.overrideWithValue(
+            ActivityRepositoryImpl(
+              SupabaseActivityDataSource(Supabase.instance.client),
             ),
           ),
         ],

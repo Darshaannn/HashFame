@@ -11,6 +11,10 @@ import 'package:ggs_mobile/features/campaign/domain/campaign.dart';
 import 'package:ggs_mobile/features/campaign/domain/campaign_application.dart';
 import 'package:ggs_mobile/features/campaign/domain/campaign_opportunity_item.dart';
 import 'package:ggs_mobile/features/campaign/domain/campaign_repository.dart';
+import 'package:ggs_mobile/features/activity/domain/activity_event.dart';
+import 'package:ggs_mobile/features/activity/domain/activity_repository.dart';
+import 'package:ggs_mobile/features/collaboration/domain/active_collaboration.dart';
+import 'package:ggs_mobile/features/collaboration/domain/collaboration_repository.dart';
 import 'package:ggs_mobile/features/creator/domain/collaboration.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_manager.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
@@ -1220,6 +1224,72 @@ class DemoCampaignRepository implements CampaignRepository {
       );
     }
 
+    // When application is selected, create or activate collaboration
+    if (newStatus == CampaignApplicationStatus.selected) {
+      final collabId = 'collab_${app.id}';
+      final existingCollab = store.collaborations[collabId];
+      if (existingCollab == null) {
+        final newCollab = ActiveCollaboration(
+          id: collabId,
+          organizationId: store.brandAccount.id,
+          campaignId: app.campaignId,
+          applicationId: app.id,
+          creatorId: app.creatorId,
+          status: ActiveCollaborationStatus.active,
+          compensationAmount: app.proposedRate ?? campaign?.budgetMin ?? 25000,
+          currency: app.currency,
+          dueDate:
+              campaign?.contentDeadline ??
+              DateTime.now().add(const Duration(days: 14)),
+          createdAt: DateTime.now(),
+          campaignTitle: campaign?.title ?? app.campaignTitle,
+          brandName:
+              campaign?.brandName ?? app.brandName ?? 'Nova Beauty India',
+          creatorDisplayName: app.creatorDisplayName ?? 'Aisha Mehta',
+          creatorCity: app.creatorCity,
+          deliverableRequirements: [
+            '1x Instagram Reel with brand tag and audio integration',
+            '3x Instagram Story frames linking to product page',
+          ],
+          submissions: [],
+          messages: [
+            CollaborationMessage(
+              id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+              collaborationId: collabId,
+              senderId: store.brandAccount.id,
+              senderName: store.brandProfile.displayName,
+              content:
+                  'Welcome! Your application for "${campaign?.title ?? "Campaign"}" was selected. Feel free to ask questions here.',
+              createdAt: DateTime.now(),
+            ),
+          ],
+        );
+        store.collaborations[collabId] = newCollab;
+        store.submissions[collabId] = [];
+        store.messages[collabId] = List.from(newCollab.messages);
+
+        // Add to creator activity feed
+        final creatorActs = store.userActivities.putIfAbsent(
+          app.creatorId,
+          () => [],
+        );
+        creatorActs.insert(
+          0,
+          ActivityEvent(
+            id: 'act_${DateTime.now().millisecondsSinceEpoch}',
+            userId: app.creatorId,
+            collaborationId: collabId,
+            title: 'Application Selected 🎉',
+            subtitle:
+                'You were selected for "${campaign?.title ?? "Campaign"}"! Tap to view collaboration.',
+            activityType: 'application_selected',
+            route: '/collaborations/$collabId',
+            createdAt: DateTime.now(),
+          ),
+        );
+      }
+    }
+
     return updated;
   }
 
@@ -1230,5 +1300,291 @@ class DemoCampaignRepository implements CampaignRepository {
       newStatus: CampaignApplicationStatus.withdrawn,
       reason: 'Application withdrawn by creator',
     );
+  }
+}
+
+// ─── Demo Collaboration Repository ─────────────────────────────────────────
+
+class DemoCollaborationRepository implements CollaborationRepository {
+  DemoCollaborationRepository(this.store);
+  final DemoStore store;
+
+  @override
+  Future<ActiveCollaboration> getCollaboration(String collaborationId) async {
+    final collab = store.collaborations[collaborationId];
+    if (collab == null) throw Exception('Collaboration not found');
+    final subs = store.submissions[collaborationId] ?? [];
+    final msgs = store.messages[collaborationId] ?? [];
+    return collab.copyWith(submissions: subs, messages: msgs);
+  }
+
+  @override
+  Future<List<ActiveCollaboration>> listUserCollaborations({
+    required String userId,
+    ActiveCollaborationStatus? status,
+  }) async {
+    return store.collaborations.values
+        .where((c) {
+          if (c.creatorId != userId) return false;
+          if (status != null && c.status != status) return false;
+          return true;
+        })
+        .map((c) {
+          final subs = store.submissions[c.id] ?? [];
+          final msgs = store.messages[c.id] ?? [];
+          return c.copyWith(submissions: subs, messages: msgs);
+        })
+        .toList();
+  }
+
+  @override
+  Future<List<ActiveCollaboration>> listOrganizationCollaborations({
+    required String organizationId,
+    ActiveCollaborationStatus? status,
+  }) async {
+    return store.collaborations.values
+        .where((c) {
+          if (status != null && c.status != status) return false;
+          return true;
+        })
+        .map((c) {
+          final subs = store.submissions[c.id] ?? [];
+          final msgs = store.messages[c.id] ?? [];
+          return c.copyWith(submissions: subs, messages: msgs);
+        })
+        .toList();
+  }
+
+  @override
+  Future<CollaborationDeliverableSubmission> submitDeliverable({
+    required String collaborationId,
+    required String deliverableTitle,
+    required String contentLink,
+    String? creatorNotes,
+  }) async {
+    final collab = store.collaborations[collaborationId];
+    if (collab == null) throw Exception('Collaboration not found');
+
+    final subs = store.submissions.putIfAbsent(collaborationId, () => []);
+    final version =
+        subs.where((s) => s.deliverableTitle == deliverableTitle).length + 1;
+
+    final sub = CollaborationDeliverableSubmission(
+      id: 'sub_${DateTime.now().millisecondsSinceEpoch}',
+      collaborationId: collaborationId,
+      deliverableTitle: deliverableTitle,
+      contentLink: contentLink,
+      creatorNotes: creatorNotes,
+      status: DeliverableSubmissionStatus.submitted,
+      submittedAt: DateTime.now(),
+      version: version,
+    );
+
+    subs.insert(0, sub);
+
+    // Update collaboration status
+    store.collaborations[collaborationId] = collab.copyWith(
+      status: ActiveCollaborationStatus.submitted,
+      updatedAt: DateTime.now(),
+    );
+
+    // Add activity event for brand
+    final brandActs = store.userActivities.putIfAbsent(
+      collab.organizationId,
+      () => [],
+    );
+    brandActs.insert(
+      0,
+      ActivityEvent(
+        id: 'act_${DateTime.now().millisecondsSinceEpoch}',
+        userId: collab.organizationId,
+        collaborationId: collaborationId,
+        title: 'Deliverable Submitted 🎬',
+        subtitle:
+            '${collab.creatorDisplayName ?? "Creator"} submitted "$deliverableTitle" for review.',
+        activityType: 'deliverable_submitted',
+        route: '/collaborations/$collaborationId',
+        createdAt: DateTime.now(),
+      ),
+    );
+
+    return sub;
+  }
+
+  @override
+  Future<CollaborationDeliverableSubmission> reviewDeliverable({
+    required String submissionId,
+    required String action,
+    String? feedback,
+  }) async {
+    for (final entry in store.submissions.entries) {
+      final idx = entry.value.indexWhere((s) => s.id == submissionId);
+      if (idx != -1) {
+        final current = entry.value[idx];
+        final newStatus = action == 'approve'
+            ? DeliverableSubmissionStatus.approved
+            : DeliverableSubmissionStatus.revisionRequested;
+
+        final updated = current.copyWith(
+          status: newStatus,
+          feedback: feedback,
+          reviewedAt: DateTime.now(),
+        );
+        entry.value[idx] = updated;
+
+        final collab = store.collaborations[current.collaborationId];
+        if (collab != null) {
+          final newCollabStatus = action == 'approve'
+              ? ActiveCollaborationStatus.approved
+              : ActiveCollaborationStatus.revisionRequested;
+          store.collaborations[collab.id] = collab.copyWith(
+            status: newCollabStatus,
+            updatedAt: DateTime.now(),
+          );
+
+          // Add activity event for creator
+          final creatorActs = store.userActivities.putIfAbsent(
+            collab.creatorId,
+            () => [],
+          );
+          creatorActs.insert(
+            0,
+            ActivityEvent(
+              id: 'act_${DateTime.now().millisecondsSinceEpoch}',
+              userId: collab.creatorId,
+              collaborationId: collab.id,
+              title: action == 'approve'
+                  ? 'Deliverable Approved ✨'
+                  : 'Revision Requested ✍️',
+              subtitle: action == 'approve'
+                  ? 'Your deliverable was approved!'
+                  : (feedback ??
+                        'Brand requested changes on your deliverable.'),
+              activityType: action == 'approve'
+                  ? 'deliverable_approved'
+                  : 'revision_requested',
+              route: '/collaborations/${collab.id}',
+              createdAt: DateTime.now(),
+            ),
+          );
+        }
+
+        return updated;
+      }
+    }
+    throw Exception('Submission not found');
+  }
+
+  @override
+  Future<ActiveCollaboration> completeCollaboration({
+    required String collaborationId,
+    String? notes,
+  }) async {
+    final collab = store.collaborations[collaborationId];
+    if (collab == null) throw Exception('Collaboration not found');
+
+    final updated = collab.copyWith(
+      status: ActiveCollaborationStatus.completed,
+      completedAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+    store.collaborations[collaborationId] = updated;
+
+    // Add activity event for creator
+    final creatorActs = store.userActivities.putIfAbsent(
+      collab.creatorId,
+      () => [],
+    );
+    creatorActs.insert(
+      0,
+      ActivityEvent(
+        id: 'act_${DateTime.now().millisecondsSinceEpoch}',
+        userId: collab.creatorId,
+        collaborationId: collaborationId,
+        title: 'Collaboration Completed 🏆',
+        subtitle: 'All deliverables approved and collaboration marked completed. Excellent work!',
+        activityType: 'collaboration_completed',
+        route: '/collaborations/$collaborationId',
+        createdAt: DateTime.now(),
+      ),
+    );
+
+    return updated;
+  }
+
+  @override
+  Future<CollaborationMessage> sendMessage({
+    required String collaborationId,
+    required String senderId,
+    required String senderName,
+    required String content,
+  }) async {
+    final msg = CollaborationMessage(
+      id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+      collaborationId: collaborationId,
+      senderId: senderId,
+      senderName: senderName,
+      content: content,
+      createdAt: DateTime.now(),
+    );
+
+    final msgs = store.messages.putIfAbsent(collaborationId, () => []);
+    msgs.add(msg);
+
+    // Notify other participant in activity
+    final collab = store.collaborations[collaborationId];
+    if (collab != null) {
+      final recipientId = senderId == collab.creatorId
+          ? collab.organizationId
+          : collab.creatorId;
+      final recipientActs = store.userActivities.putIfAbsent(
+        recipientId,
+        () => [],
+      );
+      recipientActs.insert(
+        0,
+        ActivityEvent(
+          id: 'act_${DateTime.now().millisecondsSinceEpoch}',
+          userId: recipientId,
+          collaborationId: collaborationId,
+          title: 'New Message from $senderName',
+          subtitle: content,
+          activityType: 'new_message',
+          route: '/collaborations/$collaborationId',
+          createdAt: DateTime.now(),
+        ),
+      );
+    }
+
+    return msg;
+  }
+
+  @override
+  Future<List<CollaborationMessage>> getMessages(String collaborationId) async {
+    return store.messages[collaborationId] ?? [];
+  }
+}
+
+// ─── Demo Activity Repository ──────────────────────────────────────────────
+
+class DemoActivityRepository implements ActivityRepository {
+  DemoActivityRepository(this.store);
+  final DemoStore store;
+
+  @override
+  Future<List<ActivityEvent>> getUserActivity(String userId) async {
+    final acts = store.userActivities[userId] ?? [];
+    return List.from(acts)..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
+
+  @override
+  Future<void> markActivityAsRead(String activityId) async {
+    for (final acts in store.userActivities.values) {
+      final idx = acts.indexWhere((a) => a.id == activityId);
+      if (idx != -1) {
+        acts[idx] = acts[idx].copyWith(isRead: true);
+        break;
+      }
+    }
   }
 }
