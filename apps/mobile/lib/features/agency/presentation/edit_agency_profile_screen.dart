@@ -53,102 +53,108 @@ class _EditAgencyProfileScreenState
 
     agencyAsync.whenData((profile) => _initFields(profile));
 
-    return AppScaffold(
-      title: 'Edit Agency Profile',
-      children: [
-        Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Agency Details', style: AppTypography.heading),
-              const SizedBox(height: AppSpacing.sm),
-              AppTextField(
-                label: 'Agency Name',
-                controller: _agencyNameController,
-                enabled: !_busy,
-                validator: (val) => val == null || val.trim().isEmpty
-                    ? 'Agency name cannot be empty'
-                    : null,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              AppTextField(
-                label: 'Official Website',
-                controller: _websiteController,
-                enabled: !_busy,
-                keyboardType: TextInputType.url,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              AppTextField(
-                label: 'Location / Headquarters',
-                controller: _locationController,
-                enabled: !_busy,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              AppTextField(
-                label: 'Agency Description & Services',
-                controller: _descriptionController,
-                enabled: !_busy,
-                maxLength: 500,
-                maxLines: 3,
-              ),
-              const SizedBox(height: AppSpacing.lg),
+    return GGFormExitGuard(
+      hasUnsavedChanges:
+          _agencyNameController.text.isNotEmpty ||
+          _descriptionController.text.isNotEmpty,
+      child: AppScaffold(
+        title: 'Edit Agency Profile',
+        fallbackPath: '/profile',
+        children: [
+          Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Agency Details', style: AppTypography.heading),
+                const SizedBox(height: AppSpacing.sm),
+                AppTextField(
+                  label: 'Agency Name',
+                  controller: _agencyNameController,
+                  enabled: !_busy,
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? 'Agency name cannot be empty'
+                      : null,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppTextField(
+                  label: 'Official Website',
+                  controller: _websiteController,
+                  enabled: !_busy,
+                  keyboardType: TextInputType.url,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppTextField(
+                  label: 'Location / Headquarters',
+                  controller: _locationController,
+                  enabled: !_busy,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppTextField(
+                  label: 'Agency Description & Services',
+                  controller: _descriptionController,
+                  enabled: !_busy,
+                  maxLength: 500,
+                  maxLines: 3,
+                ),
+                const SizedBox(height: AppSpacing.lg),
 
-              AppButton(
-                label: 'Save Changes',
-                busy: _busy,
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    setState(() => _busy = true);
-                    try {
-                      final current =
-                          agencyAsync.value ??
-                          const AgencyProfile(
-                            userId: 'demo_agency_user_id',
-                            agencyName: '',
+                AppButton(
+                  label: 'Save Changes',
+                  busy: _busy,
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      setState(() => _busy = true);
+                      try {
+                        final current =
+                            agencyAsync.value ??
+                            const AgencyProfile(
+                              userId: 'demo_agency_user_id',
+                              agencyName: '',
+                            );
+                        final updated = current.copyWith(
+                          agencyName: _agencyNameController.text.trim(),
+                          website: _websiteController.text.trim(),
+                          location: _locationController.text.trim(),
+                          description: _descriptionController.text.trim(),
+                        );
+                        await ref
+                            .read(agencyRepositoryProvider)
+                            .updateProfile(updated);
+                        ref.invalidate(agencyProfileProvider);
+
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Agency profile updated successfully!',
+                              ),
+                              duration: Duration(seconds: 2),
+                            ),
                           );
-                      final updated = current.copyWith(
-                        agencyName: _agencyNameController.text.trim(),
-                        website: _websiteController.text.trim(),
-                        location: _locationController.text.trim(),
-                        description: _descriptionController.text.trim(),
-                      );
-                      await ref
-                          .read(agencyRepositoryProvider)
-                          .updateProfile(updated);
-                      ref.invalidate(agencyProfileProvider);
-
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Agency profile updated successfully!',
+                          context.pop();
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Update failed: ${mapFailure(e).message}',
+                              ),
                             ),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                        context.pop();
+                          );
+                        }
+                      } finally {
+                        if (mounted) setState(() => _busy = false);
                       }
-                    } catch (e) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Update failed: ${mapFailure(e).message}',
-                            ),
-                          ),
-                        );
-                      }
-                    } finally {
-                      if (mounted) setState(() => _busy = false);
                     }
-                  }
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

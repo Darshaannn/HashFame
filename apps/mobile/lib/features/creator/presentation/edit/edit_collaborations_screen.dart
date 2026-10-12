@@ -43,6 +43,7 @@ class _EditCollaborationsScreenState
 
     return AppScaffold(
       title: 'Add Past Collaboration',
+      fallbackPath: '/profile',
       children: [
         if (controllerState.hasError)
           AppErrorState(message: mapFailure(controllerState.error!).message),

@@ -27,8 +27,9 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
     final profileAsync = ref.watch(creatorProfileProvider(creatorId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Creator Profile'),
+      appBar: GGPageAppBar(
+        title: 'Creator Profile',
+        fallbackPath: '/discover',
         actions: [
           IconButton(
             icon: const Icon(Icons.bookmark_border),

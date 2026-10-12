@@ -17,117 +17,148 @@ class CampaignOpportunityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final coverUrl = AppImages.getCampaignCover(item.title);
+
     return AppCard(
+      padding: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppRadius.card),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header: Brand name & compensation badge
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Theme.of(context)
-                      .colorScheme
-                      .surfaceContainerHighest,
-                  child: Text(
-                    item.brandName.isNotEmpty
-                        ? item.brandName[0].toUpperCase()
-                        : 'B',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
+            // Contextual Campaign Cover Image
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(AppRadius.card),
+              ),
+              child: SizedBox(
+                height: 110,
+                width: double.infinity,
+                child: Image.network(
+                  coverUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: AppColors.deepNavy,
+                    child: const Center(
+                      child: Icon(
+                        Icons.campaign,
+                        color: Colors.white,
+                        size: 36,
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: Column(
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header: Brand name & compensation badge
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        item.brandName,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.muted,
+                      AppAvatar(
+                        label: item.brandName,
+                        imageUrl: AppImages.getCreatorPhoto(item.brandName),
+                        radius: 18,
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.brandName,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: AppColors.muted,
+                              ),
+                            ),
+                            Text(
+                              item.title,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.ink,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
                         ),
                       ),
-                      Text(
-                        item.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.ink,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      const SizedBox(width: AppSpacing.xs),
+                      AppBadge(label: item.compensationType.label),
                     ],
                   ),
-                ),
-                const SizedBox(width: AppSpacing.xs),
-                AppBadge(label: item.compensationType.label),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.md),
 
-            // Categories & Platforms
-            Wrap(
-              spacing: AppSpacing.xs,
-              runSpacing: AppSpacing.xs,
-              children: [
-                ...item.categoryNames.take(2).map((c) => AppBadge(label: c)),
-                ...item.platforms.map((p) => AppBadge(label: p)),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
-
-            const Divider(height: 1),
-            const SizedBox(height: AppSpacing.sm),
-
-            // Footer: Budget & Application Status
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  // Categories & Platforms
+                  Wrap(
+                    spacing: AppSpacing.xs,
+                    runSpacing: AppSpacing.xs,
                     children: [
-                      const Text(
-                        'Compensation',
-                        style: TextStyle(fontSize: 11, color: AppColors.muted),
-                      ),
-                      Text(
-                        _buildCompensationText(),
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.ink,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      ...item.categoryNames
+                          .take(2)
+                          .map((c) => AppBadge(label: c)),
+                      ...item.platforms.map((p) => AppBadge(label: p)),
                     ],
                   ),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                if (item.myApplicationStatus != null)
-                  AppBadge(
-                    label:
-                        'Applied (${item.myApplicationStatus!.replaceAll('_', ' ')})',
-                  )
-                else if (item.applicationDeadline != null)
-                  Text(
-                    'Deadline: ${_formatDate(item.applicationDeadline!)}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.muted,
-                    ),
+                  const SizedBox(height: AppSpacing.md),
+
+                  const Divider(height: 1),
+                  const SizedBox(height: AppSpacing.sm),
+
+                  // Footer: Budget & Application Status
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Compensation',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: AppColors.muted,
+                              ),
+                            ),
+                            Text(
+                              _buildCompensationText(),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.ink,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      if (item.myApplicationStatus != null)
+                        AppBadge(
+                          label:
+                              'Applied (${item.myApplicationStatus!.replaceAll('_', ' ')})',
+                        )
+                      else if (item.applicationDeadline != null)
+                        Text(
+                          'Deadline: ${_formatDate(item.applicationDeadline!)}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppColors.muted,
+                          ),
+                        ),
+                    ],
                   ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

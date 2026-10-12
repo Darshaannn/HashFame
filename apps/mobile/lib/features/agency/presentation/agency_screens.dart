@@ -83,6 +83,16 @@ class AgencyHomeScreen extends ConsumerWidget {
           ),
         ],
         children: [
+          // Agency Workspace Hero
+          GGHeroBanner(
+            tag: 'AGENCY PARTNER',
+            title: agencyName,
+            subtitle: 'Roster management, brand casting, and talent collaboration operations.',
+            ctaLabel: 'View Talent Roster',
+            onCtaPressed: () => context.go('/talent'),
+            icon: Icons.domain,
+          ),
+
           // Header
           GGProfileHeader(
             name: account.displayName,

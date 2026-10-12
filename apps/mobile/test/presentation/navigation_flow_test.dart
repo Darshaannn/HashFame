@@ -258,5 +258,85 @@ void main() {
         expect(find.text('VIEW AS CREATOR'), findsOneWidget);
       },
     );
+
+    testWidgets(
+      'Secondary subpages have BackButton with accessible touch targets',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(createTestApp());
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('VIEW AS BRAND'));
+        await tester.pumpAndSettle();
+
+        // Navigate to Settings
+        await tester.tap(find.byIcon(Icons.settings_outlined).first);
+        await tester.pumpAndSettle();
+
+        // Verify BackButton exists and has min 48x48 bounds
+        final backButton = find.byType(BackButton);
+        expect(backButton, findsOneWidget);
+        final size = tester.getSize(backButton);
+        expect(size.width, greaterThanOrEqualTo(48.0));
+        expect(size.height, greaterThanOrEqualTo(48.0));
+      },
+    );
+
+    testWidgets(
+      'Brand campaign creation form guards unsaved changes on back navigation',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(createTestApp());
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('VIEW AS BRAND'));
+        await tester.pumpAndSettle();
+
+        // Go to Campaigns tab
+        await tester.tap(
+          find.widgetWithText(NavigationDestination, 'Campaigns'),
+        );
+        await tester.pumpAndSettle();
+
+        // Tap Create / Plus action or FAB
+        final fab = find.byType(FloatingActionButton);
+        if (fab.evaluate().isNotEmpty) {
+          await tester.tap(fab);
+        } else {
+          final createBtn = find.text('Create Campaign');
+          if (createBtn.evaluate().isNotEmpty) {
+            await tester.tap(createBtn.first);
+          }
+        }
+        await tester.pumpAndSettle();
+
+        // If on campaign creation screen, enter text into title
+        final titleField = find.widgetWithText(TextFormField, 'Campaign Title');
+        if (titleField.evaluate().isNotEmpty) {
+          await tester.enterText(titleField, 'Summer Launch 2026');
+          await tester.pumpAndSettle();
+
+          // Tap Back
+          await tester.tap(find.byType(BackButton));
+          await tester.pumpAndSettle();
+
+          // Exit confirmation dialog should appear
+          expect(find.text('Exit campaign creation?'), findsOneWidget);
+
+          // Tap Cancel / Keep Editing
+          await tester.tap(find.text('Keep Editing'));
+          await tester.pumpAndSettle();
+
+          // Still on creation screen
+          expect(find.text('Create Campaign'), findsOneWidget);
+        }
+      },
+    );
   });
 }

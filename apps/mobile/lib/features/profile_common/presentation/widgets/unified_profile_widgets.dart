@@ -43,7 +43,8 @@ class GGProfileHeader extends StatelessWidget {
             children: [
               AppAvatar(
                 label: avatarLabel ?? (name.isNotEmpty ? name : 'User'),
-                radius: 30,
+                imageUrl: AppImages.getCreatorPhoto(name),
+                radius: 32,
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(

@@ -23,8 +23,9 @@ class BrandCampaignsScreen extends ConsumerWidget {
     final campaignsAsync = ref.watch(organizationCampaignsProvider(accountId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Brand Campaigns'),
+      appBar: GGPageAppBar(
+        title: 'Brand Campaigns',
+        fallbackPath: '/home/brand_marketer',
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -74,38 +75,12 @@ class BrandCampaignsScreen extends ConsumerWidget {
               separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.sm),
               itemBuilder: (context, index) {
                 final campaign = campaigns[index];
+                final coverUrl = AppImages.getCampaignCover(campaign.title);
+
                 return AppCard(
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      campaign.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 4),
-                        Text(
-                          '${campaign.creatorSlots} Slots • ${campaign.applicantCount} Applicants (${campaign.selectedCount} Selected)',
-                          style: const TextStyle(
-                            color: AppColors.muted,
-                            fontSize: 13,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Compensation: ${campaign.compensationType.label}',
-                          style: const TextStyle(
-                            color: AppColors.muted,
-                            fontSize: 11,
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: AppBadge(label: campaign.status.label),
+                  padding: EdgeInsets.zero,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(AppRadius.card),
                     onTap: () {
                       if (campaign.status == CampaignStatus.draft) {
                         context.push('/campaigns/${campaign.id}/edit');
@@ -113,6 +88,97 @@ class BrandCampaignsScreen extends ConsumerWidget {
                         context.push('/campaigns/${campaign.id}/applicants');
                       }
                     },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(AppRadius.card),
+                          ),
+                          child: Stack(
+                            children: [
+                              SizedBox(
+                                height: 100,
+                                width: double.infinity,
+                                child: Image.network(
+                                  coverUrl,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
+                                        color: AppColors.deepNavy,
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.campaign,
+                                            color: Colors.white,
+                                            size: 32,
+                                          ),
+                                        ),
+                                      ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: AppBadge(label: campaign.status.label),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(AppSpacing.md),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                campaign.title,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: AppColors.deepNavy,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.group_outlined,
+                                    size: 14,
+                                    color: AppColors.muted,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${campaign.creatorSlots} Slots • ${campaign.applicantCount} Applicants (${campaign.selectedCount} Selected)',
+                                    style: const TextStyle(
+                                      color: AppColors.muted,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.payments_outlined,
+                                    size: 14,
+                                    color: AppColors.ggsGreen,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'Compensation: ${campaign.compensationType.label}',
+                                    style: const TextStyle(
+                                      color: AppColors.deepNavy,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

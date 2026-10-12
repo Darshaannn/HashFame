@@ -23,7 +23,10 @@ class CreatorApplicationsScreen extends ConsumerWidget {
     final appsAsync = ref.watch(creatorApplicationsProvider(userId));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('My Applications')),
+      appBar: const GGPageAppBar(
+        title: 'My Applications',
+        fallbackPath: '/home/creator',
+      ),
       body: appsAsync.when(
         loading: () => const Center(child: AppLoader()),
         error: (e, _) => Center(

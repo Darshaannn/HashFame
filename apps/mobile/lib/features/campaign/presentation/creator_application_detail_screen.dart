@@ -24,7 +24,10 @@ class CreatorApplicationDetailScreen extends ConsumerWidget {
     return appAsync.when(
       loading: () => const Scaffold(body: Center(child: AppLoader())),
       error: (e, _) => Scaffold(
-        appBar: AppBar(title: const Text('Application Detail')),
+        appBar: const GGPageAppBar(
+          title: 'Application Detail',
+          fallbackPath: '/applications',
+        ),
         body: Center(
           child: AppErrorState(
             message: e.toString(),
@@ -40,7 +43,10 @@ class CreatorApplicationDetailScreen extends ConsumerWidget {
             app.status != CampaignApplicationStatus.withdrawn;
 
         return Scaffold(
-          appBar: AppBar(title: const Text('Application Detail')),
+          appBar: const GGPageAppBar(
+            title: 'Application Detail',
+            fallbackPath: '/applications',
+          ),
           bottomNavigationBar: canWithdraw && userId != null
               ? Container(
                   padding: const EdgeInsets.all(AppSpacing.md),

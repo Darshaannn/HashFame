@@ -30,7 +30,11 @@ class CreatorHeaderCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              AppAvatar(label: name),
+              AppAvatar(
+                label: name,
+                imageUrl: AppImages.getCreatorPhoto(name),
+                radius: 34,
+              ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(

@@ -29,12 +29,13 @@ class _CampaignApplicantDashboardScreenState
     );
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: GGPageAppBar(
         title: campaignAsync.when(
-          data: (c) => Text('${c.title} • Applicants'),
-          loading: () => const Text('Applicants'),
-          error: (_, _) => const Text('Applicants'),
+          data: (c) => '${c.title} • Applicants',
+          loading: () => 'Applicants',
+          error: (_, _) => 'Applicants',
         ),
+        fallbackPath: '/campaigns',
       ),
       body: Column(
         children: [

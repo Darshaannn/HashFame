@@ -54,22 +54,43 @@ class CreatorHomeScreen extends ConsumerWidget {
           ),
         ],
         children: [
-          // Header
+          // Studio Hero Banner
+          GGHeroBanner(
+            tag: 'CREATOR STUDIO',
+            title: 'Welcome, ${account.displayName}',
+            subtitle: 'Pitch briefs, manage collaborations, and track approved deliverables.',
+            ctaLabel: 'Browse Brand Briefs',
+            onCtaPressed: () => context.go('/opportunities'),
+            icon: Icons.movie_creation_outlined,
+          ),
+
+          // Header Profile Identity
           Row(
             children: [
-              AppAvatar(label: account.displayName),
+              AppAvatar(
+                label: account.displayName,
+                imageUrl: AppImages.getCreatorPhoto(account.displayName),
+                radius: 30,
+              ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Welcome, ${account.displayName}',
-                      style: AppTypography.heading,
+                      account.displayName,
+                      style: AppTypography.heading.copyWith(
+                        color: AppColors.deepNavy,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const Text(
-                      'Creator Studio',
-                      style: TextStyle(color: AppColors.muted),
+                      'Professional Creator Studio',
+                      style: TextStyle(
+                        color: AppColors.muted,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),

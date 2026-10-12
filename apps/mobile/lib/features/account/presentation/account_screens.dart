@@ -263,8 +263,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final action = ref.read(accountActionProvider.notifier);
     final isDemo = ref.watch(configProvider).name == 'GGs Demo';
 
+    final role = ref.watch(sessionProvider).snapshot?.account.primaryRoleLabel;
+    final fallback = role != null ? '/home/${role.wire}' : '/profile';
+
     return AppScaffold(
       title: 'Settings & Preferences',
+      fallbackPath: fallback,
       children: [
         // ACCOUNT SECTION
         GGSettingsSection(

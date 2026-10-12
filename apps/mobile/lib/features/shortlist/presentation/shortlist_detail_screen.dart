@@ -20,8 +20,9 @@ class ShortlistDetailScreen extends ConsumerWidget {
     final busy = controllerState.isLoading;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(shortlistAsync.asData?.value.name ?? 'Shortlist'),
+      appBar: GGPageAppBar(
+        title: shortlistAsync.asData?.value.name ?? 'Shortlist',
+        fallbackPath: '/shortlists',
         actions: [
           IconButton(
             icon: const Icon(Icons.compare_arrows),

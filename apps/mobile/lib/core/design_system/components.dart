@@ -2,6 +2,80 @@ import 'package:flutter/material.dart';
 
 import 'tokens.dart';
 
+class GGPageAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const GGPageAppBar({
+    super.key,
+    required this.title,
+    this.actions,
+    this.leading,
+    this.showBackButton,
+    this.fallbackPath,
+    this.bottom,
+    this.elevation = 0,
+    this.centerTitle = false,
+  });
+
+  final String title;
+  final List<Widget>? actions;
+  final Widget? leading;
+  final bool? showBackButton;
+  final String? fallbackPath;
+  final PreferredSizeWidget? bottom;
+  final double elevation;
+  final bool centerTitle;
+
+  @override
+  Size get preferredSize =>
+      Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0.0));
+
+  @override
+  Widget build(BuildContext context) {
+    Widget? effectiveLeading = leading;
+
+    if (effectiveLeading == null) {
+      final canPop = Navigator.of(context).canPop();
+      final shouldShowBack = showBackButton ?? canPop;
+
+      if (shouldShowBack) {
+        effectiveLeading = Semantics(
+          label: 'Back',
+          button: true,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+            child: BackButton(
+              color: AppColors.deepNavy,
+              onPressed: () {
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                } else if (fallbackPath != null) {
+                  Navigator.of(context).pushReplacementNamed(fallbackPath!);
+                }
+              },
+            ),
+          ),
+        );
+      }
+    }
+
+    return AppBar(
+      title: Text(
+        title,
+        style: AppTypography.heading.copyWith(
+          color: AppColors.deepNavy,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      leading: effectiveLeading,
+      actions: actions,
+      bottom: bottom,
+      elevation: elevation,
+      centerTitle: centerTitle,
+      scrolledUnderElevation: 1,
+      backgroundColor: AppColors.surface,
+    );
+  }
+}
+
 class AppScaffold extends StatelessWidget {
   const AppScaffold({
     super.key,
@@ -9,15 +83,32 @@ class AppScaffold extends StatelessWidget {
     required this.children,
     this.actions,
     this.bottomNavigationBar,
+    this.leading,
+    this.showBackButton,
+    this.fallbackPath,
+    this.appBar,
   });
+
   final String title;
   final List<Widget> children;
   final List<Widget>? actions;
   final Widget? bottomNavigationBar;
+  final Widget? leading;
+  final bool? showBackButton;
+  final String? fallbackPath;
+  final PreferredSizeWidget? appBar;
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(title), actions: actions),
+    appBar:
+        appBar ??
+        GGPageAppBar(
+          title: title,
+          actions: actions,
+          leading: leading,
+          showBackButton: showBackButton,
+          fallbackPath: fallbackPath,
+        ),
     bottomNavigationBar: bottomNavigationBar,
     body: SafeArea(
       child: Align(
@@ -207,34 +298,59 @@ class AppAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveColor = accentColor ?? _generateColor(label);
+    final hasImage = imageUrl != null && imageUrl!.trim().isNotEmpty;
+
     return Semantics(
       label: 'Profile avatar for $label',
       container: true,
       excludeSemantics: true,
-      child: CircleAvatar(
-        radius: radius,
-        backgroundColor: effectiveColor.withValues(alpha: 0.15),
-        child: Text(
-          label.isEmpty ? '?' : label.characters.first.toUpperCase(),
-          style: TextStyle(
-            color: effectiveColor,
-            fontWeight: FontWeight.bold,
-            fontSize: radius * 0.8,
-          ),
+      child: Container(
+        width: radius * 2,
+        height: radius * 2,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: effectiveColor.withValues(alpha: 0.12),
+          border: Border.all(color: AppColors.outlineLight, width: 1.5),
+        ),
+        child: ClipOval(
+          child: hasImage
+              ? Image.network(
+                  imageUrl!,
+                  width: radius * 2,
+                  height: radius * 2,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      _buildFallback(effectiveColor),
+                )
+              : _buildFallback(effectiveColor),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFallback(Color color) {
+    return Center(
+      child: Text(
+        label.isEmpty ? '?' : label.characters.first.toUpperCase(),
+        style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.bold,
+          fontSize: radius * 0.8,
         ),
       ),
     );
   }
 
   Color _generateColor(String text) {
-    if (text.isEmpty) return AppColors.primary;
+    if (text.isEmpty) return AppColors.deepNavy;
     final hash = text.codeUnits.fold(0, (prev, elem) => prev + elem);
     final palette = [
-      const Color(0xFF244C45),
+      AppColors.deepNavy,
+      AppColors.ggsGreen,
       const Color(0xFF1E40AF),
       const Color(0xFF6B21A8),
       const Color(0xFF0F766E),
-      const Color(0xFFB45309),
+      const Color(0xFFD97706),
       const Color(0xFF9D174D),
     ];
     return palette[hash % palette.length];
@@ -530,4 +646,224 @@ class AppSheet {
           ),
         ),
       );
+}
+
+/// Universal PopScope-backed wrapper to protect forms from accidental navigation loss.
+class GGFormExitGuard extends StatelessWidget {
+  const GGFormExitGuard({
+    super.key,
+    required this.hasUnsavedChanges,
+    required this.child,
+    this.title = 'Discard unsaved changes?',
+    this.message = 'You have unsaved changes in this form. Leaving will discard your modifications.',
+  });
+
+  final bool hasUnsavedChanges;
+  final Widget child;
+  final String title;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: !hasUnsavedChanges,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        final shouldPop = await AppDialog.confirm(
+          context,
+          title: title,
+          message: message,
+        );
+        if (shouldPop && context.mounted) {
+          Navigator.of(context).pop(result);
+        }
+      },
+      child: child,
+    );
+  }
+}
+
+/// Premium Section Header with optional action button
+class GGSectionHeader extends StatelessWidget {
+  const GGSectionHeader({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.actionLabel,
+    this.onAction,
+  });
+
+  final String title;
+  final String? subtitle;
+  final String? actionLabel;
+  final VoidCallback? onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTypography.heading.copyWith(
+                    color: AppColors.deepNavy,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle!,
+                    style: const TextStyle(
+                      color: AppColors.muted,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          if (actionLabel != null && onAction != null)
+            TextButton(
+              onPressed: onAction,
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.ggsGreen,
+                visualDensity: VisualDensity.compact,
+              ),
+              child: Text(
+                actionLabel!,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Visual Editorial / Hero Banner for Dashboards
+class GGHeroBanner extends StatelessWidget {
+  const GGHeroBanner({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    this.tag = 'FEATURED',
+    this.ctaLabel,
+    this.onCtaPressed,
+    this.accentColor = AppColors.ggsGreen,
+    this.icon = Icons.auto_awesome,
+  });
+
+  final String title;
+  final String subtitle;
+  final String tag;
+  final String? ctaLabel;
+  final VoidCallback? onCtaPressed;
+  final Color accentColor;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.deepNavy,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF14253D), Color(0xFF1C3556)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.deepNavy.withValues(alpha: 0.15),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: AppColors.warmAmber.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                  border: Border.all(
+                    color: AppColors.warmAmber.withValues(alpha: 0.5),
+                  ),
+                ),
+                child: Text(
+                  tag,
+                  style: const TextStyle(
+                    color: AppColors.warmAmber,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+              ),
+              Icon(icon, color: AppColors.warmAmber, size: 22),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              letterSpacing: -0.2,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.8),
+              fontSize: 13,
+              height: 1.4,
+            ),
+          ),
+          if (ctaLabel != null && onCtaPressed != null) ...[
+            const SizedBox(height: AppSpacing.md),
+            FilledButton.icon(
+              onPressed: onCtaPressed,
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.ggsGreen,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                minimumSize: const Size(0, 40),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppRadius.control),
+                ),
+              ),
+              icon: const Icon(Icons.arrow_forward, size: 16),
+              label: Text(
+                ctaLabel!,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }

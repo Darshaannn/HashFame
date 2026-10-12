@@ -29,21 +29,11 @@ class CreatorDiscoveryCard extends ConsumerWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Avatar placeholder / thumbnail
-                CircleAvatar(
-                  radius: 26,
-                  backgroundColor: Theme.of(context)
-                      .colorScheme
-                      .primaryContainer,
-                  child: Text(
-                    creator.displayName.isNotEmpty
-                        ? creator.displayName[0].toUpperCase()
-                        : 'C',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
-                  ),
+                // Creator photograph
+                AppAvatar(
+                  label: creator.displayName,
+                  imageUrl: AppImages.getCreatorPhoto(creator.displayName),
+                  radius: 28,
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(

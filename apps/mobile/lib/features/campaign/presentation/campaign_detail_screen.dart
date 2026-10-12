@@ -137,7 +137,7 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
     return campaignAsync.when(
       loading: () => const Scaffold(body: Center(child: AppLoader())),
       error: (e, _) => Scaffold(
-        appBar: AppBar(title: const Text('Campaign Detail')),
+        appBar: const GGPageAppBar(title: 'Campaign Detail'),
         body: Center(
           child: AppErrorState(
             message: e.toString(),
@@ -154,7 +154,10 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
             campaign.applicationDeadline!.isBefore(DateTime.now());
 
         return Scaffold(
-          appBar: AppBar(title: Text(campaign.title)),
+          appBar: GGPageAppBar(
+            title: campaign.title,
+            fallbackPath: isCreator ? '/opportunities' : '/campaigns',
+          ),
           bottomNavigationBar: isCreator && isLive
               ? Container(
                   padding: const EdgeInsets.all(AppSpacing.md),

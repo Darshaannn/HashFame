@@ -201,337 +201,353 @@ class _CampaignCreationScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Campaign'),
-        actions: [
-          TextButton(
-            onPressed: () async {
+    final hasChanges =
+        _titleController.text.isNotEmpty ||
+        _descriptionController.text.isNotEmpty;
+
+    return GGFormExitGuard(
+      hasUnsavedChanges: hasChanges,
+      title: 'Exit campaign creation?',
+      message: 'You have unsubmitted progress in this campaign brief. Would you like to exit?',
+      child: Scaffold(
+        appBar: GGPageAppBar(
+          title: 'Create Campaign',
+          fallbackPath: '/campaigns',
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await _saveDraft();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Draft saved successfully')),
+                  );
+                }
+              },
+              child: const Text('Save Draft'),
+            ),
+          ],
+        ),
+        body: Stepper(
+          currentStep: _currentStep,
+          onStepContinue: () async {
+            if (_currentStep < 6) {
               await _saveDraft();
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Draft saved successfully')),
-                );
+              if (mounted) {
+                setState(() => _currentStep += 1);
               }
-            },
-            child: const Text('Save Draft'),
-          ),
-        ],
-      ),
-      body: Stepper(
-        currentStep: _currentStep,
-        onStepContinue: () async {
-          if (_currentStep < 6) {
-            await _saveDraft();
-            if (mounted) {
-              setState(() => _currentStep += 1);
-            }
-          } else {
-            // Final submission
-            await _saveDraft();
-            if (_savedCampaignId != null) {
-              final success = await ref
-                  .read(campaignActionControllerProvider.notifier)
-                  .submitForReview(_savedCampaignId!);
-              if (context.mounted && success) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Campaign submitted for review!'),
-                  ),
-                );
-                context.pop();
+            } else {
+              // Final submission
+              await _saveDraft();
+              if (_savedCampaignId != null) {
+                final success = await ref
+                    .read(campaignActionControllerProvider.notifier)
+                    .submitForReview(_savedCampaignId!);
+                if (context.mounted && success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Campaign submitted for review!'),
+                    ),
+                  );
+                  context.pop();
+                }
               }
             }
-          }
-        },
-        onStepCancel: () {
-          if (_currentStep > 0) {
-            setState(() => _currentStep -= 1);
-          } else {
-            context.pop();
-          }
-        },
-        steps: [
-          // Step 1: Basics
-          Step(
-            title: const Text('Step 1 of 7: Campaign Basics'),
-            isActive: _currentStep >= 0,
-            content: Column(
-              children: [
-                AppTextField(
-                  controller: _titleController,
-                  label: 'Campaign Title *',
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppTextField(
-                  controller: _objectiveController,
-                  label: 'Campaign Objective (Optional)',
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppTextField(
-                  controller: _descriptionController,
-                  label: 'Detailed Brief & Description *',
-                  maxLength: 2000,
-                ),
-              ],
-            ),
-          ),
-
-          // Step 2: Requirements
-          Step(
-            title: const Text('Creator Requirements'),
-            isActive: _currentStep >= 1,
-            content: Column(
-              children: [
-                AppTextField(
-                  controller: _slotsController,
-                  label: 'Number of Creator Slots',
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppTextField(
-                  controller: _cityController,
-                  label: 'Target City (Optional)',
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppTextField(
-                  controller: _stateController,
-                  label: 'Target State (Optional)',
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppTextField(
-                  controller: _minFollowersController,
-                  label: 'Minimum Followers (Optional)',
-                  keyboardType: TextInputType.number,
-                ),
-              ],
-            ),
-          ),
-
-          // Step 3: Deliverables
-          Step(
-            title: const Text('Deliverables'),
-            isActive: _currentStep >= 2,
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ..._deliverables.asMap().entries.map(
-                  (entry) => ListTile(
-                    title: Text(
-                      '${entry.value.quantity}x ${entry.value.deliverableType.label}',
-                    ),
-                    subtitle: Text(entry.value.platform),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: AppColors.error),
-                      onPressed: () =>
-                          setState(() => _deliverables.removeAt(entry.key)),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                OutlinedButton.icon(
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add Deliverable'),
-                  onPressed: () {
-                    setState(() {
-                      _deliverables.add(
-                        CampaignDeliverable(
-                          id: 'del_${DateTime.now().millisecondsSinceEpoch}',
-                          campaignId: _savedCampaignId ?? '',
-                          deliverableType:
-                              CampaignDeliverableType.instagramReel,
-                          platform: 'Instagram',
-                          quantity: 1,
-                        ),
-                      );
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-
-          // Step 4: Compensation
-          Step(
-            title: const Text('Compensation'),
-            isActive: _currentStep >= 3,
-            content: Column(
-              children: [
-                DropdownButtonFormField<CampaignCompensationType>(
-                  initialValue: _compensationType,
-                  decoration: const InputDecoration(
-                    labelText: 'Compensation Type',
-                  ),
-                  items: CampaignCompensationType.values
-                      .map(
-                        (type) => DropdownMenuItem(
-                          value: type,
-                          child: Text(type.label),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (val) => setState(
-                    () => _compensationType =
-                        val ?? CampaignCompensationType.paid,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                if (_compensationType != CampaignCompensationType.barter) ...[
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AppTextField(
-                          controller: _budgetMinController,
-                          label: 'Min Budget (₹)',
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.sm),
-                      Expanded(
-                        child: AppTextField(
-                          controller: _budgetMaxController,
-                          label: 'Max Budget (₹)',
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                    ],
+          },
+          onStepCancel: () {
+            if (_currentStep > 0) {
+              setState(() => _currentStep -= 1);
+            } else {
+              context.pop();
+            }
+          },
+          steps: [
+            // Step 1: Basics
+            Step(
+              title: const Text('Step 1 of 7: Campaign Basics'),
+              isActive: _currentStep >= 0,
+              content: Column(
+                children: [
+                  AppTextField(
+                    controller: _titleController,
+                    label: 'Campaign Title *',
                   ),
                   const SizedBox(height: AppSpacing.sm),
-                ],
-                if (_compensationType != CampaignCompensationType.paid) ...[
                   AppTextField(
-                    controller: _barterDescController,
-                    label: 'Barter Product Details',
+                    controller: _objectiveController,
+                    label: 'Campaign Objective (Optional)',
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppTextField(
+                    controller: _descriptionController,
+                    label: 'Detailed Brief & Description *',
+                    maxLength: 2000,
                   ),
                 ],
-              ],
+              ),
             ),
-          ),
 
-          // Step 5: Usage Rights
-          Step(
-            title: const Text('Usage Rights & Terms'),
-            isActive: _currentStep >= 4,
-            content: Column(
-              children: [
-                SwitchListTile(
-                  title: const Text('Organic Reposting on Brand Handles'),
-                  value: _organicReposting,
-                  onChanged: (v) => setState(() => _organicReposting = v),
-                ),
-                SwitchListTile(
-                  title: const Text('Paid Ad Usage Permission Required'),
-                  value: _paidUsage,
-                  onChanged: (v) => setState(() => _paidUsage = v),
-                ),
-                SwitchListTile(
-                  title: const Text('Brand Whitelisting Required'),
-                  value: _whitelisting,
-                  onChanged: (v) => setState(() => _whitelisting = v),
-                ),
-                SwitchListTile(
-                  title: const Text(
-                    'Brand Content Approval Required Before Posting',
+            // Step 2: Requirements
+            Step(
+              title: const Text('Creator Requirements'),
+              isActive: _currentStep >= 1,
+              content: Column(
+                children: [
+                  AppTextField(
+                    controller: _slotsController,
+                    label: 'Number of Creator Slots',
+                    keyboardType: TextInputType.number,
                   ),
-                  value: _contentApproval,
-                  onChanged: (v) => setState(() => _contentApproval = v),
-                ),
-                SwitchListTile(
-                  title: const Text('Paid Partnership / Collab Tag Required'),
-                  value: _disclosureRequired,
-                  onChanged: (v) => setState(() => _disclosureRequired = v),
-                ),
-              ],
+                  const SizedBox(height: AppSpacing.sm),
+                  AppTextField(
+                    controller: _cityController,
+                    label: 'Target City (Optional)',
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppTextField(
+                    controller: _stateController,
+                    label: 'Target State (Optional)',
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppTextField(
+                    controller: _minFollowersController,
+                    label: 'Minimum Followers (Optional)',
+                    keyboardType: TextInputType.number,
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          // Step 6: Timeline
-          Step(
-            title: const Text('Timeline & Deadlines'),
-            isActive: _currentStep >= 5,
-            content: Column(
-              children: [
-                ListTile(
-                  title: const Text('Application Deadline'),
-                  subtitle: Text(
-                    _appDeadline == null
-                        ? 'Not set'
-                        : '${_appDeadline!.day}/${_appDeadline!.month}/${_appDeadline!.year}',
-                  ),
-                  trailing: const Icon(Icons.calendar_today),
-                  onTap: () async {
-                    final picked = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now().add(const Duration(days: 7)),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(const Duration(days: 365)),
-                    );
-                    if (picked != null) {
-                      setState(() => _appDeadline = picked);
-                    }
-                  },
-                ),
-                ListTile(
-                  title: const Text('Content Delivery Due Date'),
-                  subtitle: Text(
-                    _contentDeadline == null
-                        ? 'Not set'
-                        : '${_contentDeadline!.day}/${_contentDeadline!.month}/${_contentDeadline!.year}',
-                  ),
-                  trailing: const Icon(Icons.calendar_today),
-                  onTap: () async {
-                    final picked = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now().add(const Duration(days: 14)),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(const Duration(days: 365)),
-                    );
-                    if (picked != null) {
-                      setState(() => _contentDeadline = picked);
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-
-          // Step 7: Preview & Submit
-          Step(
-            title: const Text('Review & Submit'),
-            isActive: _currentStep >= 6,
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Review your campaign brief before submitting for moderation.',
-                  style: TextStyle(color: AppColors.muted),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                AppCard(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _titleController.text,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text('Compensation: ${_compensationType.label}'),
-                        Text('Deliverables: ${_deliverables.length} required'),
-                        Text('Slots: ${_slotsController.text} creator(s)'),
-                      ],
+            // Step 3: Deliverables
+            Step(
+              title: const Text('Deliverables'),
+              isActive: _currentStep >= 2,
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ..._deliverables.asMap().entries.map(
+                    (entry) => ListTile(
+                      title: Text(
+                        '${entry.value.quantity}x ${entry.value.deliverableType.label}',
+                      ),
+                      subtitle: Text(entry.value.platform),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: AppColors.error),
+                        onPressed: () =>
+                            setState(() => _deliverables.removeAt(entry.key)),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: AppSpacing.sm),
+                  OutlinedButton.icon(
+                    icon: const Icon(Icons.add),
+                    label: const Text('Add Deliverable'),
+                    onPressed: () {
+                      setState(() {
+                        _deliverables.add(
+                          CampaignDeliverable(
+                            id: 'del_${DateTime.now().millisecondsSinceEpoch}',
+                            campaignId: _savedCampaignId ?? '',
+                            deliverableType:
+                                CampaignDeliverableType.instagramReel,
+                            platform: 'Instagram',
+                            quantity: 1,
+                          ),
+                        );
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+
+            // Step 4: Compensation
+            Step(
+              title: const Text('Compensation'),
+              isActive: _currentStep >= 3,
+              content: Column(
+                children: [
+                  DropdownButtonFormField<CampaignCompensationType>(
+                    initialValue: _compensationType,
+                    decoration: const InputDecoration(
+                      labelText: 'Compensation Type',
+                    ),
+                    items: CampaignCompensationType.values
+                        .map(
+                          (type) => DropdownMenuItem(
+                            value: type,
+                            child: Text(type.label),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (val) => setState(
+                      () => _compensationType =
+                          val ?? CampaignCompensationType.paid,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  if (_compensationType != CampaignCompensationType.barter) ...[
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppTextField(
+                            controller: _budgetMinController,
+                            label: 'Min Budget (₹)',
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: AppTextField(
+                            controller: _budgetMaxController,
+                            label: 'Max Budget (₹)',
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                  ],
+                  if (_compensationType != CampaignCompensationType.paid) ...[
+                    AppTextField(
+                      controller: _barterDescController,
+                      label: 'Barter Product Details',
+                    ),
+                  ],
+                ],
+              ),
+            ),
+
+            // Step 5: Usage Rights
+            Step(
+              title: const Text('Usage Rights & Terms'),
+              isActive: _currentStep >= 4,
+              content: Column(
+                children: [
+                  SwitchListTile(
+                    title: const Text('Organic Reposting on Brand Handles'),
+                    value: _organicReposting,
+                    onChanged: (v) => setState(() => _organicReposting = v),
+                  ),
+                  SwitchListTile(
+                    title: const Text('Paid Ad Usage Permission Required'),
+                    value: _paidUsage,
+                    onChanged: (v) => setState(() => _paidUsage = v),
+                  ),
+                  SwitchListTile(
+                    title: const Text('Brand Whitelisting Required'),
+                    value: _whitelisting,
+                    onChanged: (v) => setState(() => _whitelisting = v),
+                  ),
+                  SwitchListTile(
+                    title: const Text(
+                      'Brand Content Approval Required Before Posting',
+                    ),
+                    value: _contentApproval,
+                    onChanged: (v) => setState(() => _contentApproval = v),
+                  ),
+                  SwitchListTile(
+                    title: const Text('Paid Partnership / Collab Tag Required'),
+                    value: _disclosureRequired,
+                    onChanged: (v) => setState(() => _disclosureRequired = v),
+                  ),
+                ],
+              ),
+            ),
+
+            // Step 6: Timeline
+            Step(
+              title: const Text('Timeline & Deadlines'),
+              isActive: _currentStep >= 5,
+              content: Column(
+                children: [
+                  ListTile(
+                    title: const Text('Application Deadline'),
+                    subtitle: Text(
+                      _appDeadline == null
+                          ? 'Not set'
+                          : '${_appDeadline!.day}/${_appDeadline!.month}/${_appDeadline!.year}',
+                    ),
+                    trailing: const Icon(Icons.calendar_today),
+                    onTap: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now().add(
+                          const Duration(days: 7),
+                        ),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(const Duration(days: 365)),
+                      );
+                      if (picked != null) {
+                        setState(() => _appDeadline = picked);
+                      }
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Content Delivery Due Date'),
+                    subtitle: Text(
+                      _contentDeadline == null
+                          ? 'Not set'
+                          : '${_contentDeadline!.day}/${_contentDeadline!.month}/${_contentDeadline!.year}',
+                    ),
+                    trailing: const Icon(Icons.calendar_today),
+                    onTap: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now().add(
+                          const Duration(days: 14),
+                        ),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(const Duration(days: 365)),
+                      );
+                      if (picked != null) {
+                        setState(() => _contentDeadline = picked);
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+
+            // Step 7: Preview & Submit
+            Step(
+              title: const Text('Review & Submit'),
+              isActive: _currentStep >= 6,
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Review your campaign brief before submitting for moderation.',
+                    style: TextStyle(color: AppColors.muted),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  AppCard(
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _titleController.text,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text('Compensation: ${_compensationType.label}'),
+                          Text(
+                            'Deliverables: ${_deliverables.length} required',
+                          ),
+                          Text('Slots: ${_slotsController.text} creator(s)'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -50,8 +50,9 @@ class _CreatorOpportunitiesScreenState
     final filters = ref.watch(campaignFiltersProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Discover Work'),
+      appBar: GGPageAppBar(
+        title: 'Discover Work',
+        fallbackPath: '/home/creator',
         actions: [
           IconButton(
             icon: Stack(

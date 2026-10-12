@@ -38,6 +38,7 @@ class _EditSocialsScreenState extends ConsumerState<EditSocialsScreen> {
 
     return AppScaffold(
       title: 'Add Social Account',
+      fallbackPath: '/profile',
       children: [
         if (controllerState.hasError)
           AppErrorState(message: mapFailure(controllerState.error!).message),

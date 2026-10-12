@@ -59,126 +59,134 @@ class _EditBrandProfileScreenState
 
     brandAsync.whenData((profile) => _initFields(profile));
 
-    return AppScaffold(
-      title: 'Edit Brand Profile',
-      children: [
-        Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Marketer Information', style: AppTypography.heading),
-              const SizedBox(height: AppSpacing.sm),
-              AppTextField(
-                label: 'Full Name',
-                controller: _nameController,
-                enabled: !_busy,
-                validator: (val) => val == null || val.trim().isEmpty
-                    ? 'Name cannot be empty'
-                    : null,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              AppTextField(
-                label: 'Job Title / Role',
-                controller: _jobTitleController,
-                enabled: !_busy,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              AppTextField(
-                label: 'Work Email',
-                controller: _emailController,
-                enabled: !_busy,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              AppTextField(
-                label: 'Phone Number',
-                controller: _phoneController,
-                enabled: !_busy,
-                keyboardType: TextInputType.phone,
-              ),
-              const SizedBox(height: AppSpacing.md),
+    return GGFormExitGuard(
+      hasUnsavedChanges:
+          _nameController.text.isNotEmpty || _bioController.text.isNotEmpty,
+      child: AppScaffold(
+        title: 'Edit Brand Profile',
+        fallbackPath: '/profile',
+        children: [
+          Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Marketer Information',
+                  style: AppTypography.heading,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppTextField(
+                  label: 'Full Name',
+                  controller: _nameController,
+                  enabled: !_busy,
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? 'Name cannot be empty'
+                      : null,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppTextField(
+                  label: 'Job Title / Role',
+                  controller: _jobTitleController,
+                  enabled: !_busy,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppTextField(
+                  label: 'Work Email',
+                  controller: _emailController,
+                  enabled: !_busy,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppTextField(
+                  label: 'Phone Number',
+                  controller: _phoneController,
+                  enabled: !_busy,
+                  keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: AppSpacing.md),
 
-              const Text(
-                'Organization / Company',
-                style: AppTypography.heading,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              AppTextField(
-                label: 'Company / Organization Name',
-                controller: _orgNameController,
-                enabled: !_busy,
-                validator: (val) => val == null || val.trim().isEmpty
-                    ? 'Organization name is required'
-                    : null,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              AppTextField(
-                label: 'Company Bio & Mission',
-                controller: _bioController,
-                enabled: !_busy,
-                maxLength: 500,
-                maxLines: 3,
-              ),
-              const SizedBox(height: AppSpacing.lg),
+                const Text(
+                  'Organization / Company',
+                  style: AppTypography.heading,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppTextField(
+                  label: 'Company / Organization Name',
+                  controller: _orgNameController,
+                  enabled: !_busy,
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? 'Organization name is required'
+                      : null,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppTextField(
+                  label: 'Company Bio & Mission',
+                  controller: _bioController,
+                  enabled: !_busy,
+                  maxLength: 500,
+                  maxLines: 3,
+                ),
+                const SizedBox(height: AppSpacing.lg),
 
-              AppButton(
-                label: 'Save Changes',
-                busy: _busy,
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    setState(() => _busy = true);
-                    try {
-                      final current =
-                          brandAsync.value ??
-                          const BrandMarketerProfile(
-                            userId: 'demo_brand_user_id',
-                            displayName: '',
+                AppButton(
+                  label: 'Save Changes',
+                  busy: _busy,
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      setState(() => _busy = true);
+                      try {
+                        final current =
+                            brandAsync.value ??
+                            const BrandMarketerProfile(
+                              userId: 'demo_brand_user_id',
+                              displayName: '',
+                            );
+                        final updated = current.copyWith(
+                          displayName: _nameController.text.trim(),
+                          jobTitle: _jobTitleController.text.trim(),
+                          workEmail: _emailController.text.trim(),
+                          phone: _phoneController.text.trim(),
+                          organizationName: _orgNameController.text.trim(),
+                          bio: _bioController.text.trim(),
+                        );
+                        await ref
+                            .read(brandRepositoryProvider)
+                            .updateProfile(updated);
+                        ref.invalidate(brandProfileProvider);
+
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Brand profile updated successfully!',
+                              ),
+                              duration: Duration(seconds: 2),
+                            ),
                           );
-                      final updated = current.copyWith(
-                        displayName: _nameController.text.trim(),
-                        jobTitle: _jobTitleController.text.trim(),
-                        workEmail: _emailController.text.trim(),
-                        phone: _phoneController.text.trim(),
-                        organizationName: _orgNameController.text.trim(),
-                        bio: _bioController.text.trim(),
-                      );
-                      await ref
-                          .read(brandRepositoryProvider)
-                          .updateProfile(updated);
-                      ref.invalidate(brandProfileProvider);
-
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Brand profile updated successfully!',
+                          context.pop();
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Update failed: ${mapFailure(e).message}',
+                              ),
                             ),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                        context.pop();
+                          );
+                        }
+                      } finally {
+                        if (mounted) setState(() => _busy = false);
                       }
-                    } catch (e) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Update failed: ${mapFailure(e).message}',
-                            ),
-                          ),
-                        );
-                      }
-                    } finally {
-                      if (mounted) setState(() => _busy = false);
                     }
-                  }
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

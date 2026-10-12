@@ -62,10 +62,20 @@ class BrandHomeScreen extends ConsumerWidget {
           ),
         ],
         children: [
-          // Header
+          // Navy Dashboard Hero Section
+          GGHeroBanner(
+            tag: 'BRAND WORKSPACE',
+            title: orgName,
+            subtitle: 'Campaign management, creator discovery, and active collaboration hub.',
+            ctaLabel: 'Post New Campaign',
+            onCtaPressed: () => context.push('/campaigns/new'),
+            icon: Icons.storefront,
+          ),
+
+          // Header Profile Identity
           GGProfileHeader(
             name: brand?.displayName ?? account.displayName,
-            roleOrTitle: brand?.jobTitle ?? 'Brand Marketer',
+            roleOrTitle: brand?.jobTitle ?? 'Head of Brand Marketing',
             organization: orgName,
             isVerified: true,
             onEditPressed: () => context.push('/profile/edit/brand'),
@@ -93,7 +103,7 @@ class BrandHomeScreen extends ConsumerWidget {
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
+                          color: AppColors.deepNavy,
                         ),
                       ),
                     ],
@@ -120,7 +130,7 @@ class BrandHomeScreen extends ConsumerWidget {
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.accent,
+                          color: AppColors.ggsGreen,
                         ),
                       ),
                     ],
@@ -147,11 +157,61 @@ class BrandHomeScreen extends ConsumerWidget {
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.success,
+                          color: AppColors.warmAmber,
                         ),
                       ),
                     ],
                   ),
+                ),
+              ),
+            ],
+          ),
+
+          // Featured Creators Horizontal Visual Preview
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GGSectionHeader(
+                title: 'Featured Creators',
+                subtitle: 'Verified talent ready for campaign collaboration',
+                actionLabel: 'See All',
+                onAction: () => context.go('/discover'),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              SizedBox(
+                height: 124,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    _buildFeaturedCreatorThumbnail(
+                      context,
+                      name: 'Aisha Mehta',
+                      category: 'Fashion & Style',
+                      followers: '142K',
+                      photoUrl: AppImages.creatorAisha,
+                    ),
+                    _buildFeaturedCreatorThumbnail(
+                      context,
+                      name: 'Riya Kapoor',
+                      category: 'Beauty & Skincare',
+                      followers: '280K',
+                      photoUrl: AppImages.creatorRiya,
+                    ),
+                    _buildFeaturedCreatorThumbnail(
+                      context,
+                      name: 'Rohan Sharma',
+                      category: 'Tech Reviewer',
+                      followers: '410K',
+                      photoUrl: AppImages.creatorRohan,
+                    ),
+                    _buildFeaturedCreatorThumbnail(
+                      context,
+                      name: 'Neha Rao',
+                      category: 'Health & Fitness',
+                      followers: '95K',
+                      photoUrl: AppImages.creatorNeha,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -258,6 +318,49 @@ class BrandHomeScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFeaturedCreatorThumbnail(
+    BuildContext context, {
+    required String name,
+    required String category,
+    required String followers,
+    required String photoUrl,
+  }) {
+    return Container(
+      width: 100,
+      margin: const EdgeInsets.only(right: AppSpacing.sm),
+      child: InkWell(
+        onTap: () => context.go('/discover'),
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        child: Column(
+          children: [
+            AppAvatar(label: name, imageUrl: photoUrl, radius: 30),
+            const SizedBox(height: 6),
+            Text(
+              name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+                color: AppColors.deepNavy,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              followers,
+              style: const TextStyle(
+                fontSize: 11,
+                color: AppColors.ggsGreen,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

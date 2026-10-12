@@ -14,8 +14,9 @@ class ShortlistsScreen extends ConsumerWidget {
     final shortlistsAsync = ref.watch(shortlistsListProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shortlists'),
+      appBar: GGPageAppBar(
+        title: 'Shortlists',
+        fallbackPath: '/home/brand_marketer',
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

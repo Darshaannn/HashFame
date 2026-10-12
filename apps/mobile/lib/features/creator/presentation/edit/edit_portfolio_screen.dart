@@ -43,6 +43,7 @@ class _EditPortfolioScreenState extends ConsumerState<EditPortfolioScreen> {
 
     return AppScaffold(
       title: 'Add Portfolio Work',
+      fallbackPath: '/profile',
       children: [
         if (controllerState.hasError)
           AppErrorState(message: mapFailure(controllerState.error!).message),

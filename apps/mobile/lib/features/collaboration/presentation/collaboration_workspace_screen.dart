@@ -56,7 +56,10 @@ class _CollaborationWorkspaceScreenState
     return collabAsync.when(
       loading: () => const Scaffold(body: Center(child: AppLoader())),
       error: (e, _) => Scaffold(
-        appBar: AppBar(title: const Text('Collaboration Workspace')),
+        appBar: const GGPageAppBar(
+          title: 'Collaboration Workspace',
+          fallbackPath: '/activity',
+        ),
         body: Center(
           child: AppErrorState(
             message: e.toString(),
@@ -72,8 +75,9 @@ class _CollaborationWorkspaceScreenState
             collab.status == ActiveCollaborationStatus.completed;
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text(collab.campaignTitle ?? 'Active Collaboration'),
+          appBar: GGPageAppBar(
+            title: collab.campaignTitle ?? 'Active Collaboration',
+            fallbackPath: isCreator ? '/activity' : '/campaigns',
             bottom: TabBar(
               controller: _tabController,
               tabs: const [

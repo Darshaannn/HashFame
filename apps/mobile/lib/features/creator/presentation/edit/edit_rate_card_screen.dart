@@ -38,6 +38,7 @@ class _EditRateCardScreenState extends ConsumerState<EditRateCardScreen> {
 
     return AppScaffold(
       title: 'Add Rate Card Item',
+      fallbackPath: '/profile',
       children: [
         if (controllerState.hasError)
           AppErrorState(message: mapFailure(controllerState.error!).message),

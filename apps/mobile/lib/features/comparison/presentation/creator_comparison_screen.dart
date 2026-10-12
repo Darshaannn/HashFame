@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
 import '../../discovery/domain/creator_discovery_item.dart';
 import 'comparison_controller.dart';
@@ -13,8 +14,9 @@ class CreatorComparisonScreen extends ConsumerWidget {
     final state = ref.watch(comparisonControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Compare Creators'),
+      appBar: GGPageAppBar(
+        title: 'Compare Creators',
+        fallbackPath: '/shortlists',
         actions: [
           if (state.creators.isNotEmpty)
             TextButton(
