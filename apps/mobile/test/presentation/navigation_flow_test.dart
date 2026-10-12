@@ -338,5 +338,71 @@ void main() {
         }
       },
     );
+
+    testWidgets(
+      'Discover Creators shows back button and navigates back to Brand Home',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(createTestApp());
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('VIEW AS BRAND'));
+        await tester.pumpAndSettle();
+
+        // Switch to Discover tab
+        await tester.tap(find.widgetWithText(NavigationDestination, 'Discover'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Discover Creators'), findsOneWidget);
+
+        // Verify back button is visible
+        final backButton = find.byType(BackButton);
+        expect(backButton, findsOneWidget);
+
+        // Tap back button
+        await tester.tap(backButton);
+        await tester.pumpAndSettle();
+
+        // Should return to Brand Home / Workspace
+        expect(find.text('Brand Workspace'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Discover Work shows back button and navigates back to Creator Home',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(createTestApp());
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('VIEW AS CREATOR'));
+        await tester.pumpAndSettle();
+
+        // Switch to Discover Work tab
+        await tester.tap(
+          find.widgetWithText(NavigationDestination, 'Discover Work'),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('Discover Work'), findsOneWidget);
+
+        // Verify back button is visible
+        final backButton = find.byType(BackButton);
+        expect(backButton, findsOneWidget);
+
+        // Tap back button
+        await tester.tap(backButton);
+        await tester.pumpAndSettle();
+
+        // Should return to Creator Home
+        expect(find.text('Creator Home'), findsOneWidget);
+      },
+    );
   });
 }

@@ -52,6 +52,7 @@ class _CreatorOpportunitiesScreenState
     return Scaffold(
       appBar: GGPageAppBar(
         title: 'Discover Work',
+        showBackButton: true,
         fallbackPath: '/home/creator',
         actions: [
           IconButton(

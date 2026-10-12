@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'tokens.dart';
 
@@ -34,7 +35,7 @@ class GGPageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     if (effectiveLeading == null) {
       final canPop = Navigator.of(context).canPop();
-      final shouldShowBack = showBackButton ?? canPop;
+      final shouldShowBack = showBackButton ?? (canPop || fallbackPath != null);
 
       if (shouldShowBack) {
         effectiveLeading = Semantics(
@@ -48,7 +49,7 @@ class GGPageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (Navigator.of(context).canPop()) {
                   Navigator.of(context).pop();
                 } else if (fallbackPath != null) {
-                  Navigator.of(context).pushReplacementNamed(fallbackPath!);
+                  context.go(fallbackPath!);
                 }
               },
             ),

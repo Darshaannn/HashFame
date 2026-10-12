@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
+import '../../account/domain/account.dart';
+import '../../auth/presentation/session_controller.dart';
 import '../../creator/presentation/profile/creator_profile_controller.dart';
 import '../domain/creator_search_filters.dart';
 import 'discovery_controller.dart';
@@ -46,10 +48,18 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
     final state = ref.watch(discoveryControllerProvider);
     final filters = ref.watch(creatorSearchFiltersProvider);
     final categoriesAsync = ref.watch(referenceCategoriesProvider);
+    final role = ref.watch(sessionProvider).snapshot?.account.primaryRoleLabel;
+    final fallbackPath = switch (role) {
+      ProfessionalRole.creator => '/home/creator',
+      ProfessionalRole.agency => '/home/agency',
+      _ => '/home/brand_marketer',
+    };
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Discover Creators'),
+      appBar: GGPageAppBar(
+        title: 'Discover Creators',
+        showBackButton: true,
+        fallbackPath: fallbackPath,
         actions: [
           IconButton(
             icon: Badge(
