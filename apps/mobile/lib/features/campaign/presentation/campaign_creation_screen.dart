@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../app/providers.dart';
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
+import '../../assistant/domain/assistant_service.dart';
+import '../../assistant/presentation/assistant_modal_sheet.dart';
 import '../../auth/presentation/session_controller.dart';
 import '../domain/campaign.dart';
 import 'campaign_controller.dart';
@@ -282,6 +284,38 @@ class _CampaignCreationScreenState
                     label: 'Detailed Brief & Description *',
                     maxLength: 2000,
                   ),
+                  const SizedBox(height: 6),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: AssistantActionChip(
+                      label: 'AI: Refine Campaign Brief',
+                      onTap: () {
+                        AssistantModalSheet.show(
+                          context: context,
+                          role: AssistantRole.brand,
+                          task: AssistantTask.draftBrief,
+                          title: 'Draft Campaign Brief',
+                          contextData: {
+                            'title': _titleController.text.trim(),
+                            'objective': _objectiveController.text.trim(),
+                          },
+                          onSuggestionAccepted: (response) {
+                            if (response.suggestion != null) {
+                              setState(() {
+                                _descriptionController.text = response.suggestion!;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('AI brief suggestion applied!'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -338,23 +372,75 @@ class _CampaignCreationScreenState
                     ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
-                  OutlinedButton.icon(
-                    icon: const Icon(Icons.add),
-                    label: const Text('Add Deliverable'),
-                    onPressed: () {
-                      setState(() {
-                        _deliverables.add(
-                          CampaignDeliverable(
-                            id: 'del_${DateTime.now().millisecondsSinceEpoch}',
-                            campaignId: _savedCampaignId ?? '',
-                            deliverableType:
-                                CampaignDeliverableType.instagramReel,
-                            platform: 'Instagram',
-                            quantity: 1,
-                          ),
-                        );
-                      });
-                    },
+                  Row(
+                    children: [
+                      OutlinedButton.icon(
+                        icon: const Icon(Icons.add),
+                        label: const Text('Add Deliverable'),
+                        onPressed: () {
+                          setState(() {
+                            _deliverables.add(
+                              CampaignDeliverable(
+                                id: 'del_${DateTime.now().millisecondsSinceEpoch}',
+                                campaignId: _savedCampaignId ?? '',
+                                deliverableType:
+                                    CampaignDeliverableType.instagramReel,
+                                platform: 'Instagram',
+                                quantity: 1,
+                              ),
+                            );
+                          });
+                        },
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      AssistantActionChip(
+                        label: 'AI: Suggest Deliverables',
+                        onTap: () {
+                          AssistantModalSheet.show(
+                            context: context,
+                            role: AssistantRole.brand,
+                            task: AssistantTask.suggestDeliverables,
+                            title: 'Suggest Deliverables',
+                            contextData: {
+                              'title': _titleController.text.trim(),
+                              'objective': _objectiveController.text.trim(),
+                            },
+                            onSuggestionAccepted: (response) {
+                              setState(() {
+                                if (_deliverables.isEmpty) {
+                                  _deliverables.add(
+                                    CampaignDeliverable(
+                                      id: 'del_${DateTime.now().millisecondsSinceEpoch}',
+                                      campaignId: _savedCampaignId ?? '',
+                                      deliverableType:
+                                          CampaignDeliverableType.instagramReel,
+                                      platform: 'Instagram',
+                                      quantity: 1,
+                                    ),
+                                  );
+                                  _deliverables.add(
+                                    CampaignDeliverable(
+                                      id: 'del_${DateTime.now().millisecondsSinceEpoch + 1}',
+                                      campaignId: _savedCampaignId ?? '',
+                                      deliverableType:
+                                          CampaignDeliverableType.instagramStory,
+                                      platform: 'Instagram',
+                                      quantity: 2,
+                                    ),
+                                  );
+                                }
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('AI deliverable requirements applied!'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

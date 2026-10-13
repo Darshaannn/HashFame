@@ -39,7 +39,7 @@ class CampaignOpportunityCard extends StatelessWidget {
                   coverUrl,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: AppColors.deepNavy,
+                    color: AppColors.black,
                     child: const Center(
                       child: Icon(
                         Icons.campaign,

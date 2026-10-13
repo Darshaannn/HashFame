@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
 import '../../account/domain/account.dart';
+import '../../assistant/domain/assistant_service.dart';
+import '../../assistant/presentation/assistant_modal_sheet.dart';
 import '../../auth/presentation/session_controller.dart';
 import '../domain/campaign.dart';
 import 'campaign_controller.dart';
@@ -60,6 +62,32 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
                     controller: _pitchController,
                     label: 'Your Pitch / Message (Required)',
                     maxLength: 1000,
+                  ),
+                  const SizedBox(height: 4),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: AssistantActionChip(
+                      label: 'AI: Draft Pitch for Brief',
+                      onTap: () {
+                        AssistantModalSheet.show(
+                          context: context,
+                          role: AssistantRole.creator,
+                          task: AssistantTask.draftPitch,
+                          title: 'Draft Pitch Note',
+                          contextData: {
+                            'campaignTitle': campaign.title,
+                            'creatorName': ref.watch(sessionProvider).snapshot?.account.displayName ?? 'Creator',
+                          },
+                          onSuggestionAccepted: (response) {
+                            if (response.suggestion != null) {
+                              setModalState(() {
+                                _pitchController.text = response.suggestion!;
+                              });
+                            }
+                          },
+                        );
+                      },
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   if (campaign.compensationType !=

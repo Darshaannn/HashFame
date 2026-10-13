@@ -14,6 +14,7 @@ import '../features/shortlist/domain/shortlist_repository.dart';
 import '../features/talent_manager/domain/talent_manager_repository.dart';
 
 import '../features/activity/domain/activity_repository.dart';
+import '../features/assistant/domain/assistant_service.dart';
 import '../features/collaboration/domain/collaboration_repository.dart';
 
 final configProvider = Provider<AppConfig>(
@@ -55,6 +56,10 @@ final collaborationRepositoryProvider = Provider<CollaborationRepository>(
 final activityRepositoryProvider = Provider<ActivityRepository>(
   (ref) => throw StateError('Bootstrap must supply activity repository'),
 );
+final assistantServiceProvider = Provider<AssistantService>(
+  (ref) => throw StateError('Bootstrap must supply assistant service'),
+);
 final analyticsProvider = Provider<AnalyticsService>(
   (ref) => const NoopAnalyticsService(),
 );
+

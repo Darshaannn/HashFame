@@ -33,9 +33,9 @@ class BrandShell extends StatelessWidget {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.search_outlined),
-            selectedIcon: Icon(Icons.search),
-            label: 'Discover',
+            icon: Icon(Icons.person_search_outlined),
+            selectedIcon: Icon(Icons.person_search),
+            label: 'Creator',
           ),
           NavigationDestination(
             icon: Icon(Icons.campaign_outlined),

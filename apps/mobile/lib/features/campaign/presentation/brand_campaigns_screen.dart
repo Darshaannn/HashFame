@@ -105,7 +105,7 @@ class BrandCampaignsScreen extends ConsumerWidget {
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) =>
                                       Container(
-                                        color: AppColors.deepNavy,
+                                        color: AppColors.black,
                                         child: const Center(
                                           child: Icon(
                                             Icons.campaign,
@@ -134,7 +134,7 @@ class BrandCampaignsScreen extends ConsumerWidget {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
-                                  color: AppColors.deepNavy,
+                                  color: AppColors.black,
                                 ),
                               ),
                               const SizedBox(height: 6),
@@ -146,11 +146,14 @@ class BrandCampaignsScreen extends ConsumerWidget {
                                     color: AppColors.muted,
                                   ),
                                   const SizedBox(width: 4),
-                                  Text(
-                                    '${campaign.creatorSlots} Slots • ${campaign.applicantCount} Applicants (${campaign.selectedCount} Selected)',
-                                    style: const TextStyle(
-                                      color: AppColors.muted,
-                                      fontSize: 12,
+                                  Expanded(
+                                    child: Text(
+                                      '${campaign.creatorSlots} Slots • ${campaign.applicantCount} Applicants (${campaign.selectedCount} Selected)',
+                                      style: const TextStyle(
+                                        color: AppColors.muted,
+                                        fontSize: 12,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
@@ -161,15 +164,18 @@ class BrandCampaignsScreen extends ConsumerWidget {
                                   const Icon(
                                     Icons.payments_outlined,
                                     size: 14,
-                                    color: AppColors.ggsGreen,
+                                    color: AppColors.burgundy,
                                   ),
                                   const SizedBox(width: 4),
-                                  Text(
-                                    'Compensation: ${campaign.compensationType.label}',
-                                    style: const TextStyle(
-                                      color: AppColors.deepNavy,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
+                                  Expanded(
+                                    child: Text(
+                                      'Compensation: ${campaign.compensationType.label}',
+                                      style: const TextStyle(
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],

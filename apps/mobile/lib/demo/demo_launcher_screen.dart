@@ -20,30 +20,13 @@ class DemoLauncherScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F1B2C), // Deep premium midnight canvas
+      backgroundColor: AppColors.black,
       body: Stack(
         children: [
-          // Ambient Gradient Glow Highlights
+          // Ambient Burgundy Subtle Glow
           Positioned(
-            top: -100,
+            top: -120,
             left: -80,
-            child: Container(
-              width: 320,
-              height: 320,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    AppColors.ggsGreen.withValues(alpha: 0.16),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 140,
-            right: -100,
             child: Container(
               width: 340,
               height: 340,
@@ -51,14 +34,13 @@ class DemoLauncherScreen extends ConsumerWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    const Color(0xFF1E3A8A).withValues(alpha: 0.22),
+                    AppColors.burgundy.withValues(alpha: 0.22),
                     Colors.transparent,
                   ],
                 ),
               ),
             ),
           ),
-
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -80,40 +62,24 @@ class DemoLauncherScreen extends ConsumerWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 14,
-                              vertical: 8,
+                              vertical: 7,
                             ),
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(AppRadius.full),
                               border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.14),
+                                color: Colors.white.withValues(alpha: 0.16),
                               ),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
-                                  width: 28,
-                                  height: 28,
+                                  width: 26,
+                                  height: 26,
                                   decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        AppColors.ggsGreen,
-                                        Color(0xFF00C99E),
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.ggsGreen.withValues(
-                                          alpha: 0.4,
-                                        ),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
+                                    color: AppColors.burgundy,
+                                    borderRadius: BorderRadius.circular(6),
                                   ),
                                   alignment: Alignment.center,
                                   child: const Text(
@@ -121,7 +87,7 @@ class DemoLauncherScreen extends ConsumerWidget {
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w900,
-                                      fontSize: 13,
+                                      fontSize: 12,
                                       letterSpacing: -0.5,
                                     ),
                                   ),
@@ -143,21 +109,21 @@ class DemoLauncherScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: AppSpacing.lg),
 
-                      // Hero Headline Section
+                      // Concise, human headline
                       const Text(
-                        'Creator Collaboration,\nsimplified.',
+                        'Creator Collaboration,\nSimplified.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 28,
                           fontWeight: FontWeight.w800,
-                          letterSpacing: -0.9,
+                          letterSpacing: -0.8,
                           color: Colors.white,
-                          height: 1.18,
+                          height: 1.2,
                         ),
                       ),
                       const SizedBox(height: AppSpacing.xs),
                       Text(
-                        'Creator Intelligence • Marketplace • Operating System',
+                        'Direct Matchmaking • Campaign Briefs • Milestone Deliverables',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 12.5,
@@ -168,33 +134,33 @@ class DemoLauncherScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: AppSpacing.lg),
 
-                      // Visual Hero Card showcasing collaboration & creator photography
-                      _HeroShowcaseCard(),
+                      // Visual Hero Card showcasing creator photography
+                      const _HeroShowcaseCard(),
 
                       const SizedBox(height: AppSpacing.md),
 
-                      // Refined, subtle Demo Mode pill
+                      // Slim, subtle Demo Mode pill
                       Center(
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
-                            vertical: 6,
+                            vertical: 5,
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.06),
                             borderRadius: BorderRadius.circular(AppRadius.full),
                             border: Border.all(
-                              color: AppColors.warmAmber.withValues(alpha: 0.25),
+                              color: Colors.white.withValues(alpha: 0.12),
                             ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                width: 7,
-                                height: 7,
+                                width: 6,
+                                height: 6,
                                 decoration: const BoxDecoration(
-                                  color: AppColors.warmAmber,
+                                  color: AppColors.burgundy,
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -202,18 +168,18 @@ class DemoLauncherScreen extends ConsumerWidget {
                               const Text(
                                 'DEMO MODE',
                                 style: TextStyle(
-                                  color: AppColors.warmAmber,
-                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.w700,
                                   fontSize: 10,
                                   letterSpacing: 0.5,
                                 ),
                               ),
                               const SizedBox(width: 6),
                               Text(
-                                '• Standalone Sandbox',
+                                '• Interactive Sandbox',
                                 style: TextStyle(
                                   fontSize: 10.5,
-                                  color: Colors.white.withValues(alpha: 0.75),
+                                  color: Colors.white.withValues(alpha: 0.55),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -261,15 +227,15 @@ class DemoLauncherScreen extends ConsumerWidget {
                       _PremiumRoleCard(
                         title: 'VIEW AS BRAND',
                         subtitle:
-                            'Discover & shortlist creators, launch campaigns, review applications',
+                            'Discover & shortlist creators, launch campaigns, review applicants',
                         roleBadge: 'CAMPAIGN MARKETER',
                         icon: Icons.business_center_outlined,
                         gradientColors: const [
-                          Color(0xFF18314F),
-                          Color(0xFF13253C),
+                          Color(0xFF201616),
+                          Color(0xFF181212),
                         ],
-                        accentColor: AppColors.ggsGreen,
-                        borderColor: AppColors.ggsGreen.withValues(alpha: 0.35),
+                        accentColor: AppColors.burgundy,
+                        borderColor: AppColors.burgundy.withValues(alpha: 0.6),
                         isFeatured: true,
                         onPressed: () => _launchAs(
                           context,
@@ -288,10 +254,10 @@ class DemoLauncherScreen extends ConsumerWidget {
                         roleBadge: 'CREATOR ECONOMY',
                         icon: Icons.person_outline,
                         gradientColors: const [
-                          Color(0xFF1A2A3E),
-                          Color(0xFF142233),
+                          Color(0xFF1E1E1E),
+                          Color(0xFF161616),
                         ],
-                        accentColor: const Color(0xFF60A5FA),
+                        accentColor: Colors.white,
                         borderColor: Colors.white.withValues(alpha: 0.15),
                         isFeatured: false,
                         onPressed: () =>
@@ -309,7 +275,7 @@ class DemoLauncherScreen extends ConsumerWidget {
                       const SizedBox(height: AppSpacing.xl),
                       Center(
                         child: Text(
-                          'GGs Mobile v1.0 • Boss Demo Build',
+                          'GGs Mobile v1.0 • Verified Presentation Sandbox',
                           style: TextStyle(
                             fontSize: 11.5,
                             fontWeight: FontWeight.w500,
@@ -389,16 +355,19 @@ class _HeroShowcaseCard extends StatelessWidget {
                       children: [
                         const Icon(
                           Icons.verified,
-                          color: AppColors.ggsGreen,
+                          color: AppColors.burgundy,
                           size: 14,
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          'Verified Creator Roster',
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.95),
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12.5,
+                        Expanded(
+                          child: Text(
+                            'Verified Creator Profiles',
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.95),
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12.5,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -420,16 +389,16 @@ class _HeroShowcaseCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.25),
+              color: Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(AppRadius.sm),
             ),
             child: Row(
               children: [
-                Expanded(child: _metricItem('500+', 'Top Creators')),
+                Expanded(child: _metricItem('Curated', 'Talent Roster')),
                 _divider(),
-                Expanded(child: _metricItem('100%', 'Contract Protected')),
+                Expanded(child: _metricItem('Milestones', 'Tracked Deliverables')),
                 _divider(),
-                Expanded(child: _metricItem('Instant', 'Collab Workspace')),
+                Expanded(child: _metricItem('Direct', 'Collab Workspace')),
               ],
             ),
           ),
@@ -444,7 +413,7 @@ class _HeroShowcaseCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: const Color(0xFF0F1B2C), width: 2),
+          border: Border.all(color: AppColors.black, width: 2),
         ),
         child: ClipOval(
           child: Image.network(
@@ -455,7 +424,7 @@ class _HeroShowcaseCard extends StatelessWidget {
             errorBuilder: (_, _, _) => Container(
               width: 36,
               height: 36,
-              color: AppColors.primaryLight,
+              color: const Color(0xFF2C2C2C),
               child: const Icon(Icons.person, color: Colors.white70, size: 18),
             ),
           ),
@@ -482,6 +451,8 @@ class _HeroShowcaseCard extends StatelessWidget {
             fontWeight: FontWeight.w800,
             fontSize: 11.5,
           ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         Text(
           label,
@@ -490,6 +461,9 @@ class _HeroShowcaseCard extends StatelessWidget {
             fontSize: 9.5,
             fontWeight: FontWeight.w500,
           ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
         ),
       ],
     );
@@ -533,10 +507,8 @@ class _PremiumRoleCard extends StatelessWidget {
         border: Border.all(color: borderColor, width: isFeatured ? 1.5 : 1.0),
         boxShadow: [
           BoxShadow(
-            color: isFeatured
-                ? accentColor.withValues(alpha: 0.15)
-                : Colors.black.withValues(alpha: 0.25),
-            blurRadius: 14,
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
         ],
@@ -558,10 +530,10 @@ class _PremiumRoleCard extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: accentColor.withValues(alpha: 0.14),
+                    color: Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: accentColor.withValues(alpha: 0.3),
+                      color: accentColor.withValues(alpha: 0.4),
                     ),
                   ),
                   child: Icon(icon, color: accentColor, size: 24),
@@ -594,20 +566,18 @@ class _PremiumRoleCard extends StatelessWidget {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColors.ggsGreen.withValues(
-                                  alpha: 0.2,
+                                color: AppColors.burgundy.withValues(
+                                  alpha: 0.35,
                                 ),
                                 borderRadius: BorderRadius.circular(4),
                                 border: Border.all(
-                                  color: AppColors.ggsGreen.withValues(
-                                    alpha: 0.5,
-                                  ),
+                                  color: AppColors.burgundy,
                                 ),
                               ),
                               child: const Text(
-                                'RECOMMENDED',
+                                'PRIMARY',
                                 style: TextStyle(
-                                  color: AppColors.ggsGreen,
+                                  color: Color(0xFFFF9999),
                                   fontSize: 8.5,
                                   fontWeight: FontWeight.w800,
                                   letterSpacing: 0.4,

@@ -7,6 +7,7 @@ import 'package:ggs_mobile/core/config/app_config.dart';
 import 'package:ggs_mobile/demo/demo_repositories.dart';
 import 'package:ggs_mobile/demo/demo_store.dart';
 import 'package:ggs_mobile/features/account/domain/account.dart';
+import 'package:ggs_mobile/features/assistant/data/assistant_service_impl.dart';
 
 Widget createTestApp({ProfessionalRole? initialRole}) {
   final store = DemoStore.instance;
@@ -53,6 +54,7 @@ Widget createTestApp({ProfessionalRole? initialRole}) {
       campaignRepositoryProvider.overrideWithValue(campaignRepo),
       collaborationRepositoryProvider.overrideWithValue(collabRepo),
       activityRepositoryProvider.overrideWithValue(activityRepo),
+      assistantServiceProvider.overrideWithValue(const DemoAssistantServiceImpl()),
     ],
     child: const FoundationApp(),
   );
@@ -113,8 +115,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Brand Workspace'), findsOneWidget);
 
-      // Tap Discover Tab (Tab 1)
-      await tester.tap(find.widgetWithText(NavigationDestination, 'Discover'));
+      // Tap Creator Tab (Tab 1)
+      await tester.tap(find.widgetWithText(NavigationDestination, 'Creator'));
       await tester.pumpAndSettle();
       expect(find.text('Discover Creators'), findsOneWidget);
     });
@@ -352,8 +354,8 @@ void main() {
         await tester.tap(find.text('VIEW AS BRAND'));
         await tester.pumpAndSettle();
 
-        // Switch to Discover tab
-        await tester.tap(find.widgetWithText(NavigationDestination, 'Discover'));
+        // Switch to Creator tab
+        await tester.tap(find.widgetWithText(NavigationDestination, 'Creator'));
         await tester.pumpAndSettle();
 
         expect(find.text('Discover Creators'), findsOneWidget);

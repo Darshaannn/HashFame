@@ -7,6 +7,7 @@ import 'core/config/app_config.dart';
 import 'core/telemetry/analytics_service.dart';
 import 'demo/demo_repositories.dart';
 import 'demo/demo_store.dart';
+import 'features/assistant/data/assistant_service_impl.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +53,7 @@ void main() {
         campaignRepositoryProvider.overrideWithValue(campaignRepo),
         collaborationRepositoryProvider.overrideWithValue(collabRepo),
         activityRepositoryProvider.overrideWithValue(activityRepo),
+        assistantServiceProvider.overrideWithValue(const DemoAssistantServiceImpl()),
       ],
       child: const DemoAppRoot(),
     ),

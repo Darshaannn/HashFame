@@ -1,37 +1,34 @@
 import 'package:flutter/material.dart';
 
 abstract final class AppColors {
-  // Brand Identity Tokens (New Premium Palette)
-  static const deepNavy = Color(0xFF14253D);
-  static const ggsGreen = Color(0xFF00A884);
-  static const softOffWhite = Color(0xFFF5F7FA);
-  static const warmAmber = Color(0xFFFFB86B);
-  static const charcoal = Color(0xFF242B35);
-  static const white = Color(0xFFFFFFFF);
+  // Brand Identity Tokens (Unified Premium Burgundy & Monochrome Palette)
+  static const burgundy = Color(0xFF8B0000); // Primary Accent & CTAs
+  static const black = Color(0xFF141414); // Primary Headings & Bold Anchors
+  static const white = Color(0xFFFFFFFF); // Clean Surfaces
+  static const lightGray = Color(0xFFEEEEEE); // Neutral Canvas & Light Surfaces
+  static const secondaryGray = Color(0xFF757575); // Muted Captions & Secondary Text (WCAG AA compliant)
 
   // Semantic Design Tokens
-  static const primary = deepNavy; // Deep Navy for primary headers, hero sections, dominant brand anchors
-  static const primaryLight = Color(0xFF1F3556);
-  static const primaryDark = Color(0xFF0D1828);
-  static const accent =
-      ggsGreen; // GGs Green for active CTAs, success, highlights
-  static const accentLight = Color(0xFFE6F7F3);
-  static const highlight =
-      warmAmber; // Warm Amber for badges, ratings, highlights
+  static const primary = burgundy; // Burgundy for primary actions and highlights
+  static const primaryLight = Color(0xFFA52A2A);
+  static const primaryDark = Color(0xFF5B0000);
+  static const accent = burgundy; // Burgundy for active CTAs & focus
+  static const accentLight = Color(0xFFF9EBEB);
+  static const highlight = Color(0xFF2A2A2A);
 
   // Surfaces & Backgrounds
-  static const surface = softOffWhite;
+  static const surface = white;
   static const surfaceElevated = white;
-  static const surfaceSubtle = Color(0xFFEAEFF5);
-  static const surfaceMuted = Color(0xFFDFE6EE);
-  static const surfaceDark = deepNavy;
+  static const surfaceSubtle = lightGray;
+  static const surfaceMuted = Color(0xFFE2E2E2);
+  static const surfaceDark = black;
 
   // Inks & Neutrals
-  static const ink = charcoal;
-  static const inkSecondary = Color(0xFF4A5565);
-  static const muted = Color(0xFF5A6878);
-  static const outline = Color(0xFF9AA7B7);
-  static const outlineLight = Color(0xFFE2E7ED);
+  static const ink = black;
+  static const inkSecondary = Color(0xFF333333);
+  static const muted = secondaryGray;
+  static const outline = Color(0xFFCCCCCC);
+  static const outlineLight = Color(0xFFE5E5E5);
 
   // Functional Status
   static const error = Color(0xFFD32F2F);
@@ -43,9 +40,9 @@ abstract final class AppColors {
   static const info = Color(0xFF0284C7);
   static const infoLight = Color(0xFFE0F2FE);
 
-  // Demo Indicator Banner
-  static const demoBadgeBg = Color(0xFFFEF08A);
-  static const demoBadgeText = Color(0xFF854D0E);
+  // Demo Indicator (Neutral Minimalist Styling)
+  static const demoBadgeBg = Color(0xFF222222);
+  static const demoBadgeText = Color(0xFFEEEEEE);
 }
 
 /// Curated royalty-free, high-quality portrait and campaign photography for GGs
@@ -209,14 +206,14 @@ abstract final class AppMotion {
 ThemeData buildAppTheme() => ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme.fromSeed(
-    seedColor: AppColors.deepNavy,
+    seedColor: AppColors.burgundy,
     brightness: Brightness.light,
-    primary: AppColors.deepNavy,
+    primary: AppColors.burgundy,
     onPrimary: Colors.white,
-    secondary: AppColors.ggsGreen,
+    secondary: AppColors.black,
     onSecondary: Colors.white,
     primaryContainer: AppColors.surfaceSubtle,
-    onPrimaryContainer: AppColors.deepNavy,
+    onPrimaryContainer: AppColors.burgundy,
     surface: AppColors.surface,
     onSurface: AppColors.ink,
     surfaceContainerHighest: AppColors.surfaceMuted,
@@ -226,12 +223,12 @@ ThemeData buildAppTheme() => ThemeData(
   scaffoldBackgroundColor: AppColors.surface,
   appBarTheme: const AppBarTheme(
     backgroundColor: AppColors.surface,
-    foregroundColor: AppColors.ink,
+    foregroundColor: AppColors.black,
     elevation: 0,
     scrolledUnderElevation: 1,
     centerTitle: false,
     titleTextStyle: AppTypography.heading,
-    iconTheme: IconThemeData(color: AppColors.deepNavy, size: 24),
+    iconTheme: IconThemeData(color: AppColors.black, size: 24),
   ),
   cardTheme: CardThemeData(
     color: AppColors.surfaceElevated,
@@ -264,12 +261,12 @@ ThemeData buildAppTheme() => ThemeData(
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(AppRadius.control),
-      borderSide: const BorderSide(color: AppColors.deepNavy, width: 2),
+      borderSide: const BorderSide(color: AppColors.burgundy, width: 2),
     ),
   ),
   filledButtonTheme: FilledButtonThemeData(
     style: FilledButton.styleFrom(
-      backgroundColor: AppColors.ggsGreen, // Prominent active CTA color
+      backgroundColor: AppColors.burgundy, // Burgundy active CTA color
       foregroundColor: Colors.white,
       minimumSize: const Size(48, 48),
       padding: const EdgeInsets.symmetric(
@@ -289,7 +286,7 @@ ThemeData buildAppTheme() => ThemeData(
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
       minimumSize: const Size(48, 48),
-      foregroundColor: AppColors.deepNavy,
+      foregroundColor: AppColors.black,
       side: const BorderSide(color: AppColors.outlineLight, width: 1.5),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
@@ -311,13 +308,13 @@ ThemeData buildAppTheme() => ThemeData(
         return const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: AppColors.deepNavy,
+          color: AppColors.burgundy,
         );
       }
       return const TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w500,
-        color: AppColors.muted,
+        color: AppColors.secondaryGray,
       );
     }),
   ),

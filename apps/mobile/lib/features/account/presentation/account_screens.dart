@@ -8,6 +8,8 @@ import '../../../core/config/app_config.dart';
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
 import '../../../core/errors/app_failure.dart';
+import '../../../core/localization/locale_controller.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/session_controller.dart';
 import '../../profile_common/presentation/widgets/unified_profile_widgets.dart';
 import '../domain/account.dart';
@@ -341,6 +343,107 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         ),
                       ),
               ),
+            ),
+            // Language Selector Tile
+            Consumer(
+              builder: (context, ref, _) {
+                final currentLocale = ref.watch(activeLocaleProvider);
+                final localeItem = AppSupportedLocale.fromCode(currentLocale.languageCode);
+                final l10n = AppLocalizations.of(context);
+
+                return GGAccountActionTile(
+                  title: l10n?.language ?? 'Language',
+                  subtitle: '${localeItem.englishName} (${localeItem.nativeName})',
+                  icon: Icons.language_outlined,
+                  onTap: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      backgroundColor: Colors.white,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(AppRadius.lg),
+                        ),
+                      ),
+                      builder: (bottomSheetContext) {
+                        return SafeArea(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: AppSpacing.lg,
+                              horizontal: AppSpacing.md,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppSpacing.sm,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.translate,
+                                        color: AppColors.burgundy,
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: AppSpacing.sm),
+                                      Text(
+                                        l10n?.selectLanguage ?? 'Select Language',
+                                        style: AppTypography.heading.copyWith(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: AppSpacing.md),
+                                ...AppSupportedLocale.values.map((item) {
+                                  final isSelected = item.locale.languageCode ==
+                                      currentLocale.languageCode;
+                                  return ListTile(
+                                    title: Text(
+                                      '${item.englishName} • ${item.nativeName}',
+                                      style: TextStyle(
+                                        fontWeight: isSelected
+                                            ? FontWeight.w700
+                                            : FontWeight.w500,
+                                        color: isSelected
+                                            ? AppColors.burgundy
+                                            : AppColors.ink,
+                                      ),
+                                    ),
+                                    trailing: isSelected
+                                        ? const Icon(
+                                            Icons.check_circle,
+                                            color: AppColors.burgundy,
+                                          )
+                                        : null,
+                                    onTap: () async {
+                                      Navigator.of(bottomSheetContext).pop();
+                                      await ref
+                                          .read(activeLocaleProvider.notifier)
+                                          .setLocale(item.locale);
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              l10n?.languageChangedNotice ??
+                                                  'Language updated successfully',
+                                            ),
+                                            duration: const Duration(seconds: 2),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
             ),
             GGAccountActionTile(
               title: 'Appearance & Theme',

@@ -86,78 +86,87 @@ class BrandHomeScreen extends ConsumerWidget {
             children: [
               Expanded(
                 child: AppCard(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Active Campaigns',
+                        'Campaigns',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 11,
                           color: AppColors.muted,
                           fontWeight: FontWeight.w600,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '${campaignsAsync.value?.where((c) => c.status == CampaignStatus.live).length ?? 0}',
                         style: const TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.deepNavy,
+                          color: AppColors.black,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
+              const SizedBox(width: AppSpacing.xs),
               Expanded(
                 child: AppCard(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Collaborations',
+                        'Collabs',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 11,
                           color: AppColors.muted,
                           fontWeight: FontWeight.w600,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '${collabsAsync.value?.where((c) => c.status != ActiveCollaborationStatus.completed && c.status != ActiveCollaborationStatus.cancelled).length ?? 0}',
                         style: const TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.ggsGreen,
+                          color: AppColors.burgundy,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
+              const SizedBox(width: AppSpacing.xs),
               Expanded(
                 child: AppCard(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Pending Review',
+                        'In Review',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 11,
                           color: AppColors.muted,
                           fontWeight: FontWeight.w600,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '${collabsAsync.value?.where((c) => c.status == ActiveCollaborationStatus.submitted).length ?? 0}',
                         style: const TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.warmAmber,
+                          color: AppColors.burgundy,
                         ),
                       ),
                     ],
@@ -290,19 +299,14 @@ class BrandHomeScreen extends ConsumerWidget {
                             color: AppColors.primary,
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            b.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            '• ${b.industry}',
-                            style: const TextStyle(
-                              color: AppColors.muted,
-                              fontSize: 12,
+                          Expanded(
+                            child: Text(
+                              '${b.name} • ${b.industry}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
@@ -344,7 +348,7 @@ class BrandHomeScreen extends ConsumerWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
-                color: AppColors.deepNavy,
+                color: AppColors.black,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -354,7 +358,7 @@ class BrandHomeScreen extends ConsumerWidget {
               followers,
               style: const TextStyle(
                 fontSize: 11,
-                color: AppColors.ggsGreen,
+                color: AppColors.burgundy,
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,

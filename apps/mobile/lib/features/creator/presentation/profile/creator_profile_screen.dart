@@ -6,6 +6,8 @@ import 'package:ggs_mobile/app/providers.dart';
 import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/core/errors/app_failure.dart';
+import 'package:ggs_mobile/features/assistant/domain/assistant_service.dart';
+import 'package:ggs_mobile/features/assistant/presentation/assistant_modal_sheet.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
 import 'package:ggs_mobile/features/profile_common/presentation/widgets/unified_profile_widgets.dart';
 
@@ -85,11 +87,34 @@ class CreatorProfileScreen extends ConsumerWidget {
             onEditPressed: isOwn ? () => context.push('/profile/edit') : null,
           ),
 
-          if (isOwn)
+          if (isOwn) ...[
             CreatorCompletionCard(
               profile: profile,
               onRecommendationTap: (rec) => context.push(rec.actionRoute),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 4),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: AssistantActionChip(
+                  label: 'AI: Review Profile Completeness',
+                  onTap: () {
+                    AssistantModalSheet.show(
+                      context: context,
+                      role: AssistantRole.creator,
+                      task: AssistantTask.suggestProfileImprovements,
+                      title: 'Profile Optimization Advice',
+                      contextData: {
+                        'hasBio': profile.bio != null && profile.bio!.isNotEmpty,
+                        'hasRateCard': profile.rateCard.isNotEmpty,
+                        'hasLanguages': profile.languages.isNotEmpty,
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
 
           CreatorBioCard(
             profile: profile,

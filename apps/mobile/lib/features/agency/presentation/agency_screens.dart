@@ -7,6 +7,8 @@ import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/core/errors/app_failure.dart';
 import 'package:ggs_mobile/features/agency/domain/agency_profile.dart';
+import 'package:ggs_mobile/features/assistant/domain/assistant_service.dart';
+import 'package:ggs_mobile/features/assistant/presentation/assistant_modal_sheet.dart';
 import 'package:ggs_mobile/features/auth/presentation/session_controller.dart';
 import 'package:ggs_mobile/features/profile_common/presentation/generic_role_shell.dart';
 import 'package:ggs_mobile/features/profile_common/presentation/widgets/unified_profile_widgets.dart';
@@ -53,9 +55,9 @@ class AgencyHomeScreen extends ConsumerWidget {
           label: 'Home',
         ),
         NavigationDestination(
-          icon: Icon(Icons.search_outlined),
-          selectedIcon: Icon(Icons.search),
-          label: 'Discover',
+          icon: Icon(Icons.person_search_outlined),
+          selectedIcon: Icon(Icons.person_search),
+          label: 'Creator',
         ),
         NavigationDestination(
           icon: Icon(Icons.campaign_outlined),
@@ -100,6 +102,26 @@ class AgencyHomeScreen extends ConsumerWidget {
             organization: agencyName,
             isVerified: true,
             onEditPressed: () => context.push('/profile/edit/agency'),
+          ),
+
+          Align(
+            alignment: Alignment.centerLeft,
+            child: AssistantActionChip(
+              label: 'AI: Talent Discovery & Brief Assistant',
+              onTap: () {
+                AssistantModalSheet.show(
+                  context: context,
+                  role: AssistantRole.agency,
+                  task: AssistantTask.draftBrief,
+                  title: 'Agency Campaign Brief Prep',
+                  contextData: {
+                    'agencyName': agencyName,
+                    'title': 'Agency Multi-Creator Brand Collaboration',
+                    'objective': 'Roster pitching and milestone delivery',
+                  },
+                );
+              },
+            ),
           ),
 
           // Live Agency KPI Metrics
@@ -306,9 +328,9 @@ class AgencyProfileScreen extends ConsumerWidget {
           label: 'Home',
         ),
         NavigationDestination(
-          icon: Icon(Icons.search_outlined),
-          selectedIcon: Icon(Icons.search),
-          label: 'Discover',
+          icon: Icon(Icons.person_search_outlined),
+          selectedIcon: Icon(Icons.person_search),
+          label: 'Creator',
         ),
         NavigationDestination(
           icon: Icon(Icons.campaign_outlined),

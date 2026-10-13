@@ -31,6 +31,7 @@ import 'features/creator/data/creator_repository_impl.dart';
 import 'features/discovery/data/discovery_repository_impl.dart';
 import 'features/profile_common/data/reference_data_repository_impl.dart';
 import 'features/activity/data/activity_repository_impl.dart';
+import 'features/assistant/data/assistant_service_impl.dart';
 import 'features/collaboration/data/collaboration_repository_impl.dart';
 import 'features/shortlist/data/shortlist_repository_impl.dart';
 import 'features/talent_manager/data/talent_manager_repository_impl.dart';
@@ -139,6 +140,13 @@ Future<void> main() async {
           activityRepositoryProvider.overrideWithValue(
             ActivityRepositoryImpl(
               SupabaseActivityDataSource(Supabase.instance.client),
+            ),
+          ),
+          assistantServiceProvider.overrideWithValue(
+            SupabaseAssistantServiceImpl(
+              supabaseUrl: config.supabaseUrl,
+              tokenProvider: () async =>
+                  Supabase.instance.client.auth.currentSession?.accessToken,
             ),
           ),
         ],

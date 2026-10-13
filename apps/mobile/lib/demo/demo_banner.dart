@@ -27,10 +27,10 @@ class DemoTopBanner extends ConsumerWidget implements PreferredSizeWidget {
     final currentRole = DemoStore.instance.currentRole;
 
     return Container(
-      color: AppColors.demoBadgeBg,
+      color: AppColors.black,
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
-        vertical: 2,
+        vertical: 3,
       ),
       child: SafeArea(
         bottom: false,
@@ -39,16 +39,20 @@ class DemoTopBanner extends ConsumerWidget implements PreferredSizeWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: AppColors.demoBadgeText,
-                borderRadius: BorderRadius.circular(4),
+                color: Colors.white.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(3),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  width: 0.8,
+                ),
               ),
               child: const Text(
-                'DEMO MODE',
+                'DEMO',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 10,
-                  letterSpacing: 0.5,
+                  color: Colors.white70,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 9.5,
+                  letterSpacing: 0.6,
                 ),
               ),
             ),
@@ -57,9 +61,10 @@ class DemoTopBanner extends ConsumerWidget implements PreferredSizeWidget {
               child: Text(
                 'Viewing as ${currentRole.label}',
                 style: const TextStyle(
-                  color: AppColors.demoBadgeText,
+                  color: Colors.white,
                   fontWeight: FontWeight.w600,
-                  fontSize: 11,
+                  fontSize: 12,
+                  letterSpacing: 0.1,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -68,9 +73,9 @@ class DemoTopBanner extends ConsumerWidget implements PreferredSizeWidget {
               icon: const Icon(
                 Icons.more_vert,
                 size: 16,
-                color: AppColors.demoBadgeText,
+                color: Colors.white70,
               ),
-              tooltip: 'Demo Controls',
+              tooltip: 'Switch Presentation Role',
               onSelected: (value) async {
                 if (value == 'switch_brand') {
                   _switchRole(context, ref, ProfessionalRole.brandMarketer);

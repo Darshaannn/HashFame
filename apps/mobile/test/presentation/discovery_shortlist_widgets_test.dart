@@ -19,8 +19,12 @@ void main() {
     FakeShortlistRepository? shortlistRepo,
     FakeDiscoveryRepository? discoveryRepo,
   }) {
+    final fakeAuth = FakeAuth()..id = sampleAccount().id;
+    final fakeAccounts = FakeAccounts();
     return ProviderScope(
       overrides: [
+        authRepositoryProvider.overrideWithValue(fakeAuth),
+        accountRepositoryProvider.overrideWithValue(fakeAccounts),
         referenceDataRepositoryProvider.overrideWithValue(
           FakeReferenceDataRepository(),
         ),

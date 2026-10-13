@@ -44,7 +44,7 @@ class GGPageAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: ConstrainedBox(
             constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
             child: BackButton(
-              color: AppColors.deepNavy,
+              color: AppColors.black,
               onPressed: () {
                 if (Navigator.of(context).canPop()) {
                   Navigator.of(context).pop();
@@ -62,7 +62,7 @@ class GGPageAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: AppTypography.heading.copyWith(
-          color: AppColors.deepNavy,
+          color: AppColors.black,
           fontWeight: FontWeight.w700,
         ),
       ),
@@ -343,16 +343,16 @@ class AppAvatar extends StatelessWidget {
   }
 
   Color _generateColor(String text) {
-    if (text.isEmpty) return AppColors.deepNavy;
+    if (text.isEmpty) return AppColors.burgundy;
     final hash = text.codeUnits.fold(0, (prev, elem) => prev + elem);
     final palette = [
-      AppColors.deepNavy,
-      AppColors.ggsGreen,
-      const Color(0xFF1E40AF),
+      AppColors.burgundy,
+      AppColors.black,
+      const Color(0xFF4A4A4A),
       const Color(0xFF6B21A8),
-      const Color(0xFF0F766E),
-      const Color(0xFFD97706),
-      const Color(0xFF9D174D),
+      const Color(0xFF8B2500),
+      const Color(0xFF2C3E50),
+      const Color(0xFF701A75),
     ];
     return palette[hash % palette.length];
   }
@@ -714,7 +714,7 @@ class GGSectionHeader extends StatelessWidget {
                 Text(
                   title,
                   style: AppTypography.heading.copyWith(
-                    color: AppColors.deepNavy,
+                    color: AppColors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -723,7 +723,7 @@ class GGSectionHeader extends StatelessWidget {
                   Text(
                     subtitle!,
                     style: const TextStyle(
-                      color: AppColors.muted,
+                      color: AppColors.secondaryGray,
                       fontSize: 13,
                     ),
                   ),
@@ -735,7 +735,7 @@ class GGSectionHeader extends StatelessWidget {
             TextButton(
               onPressed: onAction,
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.ggsGreen,
+                foregroundColor: AppColors.burgundy,
                 visualDensity: VisualDensity.compact,
               ),
               child: Text(
@@ -758,7 +758,7 @@ class GGHeroBanner extends StatelessWidget {
     this.tag = 'FEATURED',
     this.ctaLabel,
     this.onCtaPressed,
-    this.accentColor = AppColors.ggsGreen,
+    this.accentColor = AppColors.burgundy,
     this.icon = Icons.auto_awesome,
   });
 
@@ -774,18 +774,19 @@ class GGHeroBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.deepNavy,
+        color: AppColors.black,
         borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.outlineLight),
         gradient: const LinearGradient(
-          colors: [Color(0xFF14253D), Color(0xFF1C3556)],
+          colors: [Color(0xFF141414), Color(0xFF222222)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.deepNavy.withValues(alpha: 0.15),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.12),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -799,23 +800,23 @@ class GGHeroBanner extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: AppColors.warmAmber.withValues(alpha: 0.2),
+                  color: AppColors.burgundy.withValues(alpha: 0.25),
                   borderRadius: BorderRadius.circular(AppRadius.sm),
                   border: Border.all(
-                    color: AppColors.warmAmber.withValues(alpha: 0.5),
+                    color: AppColors.burgundy.withValues(alpha: 0.6),
                   ),
                 ),
                 child: Text(
                   tag,
                   style: const TextStyle(
-                    color: AppColors.warmAmber,
+                    color: Color(0xFFFF8888),
                     fontWeight: FontWeight.bold,
                     fontSize: 10,
                     letterSpacing: 0.8,
                   ),
                 ),
               ),
-              Icon(icon, color: AppColors.warmAmber, size: 22),
+              Icon(icon, color: Colors.white70, size: 22),
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -842,7 +843,7 @@ class GGHeroBanner extends StatelessWidget {
             FilledButton.icon(
               onPressed: onCtaPressed,
               style: FilledButton.styleFrom(
-                backgroundColor: AppColors.ggsGreen,
+                backgroundColor: AppColors.burgundy,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,

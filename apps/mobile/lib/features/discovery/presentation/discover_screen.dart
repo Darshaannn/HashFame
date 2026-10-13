@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
 import '../../account/domain/account.dart';
+import '../../assistant/domain/assistant_service.dart';
+import '../../assistant/presentation/assistant_modal_sheet.dart';
 import '../../auth/presentation/session_controller.dart';
 import '../../creator/presentation/profile/creator_profile_controller.dart';
 import '../domain/creator_search_filters.dart';
@@ -61,6 +63,23 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
         showBackButton: true,
         fallbackPath: fallbackPath,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.auto_awesome, color: AppColors.burgundy, size: 20),
+            tooltip: 'AI: Explain Search Filters',
+            onPressed: () {
+              AssistantModalSheet.show(
+                context: context,
+                role: AssistantRole.brand,
+                task: AssistantTask.explainFilters,
+                title: 'Creator Search Guidance',
+                contextData: {
+                  'activeFilters': filters.activeFilterCount,
+                  'categories': filters.categoryIds,
+                  'hasVerificationFilter': filters.verificationStatus != null,
+                },
+              );
+            },
+          ),
           IconButton(
             icon: Badge(
               isLabelVisible: filters.activeFilterCount > 0,

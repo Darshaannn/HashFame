@@ -80,7 +80,7 @@ class CreatorHomeScreen extends ConsumerWidget {
                     Text(
                       account.displayName,
                       style: AppTypography.heading.copyWith(
-                        color: AppColors.deepNavy,
+                        color: AppColors.black,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
