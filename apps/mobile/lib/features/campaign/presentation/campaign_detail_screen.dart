@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/navigation_history.dart';
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
 import '../../account/domain/account.dart';
@@ -181,11 +182,20 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
             campaign.applicationDeadline != null &&
             campaign.applicationDeadline!.isBefore(DateTime.now());
 
-        return Scaffold(
-          appBar: GGPageAppBar(
-            title: campaign.title,
-            fallbackPath: isCreator ? '/opportunities' : '/campaigns',
-          ),
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (didPop) return;
+            await NavigationHistoryManager.handleBack(
+              context,
+              fallbackPath: isCreator ? '/opportunities' : '/campaigns',
+            );
+          },
+          child: Scaffold(
+            appBar: GGPageAppBar(
+              title: campaign.title,
+              fallbackPath: isCreator ? '/opportunities' : '/campaigns',
+            ),
           bottomNavigationBar: isCreator && isLive
               ? Container(
                   padding: const EdgeInsets.all(AppSpacing.md),
@@ -504,10 +514,11 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
               ],
             ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
 
   Widget _buildSectionHeader(String title) {
     return Padding(

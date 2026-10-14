@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/navigation_history.dart';
 import '../../../app/providers.dart';
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
@@ -26,10 +27,19 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsync = ref.watch(creatorProfileProvider(creatorId));
 
-    return Scaffold(
-      appBar: GGPageAppBar(
-        title: 'Creator Profile',
-        fallbackPath: '/discover',
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        await NavigationHistoryManager.handleBack(
+          context,
+          fallbackPath: '/discover',
+        );
+      },
+      child: Scaffold(
+        appBar: GGPageAppBar(
+          title: 'Creator Profile',
+          fallbackPath: '/discover',
         actions: [
           IconButton(
             icon: const Icon(Icons.bookmark_border),
@@ -113,6 +123,7 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
           );
         },
       ),
-    );
+    ),
+  );
   }
 }

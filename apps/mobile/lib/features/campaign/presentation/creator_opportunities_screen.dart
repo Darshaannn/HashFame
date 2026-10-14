@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/navigation_history.dart';
 import '../../../core/design_system/components.dart';
 import '../../../core/design_system/tokens.dart';
 import '../../auth/presentation/session_controller.dart';
@@ -49,11 +50,20 @@ class _CreatorOpportunitiesScreenState
     final state = ref.watch(opportunitySearchControllerProvider);
     final filters = ref.watch(campaignFiltersProvider);
 
-    return Scaffold(
-      appBar: GGPageAppBar(
-        title: 'Discover Work',
-        showBackButton: true,
-        fallbackPath: '/home/creator',
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        await NavigationHistoryManager.handleBack(
+          context,
+          fallbackPath: '/home/creator',
+        );
+      },
+      child: Scaffold(
+        appBar: GGPageAppBar(
+          title: 'Discover Work',
+          showBackButton: true,
+          fallbackPath: '/home/creator',
         actions: [
           IconButton(
             icon: Stack(
@@ -205,6 +215,7 @@ class _CreatorOpportunitiesScreenState
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

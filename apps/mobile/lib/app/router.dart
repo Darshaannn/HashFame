@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/config/app_config.dart';
+import 'navigation_history.dart';
 import '../core/design_system/gallery_screen.dart';
 import '../demo/demo_launcher_screen.dart';
 import '../features/account/domain/account.dart';
@@ -106,6 +107,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       galleryAllowed:
           ref.read(configProvider).environment != AppEnvironment.production,
     ),
+    observers: [NavigationHistoryObserver()],
     routes: [
       GoRoute(
         path: '/demo',

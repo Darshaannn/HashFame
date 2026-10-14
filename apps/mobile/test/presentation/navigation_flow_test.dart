@@ -406,5 +406,268 @@ void main() {
         expect(find.text('Creator Home'), findsOneWidget);
       },
     );
+
+    testWidgets(
+      'Root Home Android Back displays Exit GGs? confirmation and Cancel keeps app open',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(createTestApp());
+        await tester.pumpAndSettle();
+
+        // Start at Brand Home
+        await tester.tap(find.text('VIEW AS BRAND'));
+        await tester.pumpAndSettle();
+        expect(find.text('Brand Workspace'), findsOneWidget);
+
+        // Simulate Android System Back button at root
+        await tester.binding.handlePopRoute();
+        await tester.pumpAndSettle();
+
+        // Confirmation dialog appears
+        expect(find.text('Exit GGs?'), findsOneWidget);
+        expect(
+          find.text('Are you sure you want to exit the application?'),
+          findsOneWidget,
+        );
+        expect(find.text('Cancel'), findsOneWidget);
+        expect(find.text('Exit'), findsOneWidget);
+
+        // Tap Cancel keeps app open
+        await tester.tap(find.text('Cancel'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Brand Workspace'), findsOneWidget);
+        expect(find.text('Exit GGs?'), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Brand journey: Home -> Creator -> Creator Profile -> Back -> Creator -> Back -> Home',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(createTestApp());
+        await tester.pumpAndSettle();
+
+        // 1. Home
+        await tester.tap(find.text('VIEW AS BRAND'));
+        await tester.pumpAndSettle();
+        expect(find.text('Brand Workspace'), findsOneWidget);
+
+        // 2. Creator tab
+        await tester.tap(find.widgetWithText(NavigationDestination, 'Creator'));
+        await tester.pumpAndSettle();
+        expect(find.text('Discover Creators'), findsOneWidget);
+
+        // 3. Creator Profile
+        final firstCreatorCard = find.text('Aisha Mehta');
+        if (firstCreatorCard.evaluate().isNotEmpty) {
+          await tester.tap(firstCreatorCard);
+          await tester.pumpAndSettle();
+          expect(find.text('Creator Profile'), findsOneWidget);
+
+          // 4. Android Back -> Creator
+          await tester.binding.handlePopRoute();
+          await tester.pumpAndSettle();
+          expect(find.text('Discover Creators'), findsOneWidget);
+        }
+
+        // 5. Android Back -> Home
+        await tester.binding.handlePopRoute();
+        await tester.pumpAndSettle();
+        expect(find.text('Brand Workspace'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Creator journey: Home -> Discover Work -> Campaign Detail -> Back -> Discover Work -> Back -> Home',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(createTestApp());
+        await tester.pumpAndSettle();
+
+        // 1. Home
+        await tester.tap(find.text('VIEW AS CREATOR'));
+        await tester.pumpAndSettle();
+        expect(find.text('Creator Home'), findsOneWidget);
+
+        // 2. Discover Work tab
+        await tester.tap(
+          find.widgetWithText(NavigationDestination, 'Discover Work'),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text('Discover Work'), findsOneWidget);
+
+        // 3. Campaign Detail
+        final campaignCard = find.text('Glow Forward — Festive Beauty Creator Campaign');
+        if (campaignCard.evaluate().isNotEmpty) {
+          await tester.tap(campaignCard);
+          await tester.pumpAndSettle();
+          expect(find.text('Apply for Campaign'), findsWidgets);
+
+          // 4. Android Back -> Discover Work
+          await tester.binding.handlePopRoute();
+          await tester.pumpAndSettle();
+          expect(find.text('Discover Work'), findsOneWidget);
+        }
+
+        // 5. Android Back -> Home
+        await tester.binding.handlePopRoute();
+        await tester.pumpAndSettle();
+        expect(find.text('Creator Home'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Agency journey: Home -> Talent -> Creator Profile -> Back -> Talent -> Back -> Home',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(createTestApp());
+        await tester.pumpAndSettle();
+
+        // 1. Home
+        await tester.tap(find.text('View as Agency'));
+        await tester.pumpAndSettle();
+        expect(find.text('Agency Workspace'), findsOneWidget);
+
+        // 2. Talent
+        await tester.tap(find.widgetWithText(NavigationDestination, 'Talent'));
+        await tester.pumpAndSettle();
+        expect(find.text('Managed Talent Roster'), findsOneWidget);
+
+        // 3. Creator Profile
+        final talentCard = find.text('Aisha Mehta');
+        if (talentCard.evaluate().isNotEmpty) {
+          await tester.tap(talentCard);
+          await tester.pumpAndSettle();
+          expect(find.text('Creator Profile'), findsOneWidget);
+
+          // 4. Android Back -> Talent
+          await tester.binding.handlePopRoute();
+          await tester.pumpAndSettle();
+          expect(find.text('Managed Talent Roster'), findsOneWidget);
+        }
+
+        // 5. Android Back -> Home
+        await tester.binding.handlePopRoute();
+        await tester.pumpAndSettle();
+        expect(find.text('Agency Workspace'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Applications journey: Applications -> Application Detail -> Collaboration -> Back -> Application Detail',
+      (tester) async {
+        tester.view.physicalSize = const Size(1080, 2400);
+        tester.view.devicePixelRatio = 2.0;
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(createTestApp());
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('VIEW AS CREATOR'));
+        await tester.pumpAndSettle();
+
+        // 1. Applications tab
+        await tester.tap(
+          find.widgetWithText(NavigationDestination, 'Applications'),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text('My Applications'), findsOneWidget);
+
+        // 2. Open an application
+        final appTile = find.byType(ListTile);
+        if (appTile.evaluate().isNotEmpty) {
+          await tester.tap(appTile.first);
+          await tester.pumpAndSettle();
+          expect(find.text('Application Detail'), findsOneWidget);
+
+          // 3. If selected, open collaboration workspace
+          final collabBtn = find.text('Open Active Collaboration Workspace');
+          if (collabBtn.evaluate().isNotEmpty) {
+            await tester.tap(collabBtn);
+            await tester.pumpAndSettle();
+            expect(find.text('Deliverables'), findsWidgets);
+
+            // 4. Android Back -> Application Detail
+            await tester.binding.handlePopRoute();
+            await tester.pumpAndSettle();
+            expect(find.text('Application Detail'), findsOneWidget);
+          }
+        }
+      },
+    );
+
+    testWidgets('Settings journey: Home -> Settings -> Android Back -> Home', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      await tester.pumpWidget(createTestApp());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('VIEW AS BRAND'));
+      await tester.pumpAndSettle();
+      expect(find.text('Brand Workspace'), findsOneWidget);
+
+      // Go to settings
+      await tester.tap(find.byIcon(Icons.settings_outlined).first);
+      await tester.pumpAndSettle();
+      expect(find.text('Settings & Preferences'), findsOneWidget);
+
+      // Android system Back -> Home
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.text('Brand Workspace'), findsOneWidget);
+    });
+
+    testWidgets('Demo Mode: Switch roles -> Android Back behaves correctly', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      await tester.pumpWidget(createTestApp());
+      await tester.pumpAndSettle();
+
+      // Launch as Brand
+      await tester.tap(find.text('VIEW AS BRAND'));
+      await tester.pumpAndSettle();
+      expect(find.text('Brand Workspace'), findsOneWidget);
+
+      // Switch to Creator via Top Banner
+      final roleChip = find.text('Brand Marketer');
+      if (roleChip.evaluate().isNotEmpty) {
+        await tester.tap(roleChip);
+        await tester.pumpAndSettle();
+
+        final creatorOption = find.text('Creator');
+        if (creatorOption.evaluate().isNotEmpty) {
+          await tester.tap(creatorOption);
+          await tester.pumpAndSettle();
+
+          expect(find.text('Creator Home'), findsOneWidget);
+
+          // Android Back returns to previous screen (Brand Workspace)
+          await tester.binding.handlePopRoute();
+          await tester.pumpAndSettle();
+          expect(find.text('Brand Workspace'), findsOneWidget);
+        }
+      }
+    });
   });
 }

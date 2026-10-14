@@ -56,6 +56,7 @@ class AgencyTalentScreen extends ConsumerWidget {
       ],
       child: AppScaffold(
         title: 'Managed Talent Roster',
+        fallbackPath: '/home/agency',
         actions: [
           IconButton(
             icon: const Icon(Icons.person_add_outlined),

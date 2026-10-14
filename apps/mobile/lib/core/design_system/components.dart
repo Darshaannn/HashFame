@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
+import '../../app/navigation_history.dart';
 import 'tokens.dart';
 
 class GGPageAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -46,11 +46,10 @@ class GGPageAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: BackButton(
               color: AppColors.black,
               onPressed: () {
-                if (Navigator.of(context).canPop()) {
-                  Navigator.of(context).pop();
-                } else if (fallbackPath != null) {
-                  context.go(fallbackPath!);
-                }
+                NavigationHistoryManager.handleBack(
+                  context,
+                  fallbackPath: fallbackPath,
+                );
               },
             ),
           ),
@@ -100,34 +99,44 @@ class AppScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar:
-        appBar ??
-        GGPageAppBar(
-          title: title,
-          actions: actions,
-          leading: leading,
-          showBackButton: showBackButton,
-          fallbackPath: fallbackPath,
-        ),
-    bottomNavigationBar: bottomNavigationBar,
-    body: SafeArea(
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600),
-          child: ListView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.md,
-              vertical: AppSpacing.sm,
+  Widget build(BuildContext context) => PopScope(
+    canPop: false,
+    onPopInvokedWithResult: (didPop, result) async {
+      if (didPop) return;
+      await NavigationHistoryManager.handleBack(
+        context,
+        fallbackPath: fallbackPath,
+      );
+    },
+    child: Scaffold(
+      appBar:
+          appBar ??
+          GGPageAppBar(
+            title: title,
+            actions: actions,
+            leading: leading,
+            showBackButton: showBackButton,
+            fallbackPath: fallbackPath,
+          ),
+      bottomNavigationBar: bottomNavigationBar,
+      body: SafeArea(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: ListView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
+              children: [
+                for (final child in children)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                    child: child,
+                  ),
+              ],
             ),
-            children: [
-              for (final child in children)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                  child: child,
-                ),
-            ],
           ),
         ),
       ),

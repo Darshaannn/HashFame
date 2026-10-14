@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '../core/design_system/tokens.dart';
 import '../core/localization/locale_controller.dart';
 import '../l10n/app_localizations.dart';
+import 'navigation_history.dart';
 import 'providers.dart';
 import 'router.dart';
 
@@ -20,6 +21,9 @@ class FoundationApp extends ConsumerWidget {
       theme: buildAppTheme(),
       debugShowCheckedModeBanner: false,
       routerConfig: ref.watch(routerProvider),
+      builder: (context, child) => RootNavigationGuard(
+        child: child ?? const SizedBox.shrink(),
+      ),
       locale: activeLocale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
