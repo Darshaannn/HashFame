@@ -16,8 +16,8 @@ import 'package:ggs_mobile/features/profile_common/domain/verification.dart';
 import 'package:ggs_mobile/features/shortlist/domain/shortlist.dart';
 import 'package:ggs_mobile/features/shortlist/domain/shortlist_member.dart';
 
-import 'demo_raw_csv_data.dart';
-import 'demo_sheet_creator_importer.dart';
+import 'creator_directory_loader.dart';
+
 
 class DemoStore {
   DemoStore._() {
@@ -965,19 +965,18 @@ class DemoStore {
       );
     }
 
-    // Ingest real creator entries supplied from the official Google Sheet
-    final sheetProfiles = DemoSheetCreatorImporter.parseSheetProfiles(
-      demoCreatorsCsvData,
+    // Ingest clean creator directory records from the complete normalized database (163 unique creators)
+    final directoryRecords = CreatorDirectoryLoader.loadDirectoryRecordsSync();
+    final dirProfiles = CreatorDirectoryLoader.mapToProfiles(
+      directoryRecords,
       categories,
-      languages,
     );
-    creatorProfiles.addAll(sheetProfiles);
+    creatorProfiles.addAll(dirProfiles);
 
-    final sheetDiscovery = DemoSheetCreatorImporter.parseSheetDiscoveryItems(
-      demoCreatorsCsvData,
-      categories,
+    final dirDiscovery = CreatorDirectoryLoader.mapToDiscoveryItems(
+      directoryRecords,
     );
-    discoveryItems.addAll(sheetDiscovery);
+    discoveryItems.addAll(dirDiscovery);
   }
 
   void _seedShortlists() {

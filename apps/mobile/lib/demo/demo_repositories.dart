@@ -434,10 +434,10 @@ class DemoDiscoveryRepository implements DiscoveryRepository {
   }) async {
     var filtered = store.discoveryItems.where((c) {
       if (filters.query.isNotEmpty) {
-        final q = filters.query.toLowerCase();
+        final q = filters.query.toLowerCase().trim().replaceAll('@', '');
         final matchName =
             c.displayName.toLowerCase().contains(q) ||
-            (c.professionalName?.toLowerCase().contains(q) ?? false);
+            (c.professionalName?.toLowerCase().replaceAll('@', '').contains(q) ?? false);
         final matchCategory = c.primaryCategoryNames.any(
           (cat) => cat.toLowerCase().contains(q),
         );

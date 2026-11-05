@@ -1,0 +1,236 @@
+{
+  "summary": {
+    "total_source_rows": 175,
+    "imported_unique_creators": 163,
+    "merged_duplicate_rows": 12,
+    "invalid_instagram_urls_count": 18,
+    "ambiguous_followers_count": 1,
+    "missing_fields_records_count": 156,
+    "failed_records": 0
+  },
+  "sheet_breakdown": {
+    "All Categories": 129,
+    "Celebs Influencers": 23,
+    "Travel": 23
+  },
+  "invalid_instagram_urls": [
+    {
+      "sheet": "All Categories",
+      "row": 10,
+      "creator_name": "Ankita Goswami Barjatya",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "All Categories",
+      "row": 52,
+      "creator_name": "Aishwary Khajuria",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "All Categories",
+      "row": 54,
+      "creator_name": "Palak",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "All Categories",
+      "row": 55,
+      "creator_name": "Nandini Chatterjee",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "All Categories",
+      "row": 56,
+      "creator_name": "Neha Jain",
+      "raw_url": "",
+      "reason": "Missing Instagram URL"
+    },
+    {
+      "sheet": "All Categories",
+      "row": 61,
+      "creator_name": "Devashish",
+      "raw_url": "https://www.instagram.com/p/DZzuSvrCK2h/?img_index=1",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "All Categories",
+      "row": 77,
+      "creator_name": "Radha Chaudhary",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "All Categories",
+      "row": 80,
+      "creator_name": "travel_the_world_with_wifey",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "All Categories",
+      "row": 88,
+      "creator_name": "Gauri Shah",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "All Categories",
+      "row": 105,
+      "creator_name": "the_harsha_khatri",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "All Categories",
+      "row": 110,
+      "creator_name": "Kushoo Rathi",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "Celebs Influencers",
+      "row": 3,
+      "creator_name": "Krithi Shetty",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "Celebs Influencers",
+      "row": 15,
+      "creator_name": "Neetu Bisht",
+      "raw_url": "https://www.instagram.com",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "Celebs Influencers",
+      "row": 16,
+      "creator_name": "Nancy Tyagi",
+      "raw_url": "https://www.instagram.com",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "Celebs Influencers",
+      "row": 17,
+      "creator_name": "Krishna Mukherjee",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "Travel",
+      "row": 3,
+      "creator_name": "Kushoo Rathi",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "Travel",
+      "row": 11,
+      "creator_name": "Shailashree",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    },
+    {
+      "sheet": "Travel",
+      "row": 12,
+      "creator_name": "Sanjana Goswami",
+      "raw_url": "https://www.instagram.com/",
+      "reason": "Generic domain link or post link without profile handle"
+    }
+  ],
+  "ambiguous_follower_records": [
+    {
+      "sheet": "All Categories",
+      "row": 3,
+      "creator_name": "Paridhee oza",
+      "raw_followers": "9,645K",
+      "reason": "Non-standard number format (e.g. 9,645K)"
+    }
+  ],
+  "missing_fields_sample": [
+    {
+      "sheet": "All Categories",
+      "row": 2,
+      "creator_name": "Krina Pathak",
+      "missing_fields": [
+        "city"
+      ]
+    },
+    {
+      "sheet": "All Categories",
+      "row": 3,
+      "creator_name": "Paridhee oza",
+      "missing_fields": [
+        "city"
+      ]
+    },
+    {
+      "sheet": "All Categories",
+      "row": 4,
+      "creator_name": "Sean Banerjee",
+      "missing_fields": [
+        "city"
+      ]
+    },
+    {
+      "sheet": "All Categories",
+      "row": 5,
+      "creator_name": "Mallobika Banerjii",
+      "missing_fields": [
+        "city"
+      ]
+    },
+    {
+      "sheet": "All Categories",
+      "row": 7,
+      "creator_name": "Piyush Manwani",
+      "missing_fields": [
+        "city"
+      ]
+    },
+    {
+      "sheet": "All Categories",
+      "row": 8,
+      "creator_name": "Gaurav Arora",
+      "missing_fields": [
+        "city"
+      ]
+    },
+    {
+      "sheet": "All Categories",
+      "row": 10,
+      "creator_name": "Ankita Goswami Barjatya",
+      "missing_fields": [
+        "instagram_handle",
+        "city"
+      ]
+    },
+    {
+      "sheet": "All Categories",
+      "row": 11,
+      "creator_name": "Zaara Sheikh",
+      "missing_fields": [
+        "city"
+      ]
+    },
+    {
+      "sheet": "All Categories",
+      "row": 12,
+      "creator_name": "Rohith",
+      "missing_fields": [
+        "city"
+      ]
+    },
+    {
+      "sheet": "All Categories",
+      "row": 13,
+      "creator_name": "Vishakha Fulsunge",
+      "missing_fields": [
+        "city"
+      ]
+    }
+  ]
+}

@@ -19,6 +19,7 @@ class CreatorHeaderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final name = profile.displayName.isEmpty ? 'Creator' : profile.displayName;
     final profName = profile.professionalName;
+    final isDirectory = profile.userId.startsWith('dir_');
     final isVerified =
         profile.verificationSummary.identityStatus ==
         FieldVerificationStatus.verified;
@@ -32,7 +33,7 @@ class CreatorHeaderCard extends StatelessWidget {
             children: [
               AppAvatar(
                 label: name,
-                imageUrl: AppImages.getCreatorPhoto(name),
+                imageUrl: profile.avatarPath ?? AppImages.getCreatorPhoto(name),
                 radius: 34,
               ),
               const SizedBox(width: AppSpacing.md),
@@ -53,7 +54,7 @@ class CreatorHeaderCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           const Icon(
                             Icons.verified,
-                            color: AppColors.primary,
+                            color: AppColors.burgundy,
                             size: 20,
                           ),
                         ],
@@ -63,14 +64,21 @@ class CreatorHeaderCard extends StatelessWidget {
                         profName.isNotEmpty &&
                         profName != name)
                       Text(
-                        'aka $profName',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        isDirectory ? '@$profName' : 'aka $profName',
+                        style: const TextStyle(
+                          color: AppColors.secondaryGray,
                           fontSize: 14,
                         ),
                       ),
                     const SizedBox(height: 4),
-                    AppBadge(label: profile.availability.status.label),
+                    if (isDirectory)
+                      const AppBadge(
+                        label: 'Directory Listing',
+                        backgroundColor: AppColors.lightGray,
+                        textColor: AppColors.secondaryGray,
+                      )
+                    else
+                      AppBadge(label: profile.availability.status.label),
                   ],
                 ),
               ),
@@ -84,14 +92,14 @@ class CreatorHeaderCard extends StatelessWidget {
           ),
           if (profile.isRepresented) ...[
             const SizedBox(height: AppSpacing.sm),
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.business_center_outlined,
                   size: 16,
                   color: AppColors.muted,
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 Text(
                   'Represented by Talent Agency',
                   style: TextStyle(color: AppColors.muted, fontSize: 13),

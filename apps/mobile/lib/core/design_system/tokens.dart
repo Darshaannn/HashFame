@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 abstract final class AppColors {
-  // Brand Identity Tokens (Unified Premium Burgundy & Monochrome Palette)
-  static const burgundy = Color(0xFF8B0000); // Primary Accent & CTAs
-  static const black = Color(0xFF141414); // Primary Headings & Bold Anchors
+  // Brand Colors (Strict Brand Palette)
+  static const burgundy = Color(0xFF8B0000); // Primary Burgundy
+  static const deepBurgundy = Color(0xFF680000); // Deep Burgundy for gradients
+  static const black = Color(0xFF111111); // Pure Dark Black
   static const white = Color(0xFFFFFFFF); // Clean Surfaces
-  static const lightGray = Color(0xFFEEEEEE); // Neutral Canvas & Light Surfaces
-  static const secondaryGray = Color(0xFF757575); // Muted Captions & Secondary Text (WCAG AA compliant)
+  static const lightGray = Color(0xFFF5F3F3); // Soft Light Gray Canvas
+  static const secondaryGray = Color(0xFF666666); // Muted Secondary Text
+  static const borderGray = Color(0xFFE6E1DE); // Subtle Borders
 
   // Semantic Design Tokens
   static const primary = burgundy; // Burgundy for primary actions and highlights
   static const primaryLight = Color(0xFFA52A2A);
-  static const primaryDark = Color(0xFF5B0000);
+  static const primaryDark = deepBurgundy;
   static const accent = burgundy; // Burgundy for active CTAs & focus
   static const accentLight = Color(0xFFF9EBEB);
   static const highlight = Color(0xFF2A2A2A);
@@ -85,33 +87,24 @@ abstract final class AppImages {
   static const agencyPulse =
       'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=400&q=80';
 
-  /// Resolves a deterministic creator photo by name or index
+  /// Resolves a creator photo only for seeded demo creators or explicit photo URLs.
+  /// Directory creators return null by default so a polished initials placeholder is shown,
+  /// strictly adhering to the rule: "Do not assign unrelated stock photos to real creator names."
   static String? getCreatorPhoto(String idOrName) {
     final lower = idOrName.toLowerCase();
-    if (lower.contains('aisha')) return creatorAisha;
-    if (lower.contains('riya')) return creatorRiya;
-    if (lower.contains('rohan')) return creatorRohan;
-    if (lower.contains('aditya')) return creatorAditya;
-    if (lower.contains('neha')) return creatorNeha;
-    if (lower.contains('vikram')) return creatorVikram;
-    if (lower.contains('sneha')) return creatorSneha;
-    if (lower.contains('kabir')) return creatorKabir;
-    if (lower.contains('tanvi')) return creatorTanvi;
+    // Only map the synthetic demo personas who have authorized Unsplash portrait avatars
+    if (lower == 'aisha mehta' || lower == 'demo_creator_user_id') return creatorAisha;
+    if (lower == 'riya kapoor' || lower == 'creator_riya_kapoor') return creatorRiya;
+    if (lower == 'rohan sharma' || lower == 'creator_rohan_fitness') return creatorRohan;
+    if (lower == 'aditya kulkarni' || lower == 'creator_aditya_food') return creatorAditya;
+    if (lower == 'neha sharma' || lower == 'creator_neha_travel') return creatorNeha;
+    if (lower == 'vikram joshi' || lower == 'creator_vikram_finance') return creatorVikram;
+    if (lower == 'sneha reddy' || lower == 'creator_sneha_fashion') return creatorSneha;
+    if (lower == 'kabir singhania' || lower == 'creator_kabir_gaming') return creatorKabir;
+    if (lower == 'tanvi deshmukh' || lower == 'creator_tanvi_beauty') return creatorTanvi;
 
-    // Fallback deterministic selection for CSV-imported creators
-    final hash = idOrName.codeUnits.fold(0, (a, b) => a + b);
-    final pool = [
-      creatorAisha,
-      creatorRiya,
-      creatorRohan,
-      creatorAditya,
-      creatorNeha,
-      creatorVikram,
-      creatorSneha,
-      creatorKabir,
-      creatorTanvi,
-    ];
-    return pool[hash % pool.length];
+    // Real imported spreadsheet creators must show polished initials avatar until real photos arrive
+    return null;
   }
 
   /// Resolves an authentic campaign cover image
@@ -142,7 +135,39 @@ abstract final class AppImages {
 }
 
 abstract final class AppTypography {
+  // Font Families
+  static const String khandFont = 'Khand';
+  static const String hindFont = 'Hind';
+
+  // Khand Headlines & Large Display
+  static const heroHeadline = TextStyle(
+    fontFamily: khandFont,
+    fontSize: 34,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.5,
+    height: 1.05,
+    color: AppColors.white,
+  );
+  static const sectionHeading = TextStyle(
+    fontFamily: khandFont,
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.2,
+    height: 1.15,
+    color: AppColors.ink,
+  );
+  static const studioTitle = TextStyle(
+    fontFamily: khandFont,
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.2,
+    height: 1.1,
+    color: AppColors.ink,
+  );
+
+  // Hind Body, Controls, & Typography
   static const title = TextStyle(
+    fontFamily: khandFont,
     fontSize: 28,
     fontWeight: FontWeight.w700,
     letterSpacing: -0.5,
@@ -150,6 +175,7 @@ abstract final class AppTypography {
     color: AppColors.ink,
   );
   static const heading = TextStyle(
+    fontFamily: hindFont,
     fontSize: 20,
     fontWeight: FontWeight.w600,
     letterSpacing: -0.2,
@@ -157,6 +183,7 @@ abstract final class AppTypography {
     color: AppColors.ink,
   );
   static const subheading = TextStyle(
+    fontFamily: hindFont,
     fontSize: 16,
     fontWeight: FontWeight.w600,
     letterSpacing: -0.1,
@@ -164,21 +191,25 @@ abstract final class AppTypography {
     color: AppColors.ink,
   );
   static const body = TextStyle(
+    fontFamily: hindFont,
     fontSize: 15,
     height: 1.5,
     color: AppColors.ink,
   );
   static const bodyMedium = TextStyle(
+    fontFamily: hindFont,
     fontSize: 14,
     height: 1.4,
     color: AppColors.ink,
   );
   static const caption = TextStyle(
+    fontFamily: hindFont,
     fontSize: 12,
     height: 1.4,
     color: AppColors.muted,
   );
   static const label = TextStyle(
+    fontFamily: hindFont,
     fontSize: 11,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4,

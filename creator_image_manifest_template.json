@@ -1,0 +1,1485 @@
+{
+  "version": "1.0",
+  "description": "Deterministic creator photo mapping manifest for GGs Creator Directory",
+  "generated_at": "2026-11-03T00:00:00Z",
+  "total_creators": 163,
+  "mapping_rules": {
+    "primary": "directory_id (e.g. dir_xxx.jpg or dir_xxx_avatar.png)",
+    "secondary": "instagram_handle (e.g. shrutzhaasan.jpg)",
+    "supported_formats": [
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".webp"
+    ]
+  },
+  "entries": [
+    {
+      "directory_id": "dir_b40ecfdc7827",
+      "display_name": "Krina Pathak",
+      "instagram_handle": "krina_pathak",
+      "expected_primary_filename": "dir_b40ecfdc7827.jpg",
+      "expected_handle_filename": "krina_pathak.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cecf6a6b4a02",
+      "display_name": "",
+      "instagram_handle": "paridhee_oza",
+      "expected_primary_filename": "dir_cecf6a6b4a02.jpg",
+      "expected_handle_filename": "paridParidhee ozahee_oza.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_df438aad96a0",
+      "display_name": "Sean Banerjee",
+      "instagram_handle": "seanbanerjee.sb",
+      "expected_primary_filename": "dir_df438aad96a0.jpg",
+      "expected_handle_filename": "seanbanerjee.sb.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cb9be9d075b6",
+      "display_name": "Mallobika Banerjii",
+      "instagram_handle": "malobika_m.j",
+      "expected_primary_filename": "dir_cb9be9d075b6.jpg",
+      "expected_handle_filename": "malobika_m.j.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_19d0f004b45e",
+      "display_name": "Daisy Bopanna",
+      "instagram_handle": "daisybopanna",
+      "expected_primary_filename": "dir_19d0f004b45e.jpg",
+      "expected_handle_filename": "daisybopanna.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_0c95b347d987",
+      "display_name": "Piyush Manwani",
+      "instagram_handle": "piyush",
+      "expected_primary_filename": "dir_0c95b347d987.jpg",
+      "expected_handle_filename": "piyush.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_4831b84ade1e",
+      "display_name": "Gaurav Arora",
+      "instagram_handle": "megauravarora",
+      "expected_primary_filename": "dir_4831b84ade1e.jpg",
+      "expected_handle_filename": "megauravarora.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_d686bbdb4ed2",
+      "display_name": "Shruti Arora",
+      "instagram_handle": "shrutiaurora",
+      "expected_primary_filename": "dir_d686bbdb4ed2.jpg",
+      "expected_handle_filename": "shrutiaurora.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_fe5a0a4c5fac",
+      "display_name": "Ankita Goswami Barjatya",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_fe5a0a4c5fac.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_e267e1883e36",
+      "display_name": "Zaara Sheikh",
+      "instagram_handle": "sheikhzaara786",
+      "expected_primary_filename": "dir_e267e1883e36.jpg",
+      "expected_handle_filename": "sheikhzaara786.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_7deb2a92e956",
+      "display_name": "Rohith",
+      "instagram_handle": "tollfreetraveller",
+      "expected_primary_filename": "dir_7deb2a92e956.jpg",
+      "expected_handle_filename": "tollfreetraveller.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_3f6d5f314068",
+      "display_name": "Vishakha Fulsunge",
+      "instagram_handle": "ridergirlvishakha",
+      "expected_primary_filename": "dir_3f6d5f314068.jpg",
+      "expected_handle_filename": "ridergirlvishakha.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c043399a9066",
+      "display_name": "Candida Louis",
+      "instagram_handle": "candidalouis",
+      "expected_primary_filename": "dir_c043399a9066.jpg",
+      "expected_handle_filename": "candidalouis.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_f79c10e7ec25",
+      "display_name": "Roshni Misbah",
+      "instagram_handle": "roshnimisbah",
+      "expected_primary_filename": "dir_f79c10e7ec25.jpg",
+      "expected_handle_filename": "roshnimisbah.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_fa4c7b4beb06",
+      "display_name": "Karan Raina",
+      "instagram_handle": "karan_raina_",
+      "expected_primary_filename": "dir_fa4c7b4beb06.jpg",
+      "expected_handle_filename": "karan_raina_.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_db56c00ca6e4",
+      "display_name": "Yamini Bisht",
+      "instagram_handle": "motofoxyy",
+      "expected_primary_filename": "dir_db56c00ca6e4.jpg",
+      "expected_handle_filename": "motofoxyy.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_78cb76700e25",
+      "display_name": "Kongkon Talukdar",
+      "instagram_handle": "kongkon_talukdar",
+      "expected_primary_filename": "dir_78cb76700e25.jpg",
+      "expected_handle_filename": "kongkon_talukdar.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_32acc9364724",
+      "display_name": "Rahul Soni",
+      "instagram_handle": "rahulsoni_1997",
+      "expected_primary_filename": "dir_32acc9364724.jpg",
+      "expected_handle_filename": "rahulsoni_1997.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_0de9512c85e1",
+      "display_name": "Arafiya Bukhari",
+      "instagram_handle": "arafiyaabukhari",
+      "expected_primary_filename": "dir_0de9512c85e1.jpg",
+      "expected_handle_filename": "arafiyaabukhari.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_15c309296242",
+      "display_name": "Kalyani Potekar",
+      "instagram_handle": "bikergirl_93",
+      "expected_primary_filename": "dir_15c309296242.jpg",
+      "expected_handle_filename": "bikergirl_93.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c2a80cdd1cde",
+      "display_name": "Flexcia Dsouza",
+      "instagram_handle": "flexcia_dsouza",
+      "expected_primary_filename": "dir_c2a80cdd1cde.jpg",
+      "expected_handle_filename": "flexcia_dsouza.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_56ba1f2f9a0e",
+      "display_name": "Strell",
+      "instagram_handle": "iamstrell",
+      "expected_primary_filename": "dir_56ba1f2f9a0e.jpg",
+      "expected_handle_filename": "iamstrell.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c0da27e2e016",
+      "display_name": "Sagar Sheldekar",
+      "instagram_handle": "sagarsheldekar",
+      "expected_primary_filename": "dir_c0da27e2e016.jpg",
+      "expected_handle_filename": "sagarsheldekar.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_4f4b1c95271c",
+      "display_name": "Thasni Thaaz",
+      "instagram_handle": "thasni___thaaz",
+      "expected_primary_filename": "dir_4f4b1c95271c.jpg",
+      "expected_handle_filename": "thasni___thaaz.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_b8157b631709",
+      "display_name": "Baidik Chatterjee",
+      "instagram_handle": "baidik_c",
+      "expected_primary_filename": "dir_b8157b631709.jpg",
+      "expected_handle_filename": "baidik_c.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_813a6fa57e0a",
+      "display_name": "Dusty Jackets",
+      "instagram_handle": "dustyjacketstravel",
+      "expected_primary_filename": "dir_813a6fa57e0a.jpg",
+      "expected_handle_filename": "dustyjacketstravel.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_15f3b7dbb0ad",
+      "display_name": "Riswan A",
+      "instagram_handle": "thetravelworld2020",
+      "expected_primary_filename": "dir_15f3b7dbb0ad.jpg",
+      "expected_handle_filename": "thetravelworld2020.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_88d3fd2976be",
+      "display_name": "Sanoj SK",
+      "instagram_handle": "sanoj_sk",
+      "expected_primary_filename": "dir_88d3fd2976be.jpg",
+      "expected_handle_filename": "sanoj_sk.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_2dcb177c5ab9",
+      "display_name": "Alisha Hoda",
+      "instagram_handle": "alisha_hoda",
+      "expected_primary_filename": "dir_2dcb177c5ab9.jpg",
+      "expected_handle_filename": "alisha_hoda.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_735874d75b00",
+      "display_name": "Mahak Kapoor",
+      "instagram_handle": "her_garage_yt",
+      "expected_primary_filename": "dir_735874d75b00.jpg",
+      "expected_handle_filename": "her_garage_yt.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_be19b5e4da34",
+      "display_name": "Faisal Khan",
+      "instagram_handle": "fasbeam",
+      "expected_primary_filename": "dir_be19b5e4da34.jpg",
+      "expected_handle_filename": "fasbeam.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_3d5bafd33c62",
+      "display_name": "Car Girls India",
+      "instagram_handle": "cargirlsindia",
+      "expected_primary_filename": "dir_3d5bafd33c62.jpg",
+      "expected_handle_filename": "cargirlsindia.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_ee9b31554581",
+      "display_name": "Mia Joseph Chirakkekaran",
+      "instagram_handle": "octane_girl",
+      "expected_primary_filename": "dir_ee9b31554581.jpg",
+      "expected_handle_filename": "octane_girl.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_b898481b0167",
+      "display_name": "Gagan Choudhary",
+      "instagram_handle": "ganikgagan",
+      "expected_primary_filename": "dir_b898481b0167.jpg",
+      "expected_handle_filename": "ganikgagan.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_602562cbd79b",
+      "display_name": "Umar Bopary",
+      "instagram_handle": "mycarmydreamofficial",
+      "expected_primary_filename": "dir_602562cbd79b.jpg",
+      "expected_handle_filename": "mycarmydreamofficial.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_69a9d6d776d3",
+      "display_name": "Garima Avtar",
+      "instagram_handle": "garimaavtar",
+      "expected_primary_filename": "dir_69a9d6d776d3.jpg",
+      "expected_handle_filename": "garimaavtar.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_f0d3cdf7c4f2",
+      "display_name": "Nitin Choudhary",
+      "instagram_handle": "wowautosbynitin",
+      "expected_primary_filename": "dir_f0d3cdf7c4f2.jpg",
+      "expected_handle_filename": "wowautosbynitin.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_0604564e3fae",
+      "display_name": "Sirish Chandran",
+      "instagram_handle": "sirishchandran",
+      "expected_primary_filename": "dir_0604564e3fae.jpg",
+      "expected_handle_filename": "sirishchandran.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_7f9a7d6aa45e",
+      "display_name": "Deepesh Pandey",
+      "instagram_handle": "ddsravi",
+      "expected_primary_filename": "dir_7f9a7d6aa45e.jpg",
+      "expected_handle_filename": "ddsravi.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_5f6d6f3b867d",
+      "display_name": "Nikky Verma",
+      "instagram_handle": "revv.buzz",
+      "expected_primary_filename": "dir_5f6d6f3b867d.jpg",
+      "expected_handle_filename": "revv.buzz.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_4646a79d1c04",
+      "display_name": "On the Go Reviews",
+      "instagram_handle": "onthego.reviews",
+      "expected_primary_filename": "dir_4646a79d1c04.jpg",
+      "expected_handle_filename": "onthego.reviews.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_74a79c101a73",
+      "display_name": "Dhruv Attri",
+      "instagram_handle": "dhruvattri208",
+      "expected_primary_filename": "dir_74a79c101a73.jpg",
+      "expected_handle_filename": "dhruvattri208.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_6c480ef31304",
+      "display_name": "Bhuvan Chowdhary",
+      "instagram_handle": "b.choww",
+      "expected_primary_filename": "dir_6c480ef31304.jpg",
+      "expected_handle_filename": "b.choww.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_8daeede07fa0",
+      "display_name": "Deepali Rana",
+      "instagram_handle": "deepalirana",
+      "expected_primary_filename": "dir_8daeede07fa0.jpg",
+      "expected_handle_filename": "deepalirana.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_2faaa4c69b93",
+      "display_name": "Rohit Yadav",
+      "instagram_handle": "itsmanandmotor",
+      "expected_primary_filename": "dir_2faaa4c69b93.jpg",
+      "expected_handle_filename": "itsmanandmotor.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_00123d1a33c4",
+      "display_name": "Renuka Kirpalani",
+      "instagram_handle": "renukakirpalani",
+      "expected_primary_filename": "dir_00123d1a33c4.jpg",
+      "expected_handle_filename": "renukakirpalani.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_5f2a1dcd8028",
+      "display_name": "Rishi Kapoor",
+      "instagram_handle": "rjrishikapoor",
+      "expected_primary_filename": "dir_5f2a1dcd8028.jpg",
+      "expected_handle_filename": "rjrishikapoor.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_11ff7726b2ac",
+      "display_name": "Aparna Umesh",
+      "instagram_handle": "aparnaaumesh",
+      "expected_primary_filename": "dir_11ff7726b2ac.jpg",
+      "expected_handle_filename": "aparnaaumesh.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_223ce23d8fcc",
+      "display_name": "Vikas Yogi",
+      "instagram_handle": "autoyogi",
+      "expected_primary_filename": "dir_223ce23d8fcc.jpg",
+      "expected_handle_filename": "autoyogi.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c188667120e1",
+      "display_name": "Alisha Arora",
+      "instagram_handle": "aleeshaaroraa",
+      "expected_primary_filename": "dir_c188667120e1.jpg",
+      "expected_handle_filename": "aleeshaaroraa.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_67831ba8ebc8",
+      "display_name": "Aishwary Khajuria",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_67831ba8ebc8.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_9936064450eb",
+      "display_name": "Fatema Hundekari",
+      "instagram_handle": "fatemahundekari",
+      "expected_primary_filename": "dir_9936064450eb.jpg",
+      "expected_handle_filename": "fatemahundekari.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_6418d24e63f4",
+      "display_name": "Palak",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_6418d24e63f4.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_e91a9608830f",
+      "display_name": "Nandini Chatterjee",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_e91a9608830f.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_d36d9a33b9f0",
+      "display_name": "Neha Jain",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_d36d9a33b9f0.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_de8fb22aada5",
+      "display_name": "Dr. Sejal Jain",
+      "instagram_handle": "glamprotocol",
+      "expected_primary_filename": "dir_de8fb22aada5.jpg",
+      "expected_handle_filename": "glamprotocol.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c606731772d7",
+      "display_name": "Chirag Khanna",
+      "instagram_handle": "chiragkhannaa",
+      "expected_primary_filename": "dir_c606731772d7.jpg",
+      "expected_handle_filename": "chiragkhannaa.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_e9497e70b4d7",
+      "display_name": "Krishen Riyat",
+      "instagram_handle": "krishenriyat",
+      "expected_primary_filename": "dir_e9497e70b4d7.jpg",
+      "expected_handle_filename": "krishenriyat.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_d41737b09626",
+      "display_name": "Himanshu Shukla",
+      "instagram_handle": "hemann007",
+      "expected_primary_filename": "dir_d41737b09626.jpg",
+      "expected_handle_filename": "hemann007.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_649110480f60",
+      "display_name": "Devashish",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_649110480f60.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_811c707fbe8e",
+      "display_name": "Ankit Chopra",
+      "instagram_handle": "aankitchopra",
+      "expected_primary_filename": "dir_811c707fbe8e.jpg",
+      "expected_handle_filename": "aankitchopra.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_7d6b6182bad8",
+      "display_name": "Shreyas Bhandarkar",
+      "instagram_handle": "shreyasbhandarkar",
+      "expected_primary_filename": "dir_7d6b6182bad8.jpg",
+      "expected_handle_filename": "shreyasbhandarkar.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_a518e3f2695e",
+      "display_name": "Madhura's Recipie",
+      "instagram_handle": "madhurasrecipe",
+      "expected_primary_filename": "dir_a518e3f2695e.jpg",
+      "expected_handle_filename": "madhurasrecipe.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_928138773cc1",
+      "display_name": "Sarita Padman",
+      "instagram_handle": "saritaskitchenofficial",
+      "expected_primary_filename": "dir_928138773cc1.jpg",
+      "expected_handle_filename": "saritaskitchenofficial.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_f6f4deb7dad1",
+      "display_name": "Lina",
+      "instagram_handle": "ahouse_to_myhome",
+      "expected_primary_filename": "dir_f6f4deb7dad1.jpg",
+      "expected_handle_filename": "ahouse_to_myhome.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c675f954bd41",
+      "display_name": "Ridhi Kosla Jalan",
+      "instagram_handle": "ridhi.khosla.jalan",
+      "expected_primary_filename": "dir_c675f954bd41.jpg",
+      "expected_handle_filename": "ridhi.khosla.jalan.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_b3a4f43b2edd",
+      "display_name": "Sonakshi Awana",
+      "instagram_handle": "incredible_prodigy",
+      "expected_primary_filename": "dir_b3a4f43b2edd.jpg",
+      "expected_handle_filename": "incredible_prodigy.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_1cbf861e91aa",
+      "display_name": "Navneet Sandhu",
+      "instagram_handle": "designdecortravel",
+      "expected_primary_filename": "dir_1cbf861e91aa.jpg",
+      "expected_handle_filename": "designdecortravel.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_da7205631e2e",
+      "display_name": "Grishma Shah",
+      "instagram_handle": "thecurateddecor",
+      "expected_primary_filename": "dir_da7205631e2e.jpg",
+      "expected_handle_filename": "thecurateddecor.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c656d069800d",
+      "display_name": "Falaque Rashid Roy",
+      "instagram_handle": "falaque.rashidroy",
+      "expected_primary_filename": "dir_c656d069800d.jpg",
+      "expected_handle_filename": "falaque.rashidroy.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_d79d040761bd",
+      "display_name": "Sanket Mehta",
+      "instagram_handle": "sankett25",
+      "expected_primary_filename": "dir_d79d040761bd.jpg",
+      "expected_handle_filename": "sankett25.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_a9c92eb48d34",
+      "display_name": "Utkarsh Khatri",
+      "instagram_handle": "_utkarsh_khatri",
+      "expected_primary_filename": "dir_a9c92eb48d34.jpg",
+      "expected_handle_filename": "_utkarsh_khatri.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cb6af5ef2a14",
+      "display_name": "Dhwani Bhatt",
+      "instagram_handle": "dhwaniibhatt",
+      "expected_primary_filename": "dir_cb6af5ef2a14.jpg",
+      "expected_handle_filename": "dhwaniibhatt.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_848159ab55f3",
+      "display_name": "Disha (suggested)",
+      "instagram_handle": "that_aesthetic_doctor",
+      "expected_primary_filename": "dir_848159ab55f3.jpg",
+      "expected_handle_filename": "that_aesthetic_doctor.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_5e175328c6d3",
+      "display_name": "Natasha Shotri (Ludhiana)",
+      "instagram_handle": "natasha_shrotri",
+      "expected_primary_filename": "dir_5e175328c6d3.jpg",
+      "expected_handle_filename": "natasha_shrotri.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_ea15e5f8a1d6",
+      "display_name": "Radha Chaudhary",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_ea15e5f8a1d6.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_580da8dda3fb",
+      "display_name": "Shilpa Kataria Singh",
+      "instagram_handle": "shillpakatariasingh",
+      "expected_primary_filename": "dir_580da8dda3fb.jpg",
+      "expected_handle_filename": "shillpakatariasingh.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_203f3fac78ae",
+      "display_name": "Chahat Dalal",
+      "instagram_handle": "chahat.dalal",
+      "expected_primary_filename": "dir_203f3fac78ae.jpg",
+      "expected_handle_filename": "chahat.dalal.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_1dc48c3c5bb8",
+      "display_name": "travel_the_world_with_wifey",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_1dc48c3c5bb8.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_71078b7f3a14",
+      "display_name": "Simran Poddar",
+      "instagram_handle": "bellisimo__simran",
+      "expected_primary_filename": "dir_71078b7f3a14.jpg",
+      "expected_handle_filename": "bellisimo__simran.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_16a7c779cc34",
+      "display_name": "Hiiya Bajwa",
+      "instagram_handle": "hiiyabajwa",
+      "expected_primary_filename": "dir_16a7c779cc34.jpg",
+      "expected_handle_filename": "hiiyabajwa.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_20a5f5139eed",
+      "display_name": "Kiran Gill",
+      "instagram_handle": "kiran.jeet.gill",
+      "expected_primary_filename": "dir_20a5f5139eed.jpg",
+      "expected_handle_filename": "kiran.jeet.gill.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_61acd28abecc",
+      "display_name": "Abhinav Raghavan",
+      "instagram_handle": "abhinav.raghavan",
+      "expected_primary_filename": "dir_61acd28abecc.jpg",
+      "expected_handle_filename": "abhinav.raghavan.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_8687da41e40b",
+      "display_name": "Rohit Khandelwal",
+      "instagram_handle": "rohit_khandelwal77",
+      "expected_primary_filename": "dir_8687da41e40b.jpg",
+      "expected_handle_filename": "rohit_khandelwal77.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_fd5ed6db9e2f",
+      "display_name": "Ekta Varma",
+      "instagram_handle": "mommy_mode_on",
+      "expected_primary_filename": "dir_fd5ed6db9e2f.jpg",
+      "expected_handle_filename": "mommy_mode_on.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_00272cf156b2",
+      "display_name": "Nilam Chauhan",
+      "instagram_handle": "nilam_chauhan55",
+      "expected_primary_filename": "dir_00272cf156b2.jpg",
+      "expected_handle_filename": "nilam_chauhan55.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cdc5921b094c",
+      "display_name": "Gauri Shah",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_cdc5921b094c.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_db87efa1c771",
+      "display_name": "Linda Fernandes",
+      "instagram_handle": "thatquirkymamma",
+      "expected_primary_filename": "dir_db87efa1c771.jpg",
+      "expected_handle_filename": "thatquirkymamma.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_f41147fd4d91",
+      "display_name": "Divya Patel",
+      "instagram_handle": "lifewidbaby",
+      "expected_primary_filename": "dir_f41147fd4d91.jpg",
+      "expected_handle_filename": "lifewidbaby.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_5a9bd9b27e8a",
+      "display_name": "Sneha Palliwal",
+      "instagram_handle": "highstreetmommy",
+      "expected_primary_filename": "dir_5a9bd9b27e8a.jpg",
+      "expected_handle_filename": "highstreetmommy.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cd0e0764995f",
+      "display_name": "Avanne Dubash",
+      "instagram_handle": "avannedubash",
+      "expected_primary_filename": "dir_cd0e0764995f.jpg",
+      "expected_handle_filename": "avannedubash.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_0f5520e28606",
+      "display_name": "Chrissy",
+      "instagram_handle": "chryssie_missyy",
+      "expected_primary_filename": "dir_0f5520e28606.jpg",
+      "expected_handle_filename": "chryssie_missyy.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_288e224e0a1d",
+      "display_name": "Tanbeer Bhatia",
+      "instagram_handle": "tanu.m.bhatia",
+      "expected_primary_filename": "dir_288e224e0a1d.jpg",
+      "expected_handle_filename": "tanu.m.bhatia.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_bdacdb838c89",
+      "display_name": "Priyanka Thakur",
+      "instagram_handle": "amomnextdoor",
+      "expected_primary_filename": "dir_bdacdb838c89.jpg",
+      "expected_handle_filename": "amomnextdoor.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_f4eb58dac2a0",
+      "display_name": "Chitrangi Sharma",
+      "instagram_handle": "mydesipandora",
+      "expected_primary_filename": "dir_f4eb58dac2a0.jpg",
+      "expected_handle_filename": "mydesipandora.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_519b607c8156",
+      "display_name": "Anjali Pandey Verma",
+      "instagram_handle": "anjalipandeyverma",
+      "expected_primary_filename": "dir_519b607c8156.jpg",
+      "expected_handle_filename": "anjalipandeyverma.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_3b48a065e2f1",
+      "display_name": "Natasha Patel",
+      "instagram_handle": "natasshapatel",
+      "expected_primary_filename": "dir_3b48a065e2f1.jpg",
+      "expected_handle_filename": "natasshapatel.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_51c9a76ad9eb",
+      "display_name": "Himani Seth",
+      "instagram_handle": "himaniseth01",
+      "expected_primary_filename": "dir_51c9a76ad9eb.jpg",
+      "expected_handle_filename": "himaniseth01.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_3c4e8a712da1",
+      "display_name": "Pallavi Goenka",
+      "instagram_handle": "pallavi_goenka_",
+      "expected_primary_filename": "dir_3c4e8a712da1.jpg",
+      "expected_handle_filename": "pallavi_goenka_.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_0462726397a2",
+      "display_name": "Puneri Blogger",
+      "instagram_handle": "puneriblogger",
+      "expected_primary_filename": "dir_0462726397a2.jpg",
+      "expected_handle_filename": "puneriblogger.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_dc7fb70c64a0",
+      "display_name": "Eeshika Biswas",
+      "instagram_handle": "eeshikabiswas",
+      "expected_primary_filename": "dir_dc7fb70c64a0.jpg",
+      "expected_handle_filename": "eeshikabiswas.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_b2b5bbf7ced1",
+      "display_name": "the_harsha_khatri",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_b2b5bbf7ced1.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c04f3e0ede1f",
+      "display_name": "Travel with wifey (Shrilanka)",
+      "instagram_handle": "travel_with_wife",
+      "expected_primary_filename": "dir_c04f3e0ede1f.jpg",
+      "expected_handle_filename": "travel_with_wife.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_3f625e5e4423",
+      "display_name": "Cherry Jain",
+      "instagram_handle": "cherryjainn_",
+      "expected_primary_filename": "dir_3f625e5e4423.jpg",
+      "expected_handle_filename": "cherryjainn_.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_ba66f9aa694f",
+      "display_name": "Esha Fruitwala",
+      "instagram_handle": "eshaisthename",
+      "expected_primary_filename": "dir_ba66f9aa694f.jpg",
+      "expected_handle_filename": "eshaisthename.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_eba976371fcf",
+      "display_name": "Sandhya Majji",
+      "instagram_handle": "pinkpebble",
+      "expected_primary_filename": "dir_eba976371fcf.jpg",
+      "expected_handle_filename": "pinkpebble.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_d33c670e9cb7",
+      "display_name": "Kushoo Rathi",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_d33c670e9cb7.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c0497c74269a",
+      "display_name": "Parvathy",
+      "instagram_handle": "vibewithpaaru",
+      "expected_primary_filename": "dir_c0497c74269a.jpg",
+      "expected_handle_filename": "vibewithpaaru.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_d7812b94b196",
+      "display_name": "Soumya",
+      "instagram_handle": "thebloggerbeee",
+      "expected_primary_filename": "dir_d7812b94b196.jpg",
+      "expected_handle_filename": "thebloggerbeee.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_fcc8c916ff4a",
+      "display_name": "Archana Singh",
+      "instagram_handle": "travelseewrite",
+      "expected_primary_filename": "dir_fcc8c916ff4a.jpg",
+      "expected_handle_filename": "travelseewrite.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_3c6b55d597fb",
+      "display_name": "Mandavi Jaiswal",
+      "instagram_handle": "anurbannomadic",
+      "expected_primary_filename": "dir_3c6b55d597fb.jpg",
+      "expected_handle_filename": "anurbannomadic.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_6feca0f24e3a",
+      "display_name": "Chandani Ayani",
+      "instagram_handle": "bloggerchandnii",
+      "expected_primary_filename": "dir_6feca0f24e3a.jpg",
+      "expected_handle_filename": "bloggerchandnii.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cab86277f119",
+      "display_name": "Pratiksha Das",
+      "instagram_handle": "racerchick_11",
+      "expected_primary_filename": "dir_cab86277f119.jpg",
+      "expected_handle_filename": "racerchick_11.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_89270f3e3a09",
+      "display_name": "Arihant Baid",
+      "instagram_handle": "arihantbaidofficial",
+      "expected_primary_filename": "dir_89270f3e3a09.jpg",
+      "expected_handle_filename": "arihantbaidofficial.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_46c8e86d01d4",
+      "display_name": "Surbhi Vaid",
+      "instagram_handle": "surbhivaid05",
+      "expected_primary_filename": "dir_46c8e86d01d4.jpg",
+      "expected_handle_filename": "surbhivaid05.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c218f6b29507",
+      "display_name": "Tanya Purohit",
+      "instagram_handle": "tanya_purohit",
+      "expected_primary_filename": "dir_c218f6b29507.jpg",
+      "expected_handle_filename": "tanya_purohit.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_6e8b7cbf8cc4",
+      "display_name": "Yashika Gupta",
+      "instagram_handle": "yashikagupta1008",
+      "expected_primary_filename": "dir_6e8b7cbf8cc4.jpg",
+      "expected_handle_filename": "yashikagupta1008.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_93209b918733",
+      "display_name": "Tanvi Shah",
+      "instagram_handle": "tanvishah91",
+      "expected_primary_filename": "dir_93209b918733.jpg",
+      "expected_handle_filename": "tanvishah91.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_e1754058bd4b",
+      "display_name": "Mayan Tilanger",
+      "instagram_handle": "mayantilanger_b",
+      "expected_primary_filename": "dir_e1754058bd4b.jpg",
+      "expected_handle_filename": "mayantilanger_b.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_961685c17f8f",
+      "display_name": "Shubham Tiwari",
+      "instagram_handle": "shubhamxcricket",
+      "expected_primary_filename": "dir_961685c17f8f.jpg",
+      "expected_handle_filename": "shubhamxcricket.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_b2007a66ecd3",
+      "display_name": "Shreevats Goswami",
+      "instagram_handle": "shreevatsgoswami",
+      "expected_primary_filename": "dir_b2007a66ecd3.jpg",
+      "expected_handle_filename": "shreevatsgoswami.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_6feb1b63464d",
+      "display_name": "R Rajesh",
+      "instagram_handle": "r_rajesh_07",
+      "expected_primary_filename": "dir_6feb1b63464d.jpg",
+      "expected_handle_filename": "r_rajesh_07.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cf5dc1ecc818",
+      "display_name": "Anuj vlogs",
+      "instagram_handle": "anuj__vlogs",
+      "expected_primary_filename": "dir_cf5dc1ecc818.jpg",
+      "expected_handle_filename": "anuj__vlogs.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_9d4d4ab0dfdb",
+      "display_name": "Faiz",
+      "instagram_handle": "faiz_drive",
+      "expected_primary_filename": "dir_9d4d4ab0dfdb.jpg",
+      "expected_handle_filename": "faiz_drive.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_83906b2ff047",
+      "display_name": "Raman Nayak",
+      "instagram_handle": "raman_nyk",
+      "expected_primary_filename": "dir_83906b2ff047.jpg",
+      "expected_handle_filename": "raman_nyk.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_95deb5011a8f",
+      "display_name": "Pankaj",
+      "instagram_handle": "pankaj_maddeshiya_vlog",
+      "expected_primary_filename": "dir_95deb5011a8f.jpg",
+      "expected_handle_filename": "pankaj_maddeshiya_vlog.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_5d048a8cf0bb",
+      "display_name": "Shruti Haasan",
+      "instagram_handle": "shrutzhaasan",
+      "expected_primary_filename": "dir_5d048a8cf0bb.jpg",
+      "expected_handle_filename": "shrutzhaasan.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cae5021e4421",
+      "display_name": "Krithi Shetty",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_cae5021e4421.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_b4637ef5ce22",
+      "display_name": "Zoya Afroz",
+      "instagram_handle": "zoyaafroz",
+      "expected_primary_filename": "dir_b4637ef5ce22.jpg",
+      "expected_handle_filename": "zoyaafroz.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_2666b7e476da",
+      "display_name": "Sree Leela",
+      "instagram_handle": "sreeleela14",
+      "expected_primary_filename": "dir_2666b7e476da.jpg",
+      "expected_handle_filename": "sreeleela14.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_14eb67174bbe",
+      "display_name": "Tisca Chopra",
+      "instagram_handle": "tiscaofficial",
+      "expected_primary_filename": "dir_14eb67174bbe.jpg",
+      "expected_handle_filename": "tiscaofficial.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_a07ded6de7b6",
+      "display_name": "Ankita Chawla",
+      "instagram_handle": "hustlerani",
+      "expected_primary_filename": "dir_a07ded6de7b6.jpg",
+      "expected_handle_filename": "hustlerani.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_57299ad4eb6a",
+      "display_name": "Varun Duggirala",
+      "instagram_handle": "varunduggi",
+      "expected_primary_filename": "dir_57299ad4eb6a.jpg",
+      "expected_handle_filename": "varunduggi.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_bc91a978e7a4",
+      "display_name": "Bharg Kale",
+      "instagram_handle": "bhargkale",
+      "expected_primary_filename": "dir_bc91a978e7a4.jpg",
+      "expected_handle_filename": "bhargkale.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_60c52d6a7436",
+      "display_name": "Suhana Sethi",
+      "instagram_handle": "suhanasethiofficial",
+      "expected_primary_filename": "dir_60c52d6a7436.jpg",
+      "expected_handle_filename": "suhanasethiofficial.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_c18ce11075a7",
+      "display_name": "Cherry Sin",
+      "instagram_handle": "cherrysin98",
+      "expected_primary_filename": "dir_c18ce11075a7.jpg",
+      "expected_handle_filename": "cherrysin98.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_ccb7a96b4c7d",
+      "display_name": "Kusha Kapila",
+      "instagram_handle": "kushakapila",
+      "expected_primary_filename": "dir_ccb7a96b4c7d.jpg",
+      "expected_handle_filename": "kushakapila.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_fc6e1432f8b7",
+      "display_name": "Sufi Motiwala",
+      "instagram_handle": "sufimotiwala",
+      "expected_primary_filename": "dir_fc6e1432f8b7.jpg",
+      "expected_handle_filename": "sufimotiwala.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_3d815947e885",
+      "display_name": "Kenny Sebastian",
+      "instagram_handle": "kennethseb",
+      "expected_primary_filename": "dir_3d815947e885.jpg",
+      "expected_handle_filename": "kennethseb.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_aa0eee10a7b3",
+      "display_name": "Neetu Bisht",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_aa0eee10a7b3.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cf19dd5773d5",
+      "display_name": "Nancy Tyagi",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_cf19dd5773d5.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cceb33686586",
+      "display_name": "Krishna Mukherjee",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_cceb33686586.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_69389c1af8af",
+      "display_name": "Diipa Buller Khosla",
+      "instagram_handle": "diipakhosla",
+      "expected_primary_filename": "dir_69389c1af8af.jpg",
+      "expected_handle_filename": "diipakhosla.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_42a4d29c7032",
+      "display_name": "Tarun Kinra",
+      "instagram_handle": "tarun_kinra",
+      "expected_primary_filename": "dir_42a4d29c7032.jpg",
+      "expected_handle_filename": "tarun_kinra.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_979bb254a3bf",
+      "display_name": "Ashwinkumar_ak",
+      "instagram_handle": "ashwinkumar_ak",
+      "expected_primary_filename": "dir_979bb254a3bf.jpg",
+      "expected_handle_filename": "ashwinkumar_ak.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_74f31e617b24",
+      "display_name": "Balan Akassh Balaiyan Jaganathan",
+      "instagram_handle": "bjbala_kpy",
+      "expected_primary_filename": "dir_74f31e617b24.jpg",
+      "expected_handle_filename": "bjbala_kpy.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_a175a0e3ea9f",
+      "display_name": "StarBoy Atharva Murli",
+      "instagram_handle": "atharvaamurali",
+      "expected_primary_filename": "dir_a175a0e3ea9f.jpg",
+      "expected_handle_filename": "atharvaamurali.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_5381b2ffd5f8",
+      "display_name": "Harish Kalyan",
+      "instagram_handle": "iamharishkalyan",
+      "expected_primary_filename": "dir_5381b2ffd5f8.jpg",
+      "expected_handle_filename": "iamharishkalyan.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_ed273b7f7b71",
+      "display_name": "Soorimuthuchamy",
+      "instagram_handle": "soorimuthuchamy",
+      "expected_primary_filename": "dir_ed273b7f7b71.jpg",
+      "expected_handle_filename": "soorimuthuchamy.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_3153be13ca91",
+      "display_name": "Riya",
+      "instagram_handle": "riyabangia_",
+      "expected_primary_filename": "dir_3153be13ca91.jpg",
+      "expected_handle_filename": "riyabangia_.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_37fbedc5c108",
+      "display_name": "Shailashree",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_37fbedc5c108.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_4fa7e3baefb8",
+      "display_name": "Sanjana Goswami",
+      "instagram_handle": null,
+      "expected_primary_filename": "dir_4fa7e3baefb8.jpg",
+      "expected_handle_filename": null,
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_42c433404944",
+      "display_name": "Priyanka Chandola",
+      "instagram_handle": "desigirltraveller",
+      "expected_primary_filename": "dir_42c433404944.jpg",
+      "expected_handle_filename": "desigirltraveller.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_47d8c40cdb15",
+      "display_name": "Sneha &Ranjan",
+      "instagram_handle": "thetwogypsiess",
+      "expected_primary_filename": "dir_47d8c40cdb15.jpg",
+      "expected_handle_filename": "thetwogypsiess.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_3968f3bf0cc5",
+      "display_name": "Shristi",
+      "instagram_handle": "pahadan_____",
+      "expected_primary_filename": "dir_3968f3bf0cc5.jpg",
+      "expected_handle_filename": "pahadan_____.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_da4c6a962e5f",
+      "display_name": "Apoorva Rao",
+      "instagram_handle": "apytravelstories",
+      "expected_primary_filename": "dir_da4c6a962e5f.jpg",
+      "expected_handle_filename": "apytravelstories.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_cca4c0bebedc",
+      "display_name": "Ana Mishra",
+      "instagram_handle": "anamishraa",
+      "expected_primary_filename": "dir_cca4c0bebedc.jpg",
+      "expected_handle_filename": "anamishraa.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_b4dc320a0647",
+      "display_name": "Prakriti Arora",
+      "instagram_handle": "escapetolandscapes",
+      "expected_primary_filename": "dir_b4dc320a0647.jpg",
+      "expected_handle_filename": "escapetolandscapes.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_2111ccf9ea57",
+      "display_name": "Richi Jain",
+      "instagram_handle": "richi.shah",
+      "expected_primary_filename": "dir_2111ccf9ea57.jpg",
+      "expected_handle_filename": "richi.shah.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_410e0459e81d",
+      "display_name": "Mahi Sharma",
+      "instagram_handle": "maahieway",
+      "expected_primary_filename": "dir_410e0459e81d.jpg",
+      "expected_handle_filename": "maahieway.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_64fe245209b5",
+      "display_name": "Sanya Batra",
+      "instagram_handle": "insanyaty",
+      "expected_primary_filename": "dir_64fe245209b5.jpg",
+      "expected_handle_filename": "insanyaty.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_dd4af622f510",
+      "display_name": "Sneha Dobaria",
+      "instagram_handle": "snehadobaria",
+      "expected_primary_filename": "dir_dd4af622f510.jpg",
+      "expected_handle_filename": "snehadobaria.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    },
+    {
+      "directory_id": "dir_dc47018fd57e",
+      "display_name": "Sagar & Himani",
+      "instagram_handle": "wanderlust_himani",
+      "expected_primary_filename": "dir_dc47018fd57e.jpg",
+      "expected_handle_filename": "wanderlust_himani.jpg",
+      "current_image_path": null,
+      "status": "pending_upload"
+    }
+  ]
+}

@@ -19,3 +19,7 @@ coverage/
 *.log
 **/local.properties
 apps/mobile/ios/Flutter/Environment.generated.xcconfig
+# Confidential source workbooks and raw import data containing private phone/quote data
+*.xlsx
+ggs_creator_directory_import.json
+

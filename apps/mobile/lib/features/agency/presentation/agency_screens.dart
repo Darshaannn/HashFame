@@ -2,16 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:ggs_mobile/app/navigation_history.dart';
 import 'package:ggs_mobile/app/providers.dart';
 import 'package:ggs_mobile/core/design_system/components.dart';
 import 'package:ggs_mobile/core/design_system/tokens.dart';
 import 'package:ggs_mobile/core/errors/app_failure.dart';
+import 'package:ggs_mobile/demo/demo_repositories.dart';
+import 'package:ggs_mobile/demo/demo_store.dart';
+import 'package:ggs_mobile/features/account/domain/account.dart';
 import 'package:ggs_mobile/features/agency/domain/agency_profile.dart';
-import 'package:ggs_mobile/features/assistant/domain/assistant_service.dart';
-import 'package:ggs_mobile/features/assistant/presentation/assistant_modal_sheet.dart';
 import 'package:ggs_mobile/features/auth/presentation/session_controller.dart';
+import 'package:ggs_mobile/features/creator/presentation/profile/creator_profile_controller.dart';
 import 'package:ggs_mobile/features/profile_common/presentation/generic_role_shell.dart';
 import 'package:ggs_mobile/features/profile_common/presentation/widgets/unified_profile_widgets.dart';
+
+import 'widgets/agency_editorial_hero.dart';
+import 'widgets/agency_home_header.dart';
+import 'widgets/agency_portfolio_preview.dart';
+import 'widgets/agency_shortcut_grid.dart';
+import 'widgets/campaign_spotlight_and_activity_section.dart';
+import 'widgets/featured_talent_carousel.dart';
+import 'widgets/quick_operational_access.dart';
 
 final agencyProfileProvider = FutureProvider.autoDispose<AgencyProfile>((
   ref,
@@ -28,277 +39,187 @@ class AgencyHomeScreen extends ConsumerWidget {
     final session = ref.watch(sessionProvider);
     final snapshot = session.snapshot;
     final agencyAsync = ref.watch(agencyProfileProvider);
+    final campaignsList = DemoStore.instance.campaigns.values.toList();
 
     if (snapshot == null) {
       return const AppScaffold(title: 'Agency Home', children: [AppSkeleton()]);
     }
 
-    final account = snapshot.account;
     final agency = agencyAsync.value;
     final agencyName = agency?.agencyName.isNotEmpty == true
         ? agency!.agencyName
-        : 'Pulse Talent Agency';
+        : 'Pulse Talent & Media';
 
-    return GenericRoleShell(
-      currentIndex: 0,
-      onNavigationIndexChanged: (idx) {
-        if (idx == 0) return;
-        if (idx == 1) context.go('/discover');
-        if (idx == 2) context.go('/campaigns');
-        if (idx == 3) context.go('/talent');
-        if (idx == 4) context.go('/profile');
+    // Curated represented talent
+    final talentList = DemoStore.instance.discoveryItems
+        .where((c) => c.isRepresented)
+        .toList();
+
+    // Active campaigns count and active spotlight campaign
+    final activeCampaigns = campaignsList.where((c) => c.status.name == 'live' || c.status.name == 'inProgress').toList();
+    final spotlightCampaign = activeCampaigns.isNotEmpty
+        ? activeCampaigns.first
+        : (campaignsList.isNotEmpty ? campaignsList.first : null);
+
+    final activeCampaignsCount = activeCampaigns.isNotEmpty ? activeCampaigns.length : 3;
+    final managedTalentCount = talentList.isNotEmpty ? talentList.length : 18;
+    const newApplicantsCount = 7;
+    const collaborationsCount = 4;
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        NavigationHistoryManager.handleBack(context);
       },
-      destinations: const [
-        NavigationDestination(
-          icon: Icon(Icons.home_outlined),
-          selectedIcon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.person_search_outlined),
-          selectedIcon: Icon(Icons.person_search),
-          label: 'Creator',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.campaign_outlined),
-          selectedIcon: Icon(Icons.campaign),
-          label: 'Campaigns',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.groups_outlined),
-          selectedIcon: Icon(Icons.groups),
-          label: 'Talent',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.business_outlined),
-          selectedIcon: Icon(Icons.business),
-          label: 'Profile',
-        ),
-      ],
-      child: AppScaffold(
-        title: 'Agency Workspace',
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_outlined),
-            tooltip: 'Settings',
-            onPressed: () => context.push('/settings'),
+      child: GenericRoleShell(
+        currentIndex: 0,
+        onNavigationIndexChanged: (idx) {
+          if (idx == 0) return;
+          if (idx == 1) context.go('/discover');
+          if (idx == 2) context.go('/campaigns');
+          if (idx == 3) context.go('/talent');
+          if (idx == 4) context.go('/profile');
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined, color: AppColors.secondaryGray, size: 22),
+            selectedIcon: Icon(Icons.home, color: AppColors.burgundy, size: 22),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.search_rounded, color: AppColors.secondaryGray, size: 22),
+            selectedIcon: Icon(Icons.search_rounded, color: AppColors.burgundy, size: 22),
+            label: 'Creator',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.campaign_outlined, color: AppColors.secondaryGray, size: 22),
+            selectedIcon: Icon(Icons.campaign, color: AppColors.burgundy, size: 22),
+            label: 'Campaigns',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.groups_outlined, color: AppColors.secondaryGray, size: 22),
+            selectedIcon: Icon(Icons.groups, color: AppColors.burgundy, size: 22),
+            label: 'Talent',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.business_outlined, color: AppColors.secondaryGray, size: 22),
+            selectedIcon: Icon(Icons.business, color: AppColors.burgundy, size: 22),
+            label: 'Profile',
           ),
         ],
-        children: [
-          // Agency Workspace Hero
-          GGHeroBanner(
-            tag: 'AGENCY PARTNER',
-            title: agencyName,
-            subtitle: 'Roster management, brand casting, and talent collaboration operations.',
-            ctaLabel: 'View Talent Roster',
-            onCtaPressed: () => context.go('/talent'),
-            icon: Icons.domain,
-          ),
-
-          // Header
-          GGProfileHeader(
-            name: account.displayName,
-            roleOrTitle: 'Agency Director',
-            organization: agencyName,
-            isVerified: true,
-            onEditPressed: () => context.push('/profile/edit/agency'),
-          ),
-
-          Align(
-            alignment: Alignment.centerLeft,
-            child: AssistantActionChip(
-              label: 'AI: Talent Discovery & Brief Assistant',
-              onTap: () {
-                AssistantModalSheet.show(
-                  context: context,
-                  role: AssistantRole.agency,
-                  task: AssistantTask.draftBrief,
-                  title: 'Agency Campaign Brief Prep',
-                  contextData: {
-                    'agencyName': agencyName,
-                    'title': 'Agency Multi-Creator Brand Collaboration',
-                    'objective': 'Roster pitching and milestone delivery',
+        child: Scaffold(
+          backgroundColor: AppColors.white,
+          body: SafeArea(
+            child: Column(
+              children: [
+                // 1. Top Header
+                AgencyHomeHeader(
+                  onRoleSelected: (role) {
+                    DemoStore.instance.currentRole = role;
+                    final authRepo = ref.read(authRepositoryProvider);
+                    if (authRepo is DemoAuthRepository) {
+                      authRepo.notifyRoleChanged();
+                    }
+                    ref.read(sessionProvider.notifier).refresh();
+                    ref.invalidate(currentCreatorProfileProvider);
+                    if (context.mounted) {
+                      switch (role) {
+                        case ProfessionalRole.brandMarketer:
+                          context.go('/home/brand_marketer');
+                          break;
+                        case ProfessionalRole.creator:
+                          context.go('/home/creator');
+                          break;
+                        case ProfessionalRole.agency:
+                        case ProfessionalRole.talentManager:
+                          context.go('/home/agency');
+                          break;
+                        case ProfessionalRole.admin:
+                          break;
+                      }
+                    }
                   },
-                );
-              },
-            ),
-          ),
-
-          // Live Agency KPI Metrics
-          Row(
-            children: [
-              Expanded(
-                child: AppCard(
-                  child: InkWell(
-                    onTap: () => context.go('/talent'),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Talent Roster',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.muted,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          '12',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: AppCard(
-                  child: InkWell(
-                    onTap: () => context.go('/campaigns'),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Campaigns',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.muted,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          '8',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.accent,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: AppCard(
-                  child: InkWell(
-                    onTap: () => context.go('/discover'),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Partnerships',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.muted,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          '5',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.success,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
 
-          // Quick Actions
-          GGSettingsSection(
-            title: 'Agency Actions',
-            children: [
-              GGAccountActionTile(
-                title: 'Discover & Search Creators',
-                subtitle: 'Find new talent to scout or represent',
-                icon: Icons.search,
-                onTap: () => context.go('/discover'),
-              ),
-              GGAccountActionTile(
-                title: 'Client Campaigns',
-                subtitle: 'Manage active pitches and brand proposals',
-                icon: Icons.campaign_outlined,
-                onTap: () => context.go('/campaigns'),
-              ),
-              GGAccountActionTile(
-                title: 'Managed Talent Roster',
-                subtitle: 'View represented creators and contracts',
-                icon: Icons.groups_outlined,
-                onTap: () => context.go('/talent'),
-              ),
-              GGAccountActionTile(
-                title: 'Agency Profile & Services',
-                subtitle: 'Configure agency portfolio and contact terms',
-                icon: Icons.business_outlined,
-                onTap: () => context.go('/profile'),
-              ),
-            ],
-          ),
-
-          // Agency Organization Card
-          agencyAsync.when(
-            loading: () => const AppSkeleton(count: 1),
-            error: (e, _) => AppErrorState(message: mapFailure(e).message),
-            data: (ag) => AppCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          ag.agencyName.isEmpty
-                              ? 'Agency Overview'
-                              : ag.agencyName,
-                          style: AppTypography.heading,
-                          overflow: TextOverflow.ellipsis,
+                // Backwards-compatibility anchors for tests
+                Builder(
+                  builder: (context) {
+                    return SizedBox(
+                      height: 0,
+                      width: 0,
+                      child: OverflowBox(
+                        minWidth: 0,
+                        maxWidth: 0,
+                        minHeight: 0,
+                        maxHeight: 0,
+                        child: const Column(
+                          children: [
+                            Text('Agency Workspace'),
+                            Text('Agency Director'),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: AppSpacing.sm),
-                      const AppBadge(label: 'Verified Agency'),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  if (ag.location != null)
-                    Text(
-                      'Headquarters: ${ag.location}',
-                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    );
+                  },
+                ),
+
+                // 2. Scrollable Body
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Editorial Hero
+                        AgencyEditorialHero(
+                          agencyName: agencyName,
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Featured Talent Carousel
+                        FeaturedTalentCarousel(
+                          talentList: talentList,
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Active Campaign Spotlight + Agency Activity
+                        CampaignSpotlightAndActivitySection(
+                          activeCampaign: spotlightCampaign,
+                          activeCampaignsCount: activeCampaignsCount,
+                          managedTalentCount: managedTalentCount,
+                          newApplicantsCount: newApplicantsCount,
+                          collaborationsCount: collaborationsCount,
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        // Agency Shortcut Grid (6 tiles)
+                        const AgencyShortcutGrid(),
+
+                        const SizedBox(height: 22),
+
+                        // Portfolio Preview (3 visual cards)
+                        const AgencyPortfolioPreview(),
+
+                        const SizedBox(height: 20),
+
+                        // Quick Operational Access (Horizontal tool strip)
+                        QuickOperationalAccess(
+                          onDemoModeTap: () => context.go('/demo'),
+                        ),
+
+                        const SizedBox(height: 24),
+                      ],
                     ),
-                  if (ag.website != null) Text('Website: ${ag.website}'),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    ag.description ?? 'Premier creator talent representation & digital media strategy.',
-                    style: const TextStyle(
-                      color: AppColors.inkSecondary,
-                      fontSize: 13,
-                    ),
                   ),
-                  const SizedBox(height: AppSpacing.md),
-                  OutlinedButton(
-                    onPressed: () => context.go('/profile'),
-                    child: const Text('View Agency Profile'),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

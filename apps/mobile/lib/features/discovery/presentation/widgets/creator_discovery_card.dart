@@ -29,10 +29,10 @@ class CreatorDiscoveryCard extends ConsumerWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Creator photograph
+                // Creator photograph or initials placeholder
                 AppAvatar(
                   label: creator.displayName,
-                  imageUrl: AppImages.getCreatorPhoto(creator.displayName),
+                  imageUrl: creator.avatarPath ?? AppImages.getCreatorPhoto(creator.displayName),
                   radius: 28,
                 ),
                 const SizedBox(width: AppSpacing.md),
@@ -48,6 +48,7 @@ class CreatorDiscoveryCard extends ConsumerWidget {
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
+                                color: AppColors.black,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -58,7 +59,7 @@ class CreatorDiscoveryCard extends ConsumerWidget {
                             const Icon(
                               Icons.verified_user,
                               size: 16,
-                              color: AppColors.primary,
+                              color: AppColors.burgundy,
                             ),
                           ],
                         ],
@@ -67,11 +68,9 @@ class CreatorDiscoveryCard extends ConsumerWidget {
                           creator.professionalName!.isNotEmpty)
                         Text(
                           '@${creator.professionalName}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurfaceVariant,
+                            color: AppColors.secondaryGray,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -79,11 +78,9 @@ class CreatorDiscoveryCard extends ConsumerWidget {
                       if (creator.city != null && creator.city!.isNotEmpty)
                         Text(
                           '${creator.city}, ${creator.state ?? creator.country}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurfaceVariant,
+                            color: AppColors.secondaryGray,
                           ),
                         ),
                     ],
@@ -93,7 +90,7 @@ class CreatorDiscoveryCard extends ConsumerWidget {
                 IconButton(
                   icon: Icon(
                     isSaved ? Icons.bookmark : Icons.bookmark_border,
-                    color: isSaved ? AppColors.primary : null,
+                    color: isSaved ? AppColors.burgundy : AppColors.secondaryGray,
                   ),
                   tooltip: isSaved
                       ? 'Saved in shortlists'
@@ -119,7 +116,12 @@ class CreatorDiscoveryCard extends ConsumerWidget {
                 runSpacing: 4,
                 children: creator.primaryCategoryNames.take(3).map((cat) {
                   return Chip(
-                    label: Text(cat, style: const TextStyle(fontSize: 11)),
+                    label: Text(
+                      cat,
+                      style: const TextStyle(fontSize: 11, color: AppColors.black),
+                    ),
+                    backgroundColor: AppColors.lightGray,
+                    side: const BorderSide(color: AppColors.outlineLight),
                     visualDensity: VisualDensity.compact,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     padding: EdgeInsets.zero,
@@ -128,57 +130,67 @@ class CreatorDiscoveryCard extends ConsumerWidget {
               ),
 
             const SizedBox(height: AppSpacing.xs),
-            const Divider(height: 12),
+            const Divider(height: 12, color: AppColors.outlineLight),
 
-            // Bottom stats row
+            // Bottom stats row & View Profile
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (creator.primaryPlatform != null)
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.public,
-                        size: 14,
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        creator.primaryPlatform!.label,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                  Expanded(
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.camera_alt_outlined,
+                          size: 14,
+                          color: AppColors.secondaryGray,
                         ),
-                      ),
-                      if (creator.totalFollowers != null)
-                        Text(
-                          ' • ${_formatFollowers(creator.totalFollowers!)}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurfaceVariant,
+                        const SizedBox(width: 4),
+                        if (creator.totalFollowers != null)
+                          Text(
+                            '${_formatFollowers(creator.totalFollowers!)} followers',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.black,
+                            ),
+                          )
+                        else
+                          const Text(
+                            'Followers unlisted',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.secondaryGray,
+                            ),
                           ),
-                        ),
-                    ],
-                  )
-                else
-                  const Text('Multi-platform', style: TextStyle(fontSize: 12)),
-
-                if (creator.startingRate != null)
-                  Text(
-                    'From ₹${creator.startingRate!.toStringAsFixed(0)}',
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
+                      ],
                     ),
                   )
                 else
-                  const Text(
-                    'Rate on request',
-                    style: TextStyle(fontSize: 12, color: AppColors.muted),
+                  const Text('Instagram', style: TextStyle(fontSize: 12, color: AppColors.secondaryGray)),
+
+                TextButton(
+                  onPressed: onTap,
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    foregroundColor: AppColors.burgundy,
                   ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'View Profile',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 2),
+                      Icon(Icons.arrow_forward_ios, size: 10),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],

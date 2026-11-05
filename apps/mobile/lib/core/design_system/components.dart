@@ -339,13 +339,23 @@ class AppAvatar extends StatelessWidget {
   }
 
   Widget _buildFallback(Color color) {
+    String initials = '?';
+    if (label.trim().isNotEmpty) {
+      final parts = label.trim().split(RegExp(r'\s+'));
+      if (parts.length >= 2) {
+        initials = '${parts[0][0]}${parts[1][0]}'.toUpperCase();
+      } else {
+        initials = parts[0][0].toUpperCase();
+      }
+    }
     return Center(
       child: Text(
-        label.isEmpty ? '?' : label.characters.first.toUpperCase(),
+        initials,
         style: TextStyle(
-          color: color,
+          color: AppColors.burgundy,
           fontWeight: FontWeight.bold,
-          fontSize: radius * 0.8,
+          fontSize: initials.length > 1 ? radius * 0.65 : radius * 0.8,
+          letterSpacing: 0.5,
         ),
       ),
     );
