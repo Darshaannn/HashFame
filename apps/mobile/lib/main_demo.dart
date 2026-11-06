@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,6 +13,19 @@ import 'features/assistant/data/assistant_service_impl.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Diagnostics: Catch any framework errors or unhandled async exceptions
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    debugPrint('[GGs FlutterError] ${details.exceptionAsString()}');
+    debugPrintStack(stackTrace: details.stack);
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    debugPrint('[GGs UncaughtError] $error');
+    debugPrintStack(stackTrace: stack);
+    return true;
+  };
+
+  debugPrint('[GGs Startup] Initializing DemoStore...');
   final store = DemoStore.instance;
 
   const config = AppConfig(

@@ -34,7 +34,9 @@ class LocaleService {
 
   Future<Locale> loadSavedLocale() async {
     try {
-      final code = await _storage.read(key: _kLanguageStorageKey);
+      final code = await _storage
+          .read(key: _kLanguageStorageKey)
+          .timeout(const Duration(milliseconds: 500));
       return AppSupportedLocale.fromCode(code).locale;
     } catch (_) {
       return const Locale('en');
@@ -43,10 +45,12 @@ class LocaleService {
 
   Future<void> saveLocale(Locale locale) async {
     try {
-      await _storage.write(
-        key: _kLanguageStorageKey,
-        value: locale.languageCode,
-      );
+      await _storage
+          .write(
+            key: _kLanguageStorageKey,
+            value: locale.languageCode,
+          )
+          .timeout(const Duration(milliseconds: 500));
     } catch (_) {
       // In-memory fallback if secure storage is unavailable
     }

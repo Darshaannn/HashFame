@@ -67,17 +67,19 @@ class NavigationHistoryManager with ChangeNotifier {
   /// or false if at root and exit confirmation is needed.
   static Future<bool> handleBack(BuildContext context, {String? fallbackPath}) async {
     // 1. If an active modal, dialog or pushed Navigator route can pop, pop it first!
-    final nav = Navigator.maybeOf(context);
-    if (nav != null && nav.canPop()) {
-      nav.pop();
-      return true;
-    }
+    try {
+      final nav = Navigator.maybeOf(context);
+      if (nav != null && nav.canPop()) {
+        nav.pop();
+        return true;
+      }
+    } catch (_) {}
 
     String? currentLoc;
     try {
       currentLoc = GoRouterState.of(context).uri.path;
     } catch (_) {
-      // In standalone widget tests where GoRouter is not set up
+      // In standalone widget tests or contexts outside GoRouter
     }
 
     // 2. If history stack has previous screens, pop and navigate to previous screen
