@@ -142,16 +142,14 @@ class DemoAssistantServiceImpl implements AssistantService {
 
       case AssistantTask.suggestProfileImprovements:
         final hasBio = data['hasBio'] as bool? ?? false;
-        final hasRateCard = data['hasRateCard'] as bool? ?? false;
         final hasLanguages = data['hasLanguages'] as bool? ?? false;
 
         final missing = <String>[];
         if (!hasBio) missing.add('Add an authentic 2-line bio describing your style');
-        if (!hasRateCard) missing.add('Publish a rate card so brands can book you faster');
         if (!hasLanguages) missing.add('Specify languages you create content in');
 
         final suggestion = missing.isEmpty
-            ? 'Your profile contains all core verification fields! Keeping your rate card up to date ensures faster brand selections.'
+            ? 'Your profile contains all core verification fields! Keeping your portfolio and bio up to date ensures faster brand selections.'
             : 'To increase brand shortlist rates, complete these fields:\n• ${missing.join("\n• ")}';
 
         return AssistantResponse(

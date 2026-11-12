@@ -19,7 +19,6 @@ import 'widgets/creator_categories_languages_card.dart';
 import 'widgets/creator_collaborations_list.dart';
 import 'widgets/creator_completion_card.dart';
 import 'widgets/creator_portfolio_grid.dart';
-import 'widgets/creator_rate_card_view.dart';
 import 'widgets/creator_social_accounts_card.dart';
 import 'widgets/creator_verification_card.dart';
 
@@ -106,7 +105,6 @@ class CreatorProfileScreen extends ConsumerWidget {
                       title: 'Profile Optimization Advice',
                       contextData: {
                         'hasBio': profile.bio != null && profile.bio!.isNotEmpty,
-                        'hasRateCard': profile.rateCard.isNotEmpty,
                         'hasLanguages': profile.languages.isNotEmpty,
                       },
                     );
@@ -146,18 +144,6 @@ class CreatorProfileScreen extends ConsumerWidget {
                 : null,
           ),
 
-          CreatorRateCardView(
-            profile: profile,
-            onAddPressed: isOwn
-                ? () => context.push('/profile/edit/rates')
-                : null,
-            onDeleteItemPressed: isOwn
-                ? (id) => ref
-                      .read(creatorControllerProvider.notifier)
-                      .deleteRateItem(id)
-                : null,
-          ),
-
           CreatorPortfolioGrid(
             profile: profile,
             onAddPressed: isOwn
@@ -194,12 +180,6 @@ class CreatorProfileScreen extends ConsumerWidget {
                   subtitle: 'Display name, bio, location, categories',
                   icon: Icons.person_outline,
                   onTap: () => context.push('/profile/edit'),
-                ),
-                GGAccountActionTile(
-                  title: 'Manage Rate Card',
-                  subtitle: 'Deliverable pricing, Reels, YouTube reviews',
-                  icon: Icons.currency_rupee,
-                  onTap: () => context.push('/profile/edit/rates'),
                 ),
                 GGAccountActionTile(
                   title: 'Portfolio & Work Samples',

@@ -36,13 +36,12 @@ abstract class ProfileCompletionCalculator {
   ///
   /// Weights:
   /// - Profile Photo: 10%
-  /// - Bio (>= 20 chars): 10%
+  /// - Bio (>= 20 chars): 15%
   /// - Location (City/State): 10%
-  /// - Categories (at least 1 category selected): 15%
+  /// - Categories (at least 1 category selected): 20%
   /// - Languages (at least 1 language): 10%
   /// - Social Accounts (at least 1 connected/self-reported account): 15%
-  /// - Rate Card (at least 1 rate item defined): 15%
-  /// - Portfolio (at least 1 item added): 10%
+  /// - Portfolio (at least 1 item added): 15%
   /// - Availability (set or confirmed): 5%
   /// Total: 100%
   static ProfileCompletionReport calculate(CreatorProfile profile) {
@@ -68,18 +67,18 @@ abstract class ProfileCompletionCalculator {
       );
     }
 
-    // 2. Bio (10%)
+    // 2. Bio (15%)
     final hasBio = profile.bio != null && profile.bio!.trim().length >= 20;
     completedFields['bio'] = hasBio;
     if (hasBio) {
-      percentage += 10;
+      percentage += 15;
     } else {
       recommendations.add(
         const MissingRecommendation(
           key: 'bio',
           title: 'Add your professional bio',
           description: 'Describe your niche, content style, and what brands you love working with.',
-          weight: 10,
+          weight: 15,
           actionRoute: '/profile/edit',
         ),
       );
@@ -105,11 +104,11 @@ abstract class ProfileCompletionCalculator {
       );
     }
 
-    // 4. Categories (15%)
+    // 4. Categories (20%)
     final hasCategories = profile.primaryCategories.isNotEmpty;
     completedFields['categories'] = hasCategories;
     if (hasCategories) {
-      percentage += 15;
+      percentage += 20;
     } else {
       recommendations.add(
         const MissingRecommendation(
@@ -117,7 +116,7 @@ abstract class ProfileCompletionCalculator {
           title: 'Select your content categories',
           description:
               'Add your primary content domains (e.g., Tech, Fashion, Gaming).',
-          weight: 15,
+          weight: 20,
           actionRoute: '/profile/edit',
         ),
       );
@@ -157,42 +156,24 @@ abstract class ProfileCompletionCalculator {
       );
     }
 
-    // 7. Rate Card (15%)
-    final hasRates = profile.rateCard.where((r) => r.isActive).isNotEmpty;
-    completedFields['rateCard'] = hasRates;
-    if (hasRates) {
-      percentage += 15;
-    } else {
-      recommendations.add(
-        const MissingRecommendation(
-          key: 'rateCard',
-          title: 'Set up your rate card',
-          description:
-              'List standard prices for Reels, Stories, or dedicated Videos.',
-          weight: 15,
-          actionRoute: '/profile/edit/rates',
-        ),
-      );
-    }
-
-    // 8. Portfolio (10%)
+    // 7. Portfolio (15%)
     final hasPortfolio = profile.portfolio.isNotEmpty;
     completedFields['portfolio'] = hasPortfolio;
     if (hasPortfolio) {
-      percentage += 10;
+      percentage += 15;
     } else {
       recommendations.add(
         const MissingRecommendation(
           key: 'portfolio',
           title: 'Add portfolio work',
           description: 'Showcase top-performing content, viral reels, or previous brand posts.',
-          weight: 10,
+          weight: 15,
           actionRoute: '/profile/edit/portfolio',
         ),
       );
     }
 
-    // 9. Availability (5%)
+    // 8. Availability (5%)
     // Availability status default is open, so if profile exists it is 5%
     completedFields['availability'] = true;
     percentage += 5;

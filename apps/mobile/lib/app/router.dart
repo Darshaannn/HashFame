@@ -20,7 +20,6 @@ import '../features/collaboration/presentation/collaboration_workspace_screen.da
 import '../features/creator/presentation/edit/edit_collaborations_screen.dart';
 import '../features/creator/presentation/edit/edit_creator_profile_screen.dart';
 import '../features/creator/presentation/edit/edit_portfolio_screen.dart';
-import '../features/creator/presentation/edit/edit_rate_card_screen.dart';
 import '../features/creator/presentation/edit/edit_socials_screen.dart';
 import '../features/creator/presentation/home/creator_home_screen.dart';
 import '../features/creator/presentation/onboarding/creator_onboarding_screen.dart';
@@ -197,7 +196,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/profile/edit/rates',
         name: 'profile_edit_rates',
-        builder: (_, state) => const EditRateCardScreen(),
+        redirect: (_, state) => '/profile',
       ),
       GoRoute(
         path: '/profile/edit/portfolio',

@@ -12,7 +12,7 @@ class CreatorQuickActionsGrid extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Column(
         children: [
-          // Row 1 (5 items)
+          // Row 1 (4 items)
           Row(
             children: [
               Expanded(
@@ -44,14 +44,6 @@ class CreatorQuickActionsGrid extends StatelessWidget {
                   label: 'Edit\nProfile',
                   icon: Icons.edit_outlined,
                   onTap: () => context.push('/profile/edit'),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _QuickActionTile(
-                  label: 'Rate\nCard',
-                  icon: Icons.payments_outlined,
-                  onTap: () => context.push('/profile/edit/rates'),
                 ),
               ),
             ],

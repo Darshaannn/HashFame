@@ -185,8 +185,8 @@ async function processTask(params: {
 
     case "explain_filters": {
       return {
-        suggestion: "Filters help narrow down talent by verified engagement rate, pricing budget, and content category. The 'Verified Only' toggle ensures creators with authenticated platform identity.",
-        rationale: "Using Category and Rate filters together yields the best shortlist match.",
+        suggestion: "Filters help narrow down talent by verified location, platform, and content category. The 'Verified Only' toggle ensures creators with authenticated platform identity.",
+        rationale: "Using Category and Location filters together yields the best shortlist match.",
       };
     }
 
@@ -203,16 +203,15 @@ async function processTask(params: {
     case "suggest_profile_improvements": {
       const missingFields: string[] = [];
       if (!contextData.hasBio) missingFields.push("Add a detailed 2-3 line bio");
-      if (!contextData.hasRateCard) missingFields.push("Publish a transparent rate card");
       if (!contextData.hasLanguages) missingFields.push("Specify creator languages");
 
       const suggestionText = missingFields.length > 0
         ? `To improve profile discovery by brands, we recommend: \n• ${missingFields.join("\n• ")}`
-        : "Your profile contains all core verification fields! Keeping your rate card up to date ensures faster brand selections.";
+        : "Your profile contains all core verification fields! Keeping your portfolio and biography up to date ensures faster brand selections.";
 
       return {
         suggestion: suggestionText,
-        rationale: "Profiles with complete rate cards and biographies get 3x higher shortlist rates.",
+        rationale: "Profiles with complete portfolios and biographies get 3x higher shortlist rates.",
       };
     }
 

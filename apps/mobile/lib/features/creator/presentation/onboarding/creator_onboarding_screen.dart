@@ -11,7 +11,6 @@ import 'package:ggs_mobile/features/account/domain/account.dart';
 import 'package:ggs_mobile/features/account/presentation/account_controller.dart';
 import 'package:ggs_mobile/features/auth/presentation/session_controller.dart';
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
-import 'package:ggs_mobile/features/creator/domain/rate_card.dart';
 import 'package:ggs_mobile/features/creator/domain/social_account.dart';
 
 import '../../../profile_common/presentation/widgets/category_multi_select_picker.dart';
@@ -38,8 +37,6 @@ class _CreatorOnboardingScreenState
   final _selectedLanguageCodes = <String>{'en', 'hi'};
   final _socialHandleController = TextEditingController();
   SocialPlatform _socialPlatform = SocialPlatform.instagram;
-  DeliverableType _rateDeliverable = DeliverableType.instagramReel;
-  final _ratePriceController = TextEditingController(text: '15000');
   AvailabilityStatus _availabilityStatus = AvailabilityStatus.open;
 
   bool _initialized = false;
@@ -52,7 +49,6 @@ class _CreatorOnboardingScreenState
     _cityController.dispose();
     _stateController.dispose();
     _socialHandleController.dispose();
-    _ratePriceController.dispose();
     super.dispose();
   }
 
@@ -80,7 +76,6 @@ class _CreatorOnboardingScreenState
       'Categories',
       'Location & Languages',
       'Social Platforms',
-      'Rate Card',
       'Availability',
       'Review & Launch',
     ];
@@ -221,35 +216,6 @@ class _CreatorOnboardingScreenState
             enabled: !busy,
           ),
         ] else if (_currentStep == 5) ...[
-          const Text(
-            'Set an initial starting rate for your primary deliverable.',
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Wrap(
-            spacing: 8,
-            children:
-                [
-                  DeliverableType.instagramReel,
-                  DeliverableType.youtubeVideo,
-                  DeliverableType.ugcVideo,
-                ].map((t) {
-                  return AppChip(
-                    label: t.label,
-                    selected: _rateDeliverable == t,
-                    onSelected: busy
-                        ? null
-                        : (_) => setState(() => _rateDeliverable = t),
-                  );
-                }).toList(),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          AppTextField(
-            label: 'Starting Price (INR ₹)',
-            controller: _ratePriceController,
-            keyboardType: TextInputType.number,
-            enabled: !busy,
-          ),
-        ] else if (_currentStep == 6) ...[
           const Text('What is your current availability for new brand deals?'),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
@@ -264,7 +230,7 @@ class _CreatorOnboardingScreenState
               );
             }).toList(),
           ),
-        ] else if (_currentStep == 7) ...[
+        ] else if (_currentStep == 6) ...[
           const Text('Almost done! Review your creator profile summary.'),
           const SizedBox(height: AppSpacing.sm),
           AppCard(
@@ -284,10 +250,6 @@ class _CreatorOnboardingScreenState
                 if (_socialHandleController.text.isNotEmpty)
                   Text(
                     'Primary Social: ${_socialPlatform.label} (@${_socialHandleController.text})',
-                  ),
-                if (_ratePriceController.text.isNotEmpty)
-                  Text(
-                    'Starting Rate: ₹${_ratePriceController.text} (${_rateDeliverable.label})',
                   ),
                 Text('Availability: ${_availabilityStatus.label}'),
               ],
@@ -362,19 +324,6 @@ class _CreatorOnboardingScreenState
                           '@',
                           '',
                         ),
-                      ),
-                    );
-                  }
-                  final price = double.tryParse(
-                    _ratePriceController.text.trim(),
-                  );
-                  if (price != null && price > 0) {
-                    await creatorNotifier.addRateItem(
-                      RateItem(
-                        id: '',
-                        userId: '',
-                        deliverableType: _rateDeliverable,
-                        priceAmount: price,
                       ),
                     );
                   }

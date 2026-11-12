@@ -114,7 +114,11 @@ void main() {
 
       // ── Logout ─────────────────────────────────────────────────────────────
       final signOutButton = find.text('Sign Out');
-      await tester.scrollUntilVisible(signOutButton, 50);
+      await tester.scrollUntilVisible(
+        signOutButton,
+        50,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.ensureVisible(signOutButton);
       await tester.pumpAndSettle();
       await tester.tap(signOutButton);

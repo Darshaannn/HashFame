@@ -128,13 +128,6 @@ class CreatorComparisonScreen extends ConsumerWidget {
                             : 'Unavailable',
                       ),
                       _buildRow(
-                        'Starting Rate',
-                        state.creators,
-                        (c) => c.startingRate != null
-                            ? '₹${c.startingRate!.toStringAsFixed(0)}'
-                            : 'Unavailable',
-                      ),
-                      _buildRow(
                         'Availability',
                         state.creators,
                         (c) => c.availabilityStatus.label,

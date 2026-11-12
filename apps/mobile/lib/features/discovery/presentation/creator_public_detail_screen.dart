@@ -15,7 +15,6 @@ import '../../creator/presentation/profile/widgets/creator_categories_languages_
 import '../../creator/presentation/profile/widgets/creator_collaborations_list.dart';
 import '../../creator/presentation/profile/widgets/creator_header_card.dart';
 import '../../creator/presentation/profile/widgets/creator_portfolio_grid.dart';
-import '../../creator/presentation/profile/widgets/creator_rate_card_view.dart';
 import '../../creator/presentation/profile/widgets/creator_social_accounts_card.dart';
 import '../../creator/presentation/profile/widgets/creator_verification_card.dart';
 import '../../shortlist/presentation/widgets/add_to_shortlist_dialog.dart';
@@ -144,10 +143,6 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
                     const SizedBox(height: AppSpacing.md),
                     CreatorSocialAccountsCard(profile: profile),
                     const SizedBox(height: AppSpacing.md),
-                    if (profile.rateCard.isNotEmpty) ...[
-                      CreatorRateCardView(profile: profile),
-                      const SizedBox(height: AppSpacing.md),
-                    ],
                     if (profile.portfolio.isNotEmpty) ...[
                       CreatorPortfolioGrid(profile: profile),
                       const SizedBox(height: AppSpacing.md),

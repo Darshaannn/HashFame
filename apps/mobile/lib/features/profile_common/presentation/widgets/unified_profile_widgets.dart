@@ -393,7 +393,7 @@ class GGDemoControlsCard extends ConsumerWidget {
                 leading: const Icon(Icons.person, color: AppColors.primary),
                 title: const Text('Creator (Aisha Mehta)'),
                 subtitle: const Text(
-                  'Opportunities, applications, rate card, portfolio',
+                  'Opportunities, applications, portfolio',
                 ),
                 onTap: () {
                   Navigator.pop(ctx);

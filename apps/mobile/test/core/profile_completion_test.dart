@@ -25,7 +25,7 @@ void main() {
       },
     );
 
-    test('reports all 8 missing field recommendations for empty profile', () {
+    test('reports all 7 missing field recommendations for empty profile (no rate card requirement)', () {
       const profile = CreatorProfile(userId: 'test-user', displayName: 'Test');
       final result = ProfileCompletionCalculator.calculate(profile);
 
@@ -39,25 +39,25 @@ void main() {
           'categories',
           'languages',
           'socialAccounts',
-          'rateCard',
           'portfolio',
         ]),
       );
-      expect(result.recommendations.length, equals(8));
+      expect(missingKeys.contains('rateCard'), isFalse);
+      expect(result.recommendations.length, equals(7));
     });
 
     // ─── Full profile ──────────────────────────────────────────────────────────
 
-    test('scores 100% for a fully populated profile', () {
+    test('scores 100% for a fully populated profile without rate card requirement', () {
       final profile = CreatorProfile(
         userId: 'test-user',
         displayName: 'Aarav Sharma',
         avatarPath: 'avatars/aarav.jpg', // 10
-        bio: 'Tech reviewer and digital creator based in Bengaluru.', // 10
+        bio: 'Tech reviewer and digital creator based in Bengaluru.', // 15
         location: const LocationData(city: 'Bengaluru', state: 'KA'), // 10
         primaryCategories: const [
           Category(id: 'cat-1', name: 'Technology', slug: 'tech'),
-        ], // 15
+        ], // 20
         languages: const [
           Language(code: 'en', name: 'English', nativeName: 'English'),
         ], // 10
@@ -69,21 +69,13 @@ void main() {
             handle: 'techguy',
           ),
         ], // 15
-        rateCard: const [
-          RateItem(
-            id: 'rate-1',
-            userId: 'test-user',
-            deliverableType: DeliverableType.instagramReel,
-            priceAmount: 50000,
-          ),
-        ], // 15
         portfolio: const [
           PortfolioItem(
             id: 'port-1',
             userId: 'test-user',
             title: 'Top 10 Gadgets 2026',
           ),
-        ], // 10
+        ], // 15
         // availability is always 5
       );
 
@@ -97,26 +89,25 @@ void main() {
       expect(result.completedFields['categories'], isTrue);
       expect(result.completedFields['languages'], isTrue);
       expect(result.completedFields['socialAccounts'], isTrue);
-      expect(result.completedFields['rateCard'], isTrue);
       expect(result.completedFields['portfolio'], isTrue);
       expect(result.completedFields['availability'], isTrue);
     });
 
     // ─── Partial profiles ──────────────────────────────────────────────────────
 
-    test('partial profile with avatar+bio+location scores 35%', () {
+    test('partial profile with avatar+bio+location scores 40%', () {
       final profile = CreatorProfile(
         userId: 'test-user',
         displayName: 'Test',
         avatarPath: 'avatars/test.jpg', // 10
-        bio: 'Gaming streamer and content creator since 2020.', // 10
+        bio: 'Gaming streamer and content creator since 2020.', // 15
         location: const LocationData(city: 'Mumbai'), // 10
         // availability always: 5
       );
 
       final result = ProfileCompletionCalculator.calculate(profile);
 
-      expect(result.percentage, equals(35));
+      expect(result.percentage, equals(40));
       final missingKeys = result.recommendations.map((r) => r.key).toSet();
       expect(
         missingKeys,
@@ -124,10 +115,10 @@ void main() {
           'categories',
           'languages',
           'socialAccounts',
-          'rateCard',
           'portfolio',
         ]),
       );
+      expect(missingKeys.contains('rateCard'), isFalse);
     });
 
     test('bio shorter than 20 chars is not counted', () {
@@ -143,8 +134,12 @@ void main() {
       expect(result.percentage, equals(5));
     });
 
-    test('inactive rate items do not satisfy rateCard completion', () {
-      final profile = CreatorProfile(
+    test('rateCard presence does not penalize or alter profile completion', () {
+      const profileNoRates = CreatorProfile(
+        userId: 'test-user',
+        displayName: 'Test',
+      );
+      final profileWithRates = CreatorProfile(
         userId: 'test-user',
         displayName: 'Test',
         rateCard: const [
@@ -153,13 +148,16 @@ void main() {
             userId: 'test-user',
             deliverableType: DeliverableType.instagramReel,
             priceAmount: 10000,
-            isActive: false, // inactive — should not count
+            isActive: true,
           ),
         ],
       );
-      final result = ProfileCompletionCalculator.calculate(profile);
 
-      expect(result.completedFields['rateCard'], isFalse);
+      final res1 = ProfileCompletionCalculator.calculate(profileNoRates);
+      final res2 = ProfileCompletionCalculator.calculate(profileWithRates);
+
+      expect(res1.percentage, equals(res2.percentage));
+      expect(res1.recommendations.length, equals(res2.recommendations.length));
     });
 
     // ─── Recommendation weights ────────────────────────────────────────────────

@@ -23,8 +23,6 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
   final _stateController = TextEditingController();
   final _minFollowersController = TextEditingController();
   final _maxFollowersController = TextEditingController();
-  final _minRateController = TextEditingController();
-  final _maxRateController = TextEditingController();
 
   @override
   void initState() {
@@ -38,12 +36,6 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
     if (_filters.maxFollowers != null) {
       _maxFollowersController.text = _filters.maxFollowers.toString();
     }
-    if (_filters.minRate != null) {
-      _minRateController.text = _filters.minRate!.toStringAsFixed(0);
-    }
-    if (_filters.maxRate != null) {
-      _maxRateController.text = _filters.maxRate!.toStringAsFixed(0);
-    }
   }
 
   @override
@@ -52,8 +44,6 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
     _stateController.dispose();
     _minFollowersController.dispose();
     _maxFollowersController.dispose();
-    _minRateController.dispose();
-    _maxRateController.dispose();
     super.dispose();
   }
 
@@ -73,8 +63,6 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
                 _stateController.clear();
                 _minFollowersController.clear();
                 _maxFollowersController.clear();
-                _minRateController.clear();
-                _maxRateController.clear();
               });
             },
             child: const Text('Clear All'),
@@ -193,36 +181,6 @@ class _DiscoverFilterSheetState extends ConsumerState<DiscoverFilterSheet> {
                     controller: _stateController,
                     onChanged: (v) => _filters = _filters.copyWith(
                       state: v.trim().isNotEmpty ? v.trim() : null,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
-
-            // Rates Range
-            Text('Starting Rate (INR ₹)', style: AppTypography.heading),
-            const SizedBox(height: AppSpacing.xs),
-            Row(
-              children: [
-                Expanded(
-                  child: AppTextField(
-                    label: 'Min Price',
-                    controller: _minRateController,
-                    keyboardType: TextInputType.number,
-                    onChanged: (v) => _filters = _filters.copyWith(
-                      minRate: double.tryParse(v.trim()),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: AppTextField(
-                    label: 'Max Price',
-                    controller: _maxRateController,
-                    keyboardType: TextInputType.number,
-                    onChanged: (v) => _filters = _filters.copyWith(
-                      maxRate: double.tryParse(v.trim()),
                     ),
                   ),
                 ),
