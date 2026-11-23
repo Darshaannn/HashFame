@@ -21,6 +21,7 @@ import 'widgets/creator_completion_card.dart';
 import 'widgets/creator_portfolio_grid.dart';
 import 'widgets/creator_social_accounts_card.dart';
 import 'widgets/creator_verification_card.dart';
+import '../../../instagram/presentation/widgets/instagram_connection_card.dart';
 
 class CreatorProfileScreen extends ConsumerWidget {
   const CreatorProfileScreen({super.key, this.userId});
@@ -87,6 +88,10 @@ class CreatorProfileScreen extends ConsumerWidget {
           ),
 
           if (isOwn) ...[
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 4),
+              child: InstagramConnectionCard(),
+            ),
             CreatorCompletionCard(
               profile: profile,
               onRecommendationTap: (rec) => context.push(rec.actionRoute),

@@ -9,6 +9,7 @@ import 'core/telemetry/analytics_service.dart';
 import 'demo/demo_repositories.dart';
 import 'demo/demo_store.dart';
 import 'features/assistant/data/assistant_service_impl.dart';
+import 'features/instagram/data/demo_instagram_repository.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,6 +70,7 @@ void main() {
         collaborationRepositoryProvider.overrideWithValue(collabRepo),
         activityRepositoryProvider.overrideWithValue(activityRepo),
         contactOutreachRepositoryProvider.overrideWithValue(contactRepo),
+        instagramRepositoryProvider.overrideWithValue(DemoInstagramRepository()),
         assistantServiceProvider.overrideWithValue(const DemoAssistantServiceImpl()),
       ],
       child: const DemoAppRoot(),

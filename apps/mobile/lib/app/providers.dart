@@ -17,6 +17,7 @@ import '../features/activity/domain/activity_repository.dart';
 import '../features/assistant/domain/assistant_service.dart';
 import '../features/collaboration/domain/collaboration_repository.dart';
 import '../features/contact/domain/contact_outreach_repository.dart';
+import '../features/instagram/domain/instagram_repository.dart';
 
 final configProvider = Provider<AppConfig>(
   (ref) => throw StateError('Bootstrap must supply configuration'),
@@ -59,6 +60,9 @@ final activityRepositoryProvider = Provider<ActivityRepository>(
 );
 final contactOutreachRepositoryProvider = Provider<ContactOutreachRepository>(
   (ref) => throw StateError('Bootstrap must supply contact outreach repository'),
+);
+final instagramRepositoryProvider = Provider<InstagramRepository>(
+  (ref) => throw StateError('Bootstrap must supply instagram repository'),
 );
 final assistantServiceProvider = Provider<AssistantService>(
   (ref) => throw StateError('Bootstrap must supply assistant service'),
