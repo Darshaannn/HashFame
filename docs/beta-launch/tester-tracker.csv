@@ -1,0 +1,5 @@
+tester_id,name,role,organization_or_handle,city,niche,email,phone,status,invite_date,onboarded_date,searches_conducted,shortlists_created,outreach_sent,quotes_submitted,reported_friction,notes
+CR-001,Priya Sharma,Creator,@priyastyle,Mumbai,Fashion & Beauty,priya.sharma@example.com,+919820011223,Onboarded,2026-11-25,2026-11-26,0,0,0,1,None,Connected Instagram successfully
+CR-002,Rohan Mehta,Creator,@rohanfitness,Delhi,Fitness & Wellness,rohan.mehta@example.com,+919810022334,Invited,2026-11-25,,0,0,0,0,None,Follow-up on WhatsApp scheduled
+BR-001,Kavita Nair,Brand,Veda Skincare,Mumbai,D2C Cosmetics,kavita@vedaskincare.in,+919821133445,Onboarded,2026-11-25,2026-11-26,12,3,4,0,Wanted PDF export for shortlists,Very active tester
+AG-001,Amit Verma,Agency,Pulse Media,Delhi,Influencer Marketing,amit@pulsemedia.in,+919811144556,Onboarded,2026-11-25,2026-11-27,24,6,8,0,None,Wants multi-user agency login
