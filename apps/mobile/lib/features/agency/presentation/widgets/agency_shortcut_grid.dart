@@ -60,9 +60,9 @@ class AgencyShortcutGrid extends StatelessWidget {
               Expanded(
                 child: _buildTile(
                   context,
-                  label: 'Settings',
-                  icon: Icons.settings_outlined,
-                  onTap: () => context.push('/settings'),
+                  label: 'Outreach &\nQuotations',
+                  icon: Icons.send_rounded,
+                  onTap: () => context.push('/outreach'),
                 ),
               ),
               const SizedBox(width: 8),

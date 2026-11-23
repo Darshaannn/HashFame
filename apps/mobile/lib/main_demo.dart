@@ -49,6 +49,7 @@ void main() {
   final campaignRepo = DemoCampaignRepository(store);
   final collabRepo = DemoCollaborationRepository(store);
   final activityRepo = DemoActivityRepository(store);
+  final contactRepo = DemoContactOutreachRepository(store);
 
   runApp(
     ProviderScope(
@@ -67,6 +68,7 @@ void main() {
         campaignRepositoryProvider.overrideWithValue(campaignRepo),
         collaborationRepositoryProvider.overrideWithValue(collabRepo),
         activityRepositoryProvider.overrideWithValue(activityRepo),
+        contactOutreachRepositoryProvider.overrideWithValue(contactRepo),
         assistantServiceProvider.overrideWithValue(const DemoAssistantServiceImpl()),
       ],
       child: const DemoAppRoot(),

@@ -71,17 +71,17 @@ class CreatorQuickActionsGrid extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: _QuickActionTile(
-                  label: 'Activity /\nNotifications',
-                  icon: Icons.notifications_none_outlined,
-                  onTap: () => context.push('/activity'),
+                  label: 'Contact\nRequests',
+                  icon: Icons.inbox_outlined,
+                  onTap: () => context.push('/creator/contact-requests'),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: _QuickActionTile(
-                  label: 'Settings',
-                  icon: Icons.settings_outlined,
-                  onTap: () => context.push('/settings'),
+                  label: 'Privacy\nSettings',
+                  icon: Icons.shield_outlined,
+                  onTap: () => context.push('/creator/contact-preferences'),
                 ),
               ),
             ],

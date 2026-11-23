@@ -362,6 +362,36 @@ class OutreachConversation {
   final String? creatorAvatarPath;
   final int unreadCount;
 
+  OutreachConversation copyWith({
+    String? id,
+    String? requestId,
+    String? organizationId,
+    String? brandUserId,
+    String? creatorUserId,
+    String? subject,
+    DateTime? lastMessageAt,
+    DateTime? createdAt,
+    String? creatorName,
+    String? brandName,
+    String? creatorAvatarPath,
+    int? unreadCount,
+  }) {
+    return OutreachConversation(
+      id: id ?? this.id,
+      requestId: requestId ?? this.requestId,
+      organizationId: organizationId ?? this.organizationId,
+      brandUserId: brandUserId ?? this.brandUserId,
+      creatorUserId: creatorUserId ?? this.creatorUserId,
+      subject: subject ?? this.subject,
+      lastMessageAt: lastMessageAt ?? this.lastMessageAt,
+      createdAt: createdAt ?? this.createdAt,
+      creatorName: creatorName ?? this.creatorName,
+      brandName: brandName ?? this.brandName,
+      creatorAvatarPath: creatorAvatarPath ?? this.creatorAvatarPath,
+      unreadCount: unreadCount ?? this.unreadCount,
+    );
+  }
+
   factory OutreachConversation.fromJson(Map<String, dynamic> json) {
     return OutreachConversation(
       id: json['id'] as String? ?? '',

@@ -18,6 +18,7 @@ import '../../creator/presentation/profile/widgets/creator_portfolio_grid.dart';
 import '../../creator/presentation/profile/widgets/creator_social_accounts_card.dart';
 import '../../creator/presentation/profile/widgets/creator_verification_card.dart';
 import '../../shortlist/presentation/widgets/add_to_shortlist_dialog.dart';
+import '../../contact/presentation/widgets/contact_creator_bottom_sheet.dart';
 
 class CreatorPublicDetailScreen extends ConsumerWidget {
   const CreatorPublicDetailScreen({super.key, required this.creatorId});
@@ -161,7 +162,20 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
 
                   const SizedBox(height: AppSpacing.xl),
                   AppButton(
-                    label: 'Add to Shortlist',
+                    label: 'Contact Creator',
+                    onPressed: () {
+                      ContactCreatorBottomSheet.show(
+                        context,
+                        creatorId: profile.userId,
+                        displayName: profile.displayName,
+                        avatarPath: profile.avatarPath,
+                        isRegistered: !isDirectoryListing,
+                        instagramHandle: igAccount?.handle,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  OutlinedButton(
                     onPressed: () {
                       showDialog(
                         context: context,
@@ -171,6 +185,7 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
                         ),
                       );
                     },
+                    child: const Text('Add to Shortlist'),
                   ),
                 ],
               ),

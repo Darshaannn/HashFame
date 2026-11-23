@@ -21,7 +21,18 @@ class HomeShortcutsSection extends StatelessWidget {
               onTap: () => context.push('/shortlists'),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
+
+          // Outreach Shortcut
+          Expanded(
+            child: _ShortcutCard(
+              title: 'Outreach',
+              subtitle: 'Proposals & Quotes',
+              icon: Icons.send_rounded,
+              onTap: () => context.push('/outreach'),
+            ),
+          ),
+          const SizedBox(width: 8),
 
           // Profile Shortcut
           Expanded(

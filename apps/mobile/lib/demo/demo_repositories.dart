@@ -32,6 +32,8 @@ import 'package:ggs_mobile/features/shortlist/domain/shortlist_member.dart';
 import 'package:ggs_mobile/features/shortlist/domain/shortlist_repository.dart';
 import 'package:ggs_mobile/features/talent_manager/domain/talent_manager_profile.dart';
 import 'package:ggs_mobile/features/talent_manager/domain/talent_manager_repository.dart';
+import 'package:ggs_mobile/features/contact/domain/contact_models.dart';
+import 'package:ggs_mobile/features/contact/domain/contact_outreach_repository.dart';
 
 import 'demo_store.dart';
 
@@ -1586,5 +1588,381 @@ class DemoActivityRepository implements ActivityRepository {
         break;
       }
     }
+  }
+}
+
+// ─── Demo Contact & Outreach Repository ───────────────────────────────────
+
+class DemoContactOutreachRepository implements ContactOutreachRepository {
+  DemoContactOutreachRepository(this.store);
+  final DemoStore store;
+
+  @override
+  Future<CreatorContactPreferences> getCreatorContactPreferences(String creatorId) async {
+    return store.contactPreferences[creatorId] ??
+        CreatorContactPreferences(
+          creatorId: creatorId,
+          allowCollaborationRequests: true,
+          allowBusinessEmail: false,
+          allowPhone: false,
+          allowWhatsapp: false,
+          preferredContactMethod: OutreachContactMethod.inApp,
+        );
+  }
+
+  @override
+  Future<void> updateCreatorContactPreferences(CreatorContactPreferences preferences) async {
+    store.contactPreferences[preferences.creatorId] = preferences;
+  }
+
+  @override
+  Future<CreatorContactRequest> sendContactRequest({
+    required String senderUserId,
+    String? senderOrganizationId,
+    required String senderOrganizationName,
+    String? recipientCreatorId,
+    String? recipientDirectoryId,
+    required String recipientDisplayName,
+    String? recipientAvatarPath,
+    required bool isRegisteredCreator,
+    required ContactRequestType requestType,
+    String? campaignName,
+    required String collaborationRequirement,
+    List<String> deliverables = const [],
+    String? expectedTimeline,
+    String? personalMessage,
+    OutreachContactMethod contactMethod = OutreachContactMethod.inApp,
+  }) async {
+    final id = 'req_${DateTime.now().millisecondsSinceEpoch}';
+    final request = CreatorContactRequest(
+      id: id,
+      senderUserId: senderUserId,
+      senderOrganizationId: senderOrganizationId,
+      senderOrganizationName: senderOrganizationName,
+      recipientCreatorId: recipientCreatorId,
+      recipientDirectoryId: recipientDirectoryId,
+      recipientDisplayName: recipientDisplayName,
+      recipientAvatarPath: recipientAvatarPath,
+      isRegisteredCreator: isRegisteredCreator,
+      requestType: requestType,
+      campaignName: campaignName,
+      collaborationRequirement: collaborationRequirement,
+      deliverables: deliverables,
+      expectedTimeline: expectedTimeline,
+      personalMessage: personalMessage,
+      status: ContactRequestStatus.pending,
+      contactMethod: contactMethod,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+
+    store.contactRequests[id] = request;
+
+    if (recipientCreatorId != null) {
+      final acts = store.userActivities.putIfAbsent(recipientCreatorId, () => []);
+      acts.insert(
+        0,
+        ActivityEvent(
+          id: 'act_${DateTime.now().millisecondsSinceEpoch}',
+          userId: recipientCreatorId,
+          title: 'New Collaboration Request',
+          subtitle: '$senderOrganizationName sent you a proposal for "${campaignName ?? 'Collaboration'}"',
+          activityType: 'contact_request_received',
+          route: '/creator/contact-requests',
+          createdAt: DateTime.now(),
+        ),
+      );
+    }
+
+    return request;
+  }
+
+  @override
+  Future<CreatorContactRequest> logExternalOutreach({
+    required String senderUserId,
+    String? senderOrganizationId,
+    required String senderOrganizationName,
+    String? recipientDirectoryId,
+    String? recipientCreatorId,
+    required String recipientDisplayName,
+    String? recipientAvatarPath,
+    required OutreachContactMethod contactMethod,
+    ExternalOutreachStage stage = ExternalOutreachStage.channelOpened,
+    String? notes,
+  }) async {
+    final id = 'req_${DateTime.now().millisecondsSinceEpoch}';
+    final req = CreatorContactRequest(
+      id: id,
+      senderUserId: senderUserId,
+      senderOrganizationId: senderOrganizationId,
+      senderOrganizationName: senderOrganizationName,
+      recipientDirectoryId: recipientDirectoryId,
+      recipientCreatorId: recipientCreatorId,
+      recipientDisplayName: recipientDisplayName,
+      recipientAvatarPath: recipientAvatarPath,
+      isRegisteredCreator: recipientCreatorId != null,
+      requestType: ContactRequestType.brandCollaboration,
+      collaborationRequirement: notes ?? 'External outreach initiated via ${contactMethod.name}',
+      status: ContactRequestStatus.pending,
+      contactMethod: contactMethod,
+      externalStage: stage,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+    store.contactRequests[id] = req;
+    return req;
+  }
+
+  @override
+  Future<CreatorContactRequest> updateExternalOutreachStage({
+    required String requestId,
+    required ExternalOutreachStage stage,
+  }) async {
+    final req = store.contactRequests[requestId];
+    if (req == null) throw Exception('Request not found');
+    final updated = req.copyWith(externalStage: stage, updatedAt: DateTime.now());
+    store.contactRequests[requestId] = updated;
+    return updated;
+  }
+
+  @override
+  Future<CreatorContactRequest> acceptContactRequest({
+    required String requestId,
+    required String creatorUserId,
+  }) async {
+    final req = store.contactRequests[requestId];
+    if (req == null) throw Exception('Request not found');
+
+    var convId = req.conversationId;
+    if (convId == null) {
+      convId = 'conv_${DateTime.now().millisecondsSinceEpoch}';
+      final conv = OutreachConversation(
+        id: convId,
+        requestId: requestId,
+        organizationId: req.senderOrganizationId,
+        brandUserId: req.senderUserId,
+        creatorUserId: req.recipientCreatorId ?? creatorUserId,
+        subject: req.campaignName ?? 'Outreach: ${req.senderOrganizationName}',
+        lastMessageAt: DateTime.now(),
+        createdAt: DateTime.now(),
+      );
+      store.outreachConversations[convId] = conv;
+      store.outreachMessages[convId] = [
+        OutreachMessage(
+          id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+          conversationId: convId,
+          senderId: creatorUserId,
+          senderName: req.recipientDisplayName,
+          content: 'Hello! I have accepted your request. Let us discuss the details.',
+          createdAt: DateTime.now(),
+        ),
+      ];
+    }
+
+    final updated = req.copyWith(
+      status: ContactRequestStatus.accepted,
+      conversationId: convId,
+      updatedAt: DateTime.now(),
+    );
+    store.contactRequests[requestId] = updated;
+
+    // Notify sender
+    final senderActs = store.userActivities.putIfAbsent(req.senderUserId, () => []);
+    senderActs.insert(
+      0,
+      ActivityEvent(
+        id: 'act_${DateTime.now().millisecondsSinceEpoch}',
+        userId: req.senderUserId,
+        title: 'Request Accepted! 🎉',
+        subtitle: '${req.recipientDisplayName} accepted your contact request.',
+        activityType: 'contact_request_accepted',
+        route: '/outreach',
+        createdAt: DateTime.now(),
+      ),
+    );
+
+    return updated;
+  }
+
+  @override
+  Future<CreatorContactRequest> declineContactRequest({
+    required String requestId,
+    String? reason,
+  }) async {
+    final req = store.contactRequests[requestId];
+    if (req == null) throw Exception('Request not found');
+
+    final updated = req.copyWith(
+      status: ContactRequestStatus.declined,
+      declineReason: reason,
+      updatedAt: DateTime.now(),
+    );
+    store.contactRequests[requestId] = updated;
+    return updated;
+  }
+
+  @override
+  Future<CreatorContactRequest> cancelContactRequest({
+    required String requestId,
+    String? reason,
+  }) async {
+    final req = store.contactRequests[requestId];
+    if (req == null) throw Exception('Request not found');
+
+    final updated = req.copyWith(
+      status: ContactRequestStatus.cancelled,
+      cancellationReason: reason,
+      updatedAt: DateTime.now(),
+    );
+    store.contactRequests[requestId] = updated;
+    return updated;
+  }
+
+  @override
+  Future<List<CreatorContactRequest>> listSentOutreach({
+    required String userId,
+    String? organizationId,
+  }) async {
+    return store.contactRequests.values.where((r) {
+      if (r.senderUserId == userId) return true;
+      if (organizationId != null && r.senderOrganizationId == organizationId) return true;
+      return false;
+    }).toList()
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
+
+  @override
+  Future<List<CreatorContactRequest>> listCreatorIncomingRequests({
+    required String creatorId,
+  }) async {
+    return store.contactRequests.values
+        .where((r) => r.recipientCreatorId == creatorId)
+        .toList()
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
+
+  @override
+  Future<PrivateQuotation> submitPrivateQuotation({
+    required String requestId,
+    required String creatorId,
+    required double proposedAmount,
+    String currency = 'INR',
+    required String deliverableDescription,
+    String? usageRights,
+    String? timeline,
+    String? notes,
+  }) async {
+    final req = store.contactRequests[requestId];
+    if (req == null) throw Exception('Request not found');
+
+    final quote = PrivateQuotation(
+      id: 'quote_${DateTime.now().millisecondsSinceEpoch}',
+      requestId: requestId,
+      creatorId: creatorId,
+      proposedAmount: proposedAmount,
+      currency: currency,
+      deliverableDescription: deliverableDescription,
+      usageRights: usageRights,
+      timeline: timeline,
+      notes: notes,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+
+    store.privateQuotations[requestId] = quote;
+
+    final senderActs = store.userActivities.putIfAbsent(req.senderUserId, () => []);
+    senderActs.insert(
+      0,
+      ActivityEvent(
+        id: 'act_${DateTime.now().millisecondsSinceEpoch}',
+        userId: req.senderUserId,
+        title: 'New Quotation Received',
+        subtitle: '${req.recipientDisplayName} sent a private quotation for ₹${proposedAmount.toStringAsFixed(0)}',
+        activityType: 'quotation_received',
+        route: '/outreach',
+        createdAt: DateTime.now(),
+      ),
+    );
+
+    return quote;
+  }
+
+  @override
+  Future<PrivateQuotation?> getPrivateQuotation(String requestId) async {
+    return store.privateQuotations[requestId];
+  }
+
+  @override
+  Future<List<OutreachConversation>> listConversations({
+    required String userId,
+    String? organizationId,
+  }) async {
+    return store.outreachConversations.values.where((c) {
+      return c.brandUserId == userId || c.creatorUserId == userId;
+    }).toList()
+      ..sort((a, b) => b.lastMessageAt.compareTo(a.lastMessageAt));
+  }
+
+  @override
+  Future<OutreachConversation> getConversation(String conversationId) async {
+    final conv = store.outreachConversations[conversationId];
+    if (conv == null) throw Exception('Conversation not found');
+    return conv;
+  }
+
+  @override
+  Future<List<OutreachMessage>> getMessages(String conversationId) async {
+    return store.outreachMessages[conversationId] ?? [];
+  }
+
+  @override
+  Future<OutreachMessage> sendMessage({
+    required String conversationId,
+    required String senderId,
+    required String senderName,
+    required String content,
+  }) async {
+    final msg = OutreachMessage(
+      id: 'out_msg_${DateTime.now().millisecondsSinceEpoch}',
+      conversationId: conversationId,
+      senderId: senderId,
+      senderName: senderName,
+      content: content,
+      createdAt: DateTime.now(),
+    );
+
+    final msgs = store.outreachMessages.putIfAbsent(conversationId, () => []);
+    msgs.add(msg);
+
+    final conv = store.outreachConversations[conversationId];
+    if (conv != null) {
+      store.outreachConversations[conversationId] = conv.copyWith(lastMessageAt: DateTime.now());
+    }
+
+    return msg;
+  }
+
+  @override
+  Future<void> blockUser({
+    required String blockerUserId,
+    required String blockedUserId,
+    String? reason,
+  }) async {
+    if (!store.blockedUsers.contains(blockedUserId)) {
+      store.blockedUsers.add(blockedUserId);
+    }
+  }
+
+  @override
+  Future<void> submitReport({
+    required String reporterUserId,
+    String? reportedUserId,
+    String? reportedDirectoryId,
+    String? requestId,
+    required String reason,
+    String? details,
+  }) async {
+    // Demo mode: accepted silently
   }
 }

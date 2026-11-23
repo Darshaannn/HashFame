@@ -35,6 +35,7 @@ import 'features/assistant/data/assistant_service_impl.dart';
 import 'features/collaboration/data/collaboration_repository_impl.dart';
 import 'features/shortlist/data/shortlist_repository_impl.dart';
 import 'features/talent_manager/data/talent_manager_repository_impl.dart';
+import 'features/contact/data/supabase_contact_outreach_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -141,6 +142,9 @@ Future<void> main() async {
             ActivityRepositoryImpl(
               SupabaseActivityDataSource(Supabase.instance.client),
             ),
+          ),
+          contactOutreachRepositoryProvider.overrideWithValue(
+            SupabaseContactOutreachRepository(Supabase.instance.client),
           ),
           assistantServiceProvider.overrideWithValue(
             SupabaseAssistantServiceImpl(
