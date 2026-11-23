@@ -203,7 +203,7 @@ class _OutreachChatScreenState extends ConsumerState<OutreachChatScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
-                    border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.2))),
+                    border: Border(top: BorderSide(color: Colors.grey.withValues(alpha: 0.2))),
                   ),
                   child: SafeArea(
                     child: Row(

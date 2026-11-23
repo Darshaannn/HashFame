@@ -155,7 +155,7 @@ class _OutreachCard extends ConsumerWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: AppColors.burgundy.withOpacity(0.1),
+                  backgroundColor: AppColors.burgundy.withValues(alpha: 0.1),
                   child: Text(
                     request.recipientDisplayName.isNotEmpty
                         ? request.recipientDisplayName[0].toUpperCase()
@@ -190,7 +190,7 @@ class _OutreachCard extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: statusColor.withOpacity(0.12),
+                    color: statusColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(

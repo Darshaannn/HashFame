@@ -156,7 +156,7 @@ class _IncomingCard extends ConsumerWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: AppColors.burgundy.withOpacity(0.1),
+                  backgroundColor: AppColors.burgundy.withValues(alpha: 0.1),
                   child: Text(
                     request.senderOrganizationName.isNotEmpty
                         ? request.senderOrganizationName[0].toUpperCase()
@@ -191,7 +191,7 @@ class _IncomingCard extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: statusColor.withOpacity(0.12),
+                    color: statusColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -215,7 +215,7 @@ class _IncomingCard extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.08),
+                  color: Colors.grey.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(

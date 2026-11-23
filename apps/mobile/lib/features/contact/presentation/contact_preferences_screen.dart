@@ -126,7 +126,7 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
                   title: const Text('Accept Collaboration Requests', style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: const Text('Allow Brands & Agencies to send you direct proposals on GGs'),
                   value: _allowCollabs,
-                  activeColor: AppColors.burgundy,
+                  activeTrackColor: AppColors.burgundy,
                   onChanged: (val) => setState(() => _allowCollabs = val),
                 ),
                 const Divider(height: 24),
@@ -147,7 +147,7 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
                 SwitchListTile(
                   title: const Text('Expose Business Email'),
                   value: _allowEmail,
-                  activeColor: AppColors.burgundy,
+                  activeTrackColor: AppColors.burgundy,
                   onChanged: (val) => setState(() => _allowEmail = val),
                 ),
                 if (_allowEmail)
@@ -165,7 +165,7 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
                 SwitchListTile(
                   title: const Text('Expose WhatsApp Number'),
                   value: _allowWhatsapp,
-                  activeColor: AppColors.burgundy,
+                  activeTrackColor: AppColors.burgundy,
                   onChanged: (val) => setState(() => _allowWhatsapp = val),
                 ),
                 if (_allowWhatsapp)
@@ -183,7 +183,7 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
                 SwitchListTile(
                   title: const Text('Expose Phone Number (Direct Calling)'),
                   value: _allowPhone,
-                  activeColor: AppColors.burgundy,
+                  activeTrackColor: AppColors.burgundy,
                   onChanged: (val) => setState(() => _allowPhone = val),
                 ),
                 if (_allowPhone)

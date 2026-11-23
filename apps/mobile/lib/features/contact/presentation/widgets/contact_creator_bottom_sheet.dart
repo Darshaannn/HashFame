@@ -126,7 +126,7 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.3),
+                color: Colors.grey.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -136,7 +136,7 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
             children: [
               CircleAvatar(
                 radius: 24,
-                backgroundColor: AppColors.burgundy.withOpacity(0.1),
+                backgroundColor: AppColors.burgundy.withValues(alpha: 0.1),
                 child: Text(
                   widget.displayName.isNotEmpty ? widget.displayName[0].toUpperCase() : 'C',
                   style: const TextStyle(
@@ -222,9 +222,9 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.burgundy.withOpacity(0.06),
+                  color: AppColors.burgundy.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.burgundy.withOpacity(0.2)),
+                  border: Border.all(color: AppColors.burgundy.withValues(alpha: 0.2)),
                 ),
                 child: Row(
                   children: [
@@ -317,7 +317,7 @@ class _ActionTile extends StatelessWidget {
         width: 44,
         height: 44,
         decoration: BoxDecoration(
-          color: iconColor.withOpacity(0.1),
+          color: iconColor.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
         child: Icon(icon, color: iconColor, size: 22),

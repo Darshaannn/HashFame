@@ -136,7 +136,7 @@ class _ContactRequestDialogState extends ConsumerState<ContactRequestDialog> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<ContactRequestType>(
-                  value: _requestType,
+                  initialValue: _requestType,
                   decoration: const InputDecoration(
                     labelText: 'Request Purpose',
                     border: OutlineInputBorder(),

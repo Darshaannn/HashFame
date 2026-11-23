@@ -244,7 +244,7 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: (isConnected ? AppColors.success : Colors.grey).withOpacity(0.12),
+                    color: (isConnected ? AppColors.success : Colors.grey).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
