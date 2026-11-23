@@ -14,6 +14,9 @@ import '../domain/creator_search_filters.dart';
 import 'discovery_controller.dart';
 import 'widgets/creator_discovery_card.dart';
 import 'widgets/discover_filter_sheet.dart';
+import 'widgets/smart_search_indicator_bar.dart';
+import '../domain/natural_language_search_interpreter.dart';
+import '../domain/parsed_search_criteria.dart';
 
 class DiscoverScreen extends ConsumerStatefulWidget {
   const DiscoverScreen({super.key});
@@ -25,6 +28,7 @@ class DiscoverScreen extends ConsumerStatefulWidget {
 class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
+  ParsedSearchCriteria _parsedCriteria = const ParsedSearchCriteria(rawQuery: '');
 
   @override
   void initState() {
@@ -115,12 +119,37 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                 vertical: AppSpacing.sm,
               ),
               child: AppSearchField(
+                placeholder: 'Search creators e.g. "Mumbai beauty 50K-200K"',
                 onChanged: (val) {
+                  final parsed = NaturalLanguageSearchInterpreter.parse(val);
+                  setState(() => _parsedCriteria = parsed);
+
                   ref
                       .read(creatorSearchFiltersProvider.notifier)
-                      .set(filters.copyWith(query: val.trim()));
+                      .set(filters.copyWith(
+                        query: parsed.nameOrKeyword ?? (parsed.isNaturalLanguage ? '' : val.trim()),
+                        city: parsed.city ?? filters.city,
+                        minFollowers: parsed.minFollowers ?? filters.minFollowers,
+                        maxFollowers: parsed.maxFollowers ?? filters.maxFollowers,
+                      ));
                 },
               ),
+            ),
+
+            // Smart Search Indicator & Filter Chips
+            SmartSearchIndicatorBar(
+              criteria: _parsedCriteria,
+              onClearFilter: (type) {
+                if (type == 'city') {
+                  setState(() => _parsedCriteria = _parsedCriteria.copyWith(city: null));
+                  ref.read(creatorSearchFiltersProvider.notifier).set(filters.copyWith(city: null));
+                } else if (type == 'category') {
+                  setState(() => _parsedCriteria = _parsedCriteria.copyWith(category: null));
+                } else if (type == 'followers' || type == 'tier') {
+                  setState(() => _parsedCriteria = _parsedCriteria.copyWith(minFollowers: null, maxFollowers: null, tier: null));
+                  ref.read(creatorSearchFiltersProvider.notifier).set(filters.copyWith(minFollowers: null, maxFollowers: null));
+                }
+              },
             ),
 
             // Category shortcuts row
