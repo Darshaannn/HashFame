@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-11-23T13:14:28.137480",
+  "source_file": "apps/mobile/assets/demo/ggs_demo_creators_safe.json",
+  "summary": {
+    "total_evaluated": 163,
+    "valid_count": 163,
+    "invalid_count": 0,
+    "duplicate_ids_count": 0,
+    "handle_conflicts_count": 0
+  },
+  "duplicate_ids": [],
+  "handle_conflicts": [],
+  "invalid_records": []
+}
