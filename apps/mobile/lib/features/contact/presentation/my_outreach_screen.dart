@@ -81,9 +81,25 @@ class _MyOutreachScreenState extends ConsumerState<MyOutreachScreen>
               controller: _tabController,
               children: [
                 _buildRequestList(_requests),
-                _buildRequestList(_requests.where((r) => r.status == ContactRequestStatus.pending).toList()),
-                _buildRequestList(_requests.where((r) => r.status == ContactRequestStatus.accepted).toList()),
-                _buildRequestList(_requests.where((r) => r.requestType == ContactRequestType.requestQuotation).toList()),
+                _buildRequestList(
+                  _requests
+                      .where((r) => r.status == ContactRequestStatus.pending)
+                      .toList(),
+                ),
+                _buildRequestList(
+                  _requests
+                      .where((r) => r.status == ContactRequestStatus.accepted)
+                      .toList(),
+                ),
+                _buildRequestList(
+                  _requests
+                      .where(
+                        (r) =>
+                            r.requestType ==
+                            ContactRequestType.requestQuotation,
+                      )
+                      .toList(),
+                ),
               ],
             ),
     );
@@ -182,13 +198,19 @@ class _OutreachCard extends ConsumerWidget {
                       ),
                       Text(
                         request.campaignName ?? 'Direct Collaboration Proposal',
-                        style: const TextStyle(color: Colors.grey, fontSize: 12),
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
@@ -227,20 +249,30 @@ class _OutreachCard extends ConsumerWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.burgundy,
                           foregroundColor: AppColors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          textStyle: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         icon: const Icon(Icons.chat_bubble_outline, size: 14),
                         label: const Text('Open Chat'),
                         onPressed: () {
-                          context.push('/outreach/chat/${request.conversationId!}');
+                          context.push(
+                            '/outreach/chat/${request.conversationId!}',
+                          );
                         },
                       ),
-                    if (request.requestType == ContactRequestType.requestQuotation)
+                    if (request.requestType ==
+                        ContactRequestType.requestQuotation)
                       TextButton.icon(
                         icon: const Icon(Icons.visibility_outlined, size: 14),
                         label: const Text('View Quotation'),
-                        onPressed: () => _showQuotationDialog(context, ref, request.id),
+                        onPressed: () =>
+                            _showQuotationDialog(context, ref, request.id),
                       ),
                   ],
                 ),
@@ -252,14 +284,20 @@ class _OutreachCard extends ConsumerWidget {
     );
   }
 
-  Future<void> _showQuotationDialog(BuildContext context, WidgetRef ref, String requestId) async {
+  Future<void> _showQuotationDialog(
+    BuildContext context,
+    WidgetRef ref,
+    String requestId,
+  ) async {
     final repo = ref.read(contactOutreachRepositoryProvider);
     final quote = await repo.getPrivateQuotation(requestId);
 
     if (context.mounted) {
       if (quote == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No quotation received yet for this request.')),
+          const SnackBar(
+            content: Text('No quotation received yet for this request.'),
+          ),
         );
         return;
       }
@@ -293,21 +331,36 @@ class _OutreachCard extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              const Text('Deliverables:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-              Text(quote.deliverableDescription, style: const TextStyle(fontSize: 13)),
+              const Text(
+                'Deliverables:',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+              ),
+              Text(
+                quote.deliverableDescription,
+                style: const TextStyle(fontSize: 13),
+              ),
               if (quote.usageRights != null) ...[
                 const SizedBox(height: 8),
-                const Text('Usage Rights:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                const Text(
+                  'Usage Rights:',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                ),
                 Text(quote.usageRights!, style: const TextStyle(fontSize: 13)),
               ],
               if (quote.timeline != null) ...[
                 const SizedBox(height: 8),
-                const Text('Timeline:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                const Text(
+                  'Timeline:',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                ),
                 Text(quote.timeline!, style: const TextStyle(fontSize: 13)),
               ],
               if (quote.notes != null) ...[
                 const SizedBox(height: 8),
-                const Text('Notes:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                const Text(
+                  'Notes:',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                ),
                 Text(quote.notes!, style: const TextStyle(fontSize: 13)),
               ],
             ],

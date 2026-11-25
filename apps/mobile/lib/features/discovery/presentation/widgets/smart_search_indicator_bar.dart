@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/design_system/tokens.dart';
 import '../../domain/parsed_search_criteria.dart';
 
@@ -14,48 +15,58 @@ class SmartSearchIndicatorBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!criteria.hasStructuredFilters && criteria.unsupportedConditions.isEmpty) {
+    if (!criteria.hasStructuredFilters &&
+        criteria.unsupportedConditions.isEmpty) {
       return const SizedBox.shrink();
     }
 
     final chips = <Widget>[];
 
     if (criteria.category != null) {
-      chips.add(_buildChip(
-        label: criteria.category!,
-        icon: Icons.category_outlined,
-        onDeleted: () => onClearFilter('category'),
-      ));
+      chips.add(
+        _buildChip(
+          label: criteria.category!,
+          icon: Icons.category_outlined,
+          onDeleted: () => onClearFilter('category'),
+        ),
+      );
     }
 
     if (criteria.city != null) {
-      chips.add(_buildChip(
-        label: criteria.city!,
-        icon: Icons.location_on_outlined,
-        onDeleted: () => onClearFilter('city'),
-      ));
+      chips.add(
+        _buildChip(
+          label: criteria.city!,
+          icon: Icons.location_on_outlined,
+          onDeleted: () => onClearFilter('city'),
+        ),
+      );
     }
 
     if (criteria.tier != null) {
-      chips.add(_buildChip(
-        label: criteria.tier!.label,
-        icon: Icons.groups_outlined,
-        onDeleted: () => onClearFilter('tier'),
-      ));
+      chips.add(
+        _buildChip(
+          label: criteria.tier!.label,
+          icon: Icons.groups_outlined,
+          onDeleted: () => onClearFilter('tier'),
+        ),
+      );
     } else if (criteria.minFollowers != null || criteria.maxFollowers != null) {
       String followLabel = '';
       if (criteria.minFollowers != null && criteria.maxFollowers != null) {
-        followLabel = '${_fmt(criteria.minFollowers!)} - ${_fmt(criteria.maxFollowers!)}';
+        followLabel =
+            '${_fmt(criteria.minFollowers!)} - ${_fmt(criteria.maxFollowers!)}';
       } else if (criteria.minFollowers != null) {
         followLabel = '>${_fmt(criteria.minFollowers!)}';
       } else if (criteria.maxFollowers != null) {
         followLabel = '<${_fmt(criteria.maxFollowers!)}';
       }
-      chips.add(_buildChip(
-        label: '$followLabel followers',
-        icon: Icons.people_outline,
-        onDeleted: () => onClearFilter('followers'),
-      ));
+      chips.add(
+        _buildChip(
+          label: '$followLabel followers',
+          icon: Icons.people_outline,
+          onDeleted: () => onClearFilter('followers'),
+        ),
+      );
     }
 
     return Container(
@@ -65,7 +76,11 @@ class SmartSearchIndicatorBar extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.auto_awesome, size: 14, color: AppColors.burgundy),
+              const Icon(
+                Icons.auto_awesome,
+                size: 14,
+                color: AppColors.burgundy,
+              ),
               const SizedBox(width: 6),
               Text(
                 'Interpreted Search Intent',
@@ -79,11 +94,7 @@ class SmartSearchIndicatorBar extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 6),
-          Wrap(
-            spacing: 6,
-            runSpacing: 4,
-            children: chips,
-          ),
+          Wrap(spacing: 6, runSpacing: 4, children: chips),
           if (criteria.unsupportedConditions.isNotEmpty) ...[
             const SizedBox(height: 6),
             Container(
@@ -91,11 +102,17 @@ class SmartSearchIndicatorBar extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.warningLight,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: AppColors.warning.withValues(alpha: 0.3),
+                ),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.info_outline, size: 14, color: AppColors.warning),
+                  const Icon(
+                    Icons.info_outline,
+                    size: 14,
+                    color: AppColors.warning,
+                  ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(

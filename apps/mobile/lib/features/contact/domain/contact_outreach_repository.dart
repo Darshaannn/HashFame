@@ -85,10 +85,14 @@ abstract interface class ContactOutreachRepository {
   Future<PrivateQuotation?> getPrivateQuotation(String requestId);
 
   /// Fetch creator contact sharing preferences
-  Future<CreatorContactPreferences> getCreatorContactPreferences(String creatorId);
+  Future<CreatorContactPreferences> getCreatorContactPreferences(
+    String creatorId,
+  );
 
   /// Update creator contact sharing preferences
-  Future<void> updateCreatorContactPreferences(CreatorContactPreferences preferences);
+  Future<void> updateCreatorContactPreferences(
+    CreatorContactPreferences preferences,
+  );
 
   /// Conversations & In-app Messaging
   Future<List<OutreachConversation>> listConversations({

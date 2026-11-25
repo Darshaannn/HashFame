@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
 
 import 'package:ggs_mobile/features/creator/domain/creator_profile.dart';
@@ -6,6 +7,7 @@ import 'package:ggs_mobile/features/creator/domain/social_account.dart';
 import 'package:ggs_mobile/features/discovery/domain/creator_discovery_item.dart';
 import 'package:ggs_mobile/features/profile_common/domain/reference_data.dart';
 import 'package:ggs_mobile/features/profile_common/domain/verification.dart';
+
 import 'creator_directory_fixture.dart';
 
 /// Clean loader for imported creator directory records.
@@ -53,7 +55,8 @@ class CreatorDirectoryLoader {
       final name = r['display_name'] as String;
       final handle = r['instagram_handle'] as String?;
       final followers = r['followers_count'] as int?;
-      final cats = (r['categories'] as List<dynamic>?)
+      final cats =
+          (r['categories'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           const [];
@@ -73,7 +76,8 @@ class CreatorDirectoryLoader {
           languageNames: const [], // Not fabricated
           primaryPlatform: SocialPlatform.instagram,
           totalFollowers: followers,
-          startingRate: null, // Commercial quote is unverified; not standard rate
+          startingRate:
+              null, // Commercial quote is unverified; not standard rate
           startingRateDeliverable: null,
           availabilityStatus: AvailabilityStatus.open,
           isRepresented: false, // Not fabricated
@@ -101,7 +105,8 @@ class CreatorDirectoryLoader {
       final handle = r['instagram_handle'] as String?;
       final profileUrl = r['instagram_profile_url'] as String?;
       final followers = r['followers_count'] as int?;
-      final cats = (r['categories'] as List<dynamic>?)
+      final cats =
+          (r['categories'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           const [];

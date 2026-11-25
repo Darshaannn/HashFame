@@ -11,7 +11,8 @@ abstract final class AppColors {
   static const borderGray = Color(0xFFE6E1DE); // Subtle Borders
 
   // Semantic Design Tokens
-  static const primary = burgundy; // Burgundy for primary actions and highlights
+  static const primary =
+      burgundy; // Burgundy for primary actions and highlights
   static const primaryLight = Color(0xFFA52A2A);
   static const primaryDark = deepBurgundy;
   static const accent = burgundy; // Burgundy for active CTAs & focus
@@ -93,15 +94,33 @@ abstract final class AppImages {
   static String? getCreatorPhoto(String idOrName) {
     final lower = idOrName.toLowerCase();
     // Only map the synthetic demo personas who have authorized Unsplash portrait avatars
-    if (lower == 'aisha mehta' || lower == 'demo_creator_user_id') return creatorAisha;
-    if (lower == 'riya kapoor' || lower == 'creator_riya_kapoor') return creatorRiya;
-    if (lower == 'rohan sharma' || lower == 'creator_rohan_fitness') return creatorRohan;
-    if (lower == 'aditya kulkarni' || lower == 'creator_aditya_food') return creatorAditya;
-    if (lower == 'neha sharma' || lower == 'creator_neha_travel') return creatorNeha;
-    if (lower == 'vikram joshi' || lower == 'creator_vikram_finance') return creatorVikram;
-    if (lower == 'sneha reddy' || lower == 'creator_sneha_fashion') return creatorSneha;
-    if (lower == 'kabir singhania' || lower == 'creator_kabir_gaming') return creatorKabir;
-    if (lower == 'tanvi deshmukh' || lower == 'creator_tanvi_beauty') return creatorTanvi;
+    if (lower == 'aisha mehta' || lower == 'demo_creator_user_id') {
+      return creatorAisha;
+    }
+    if (lower == 'riya kapoor' || lower == 'creator_riya_kapoor') {
+      return creatorRiya;
+    }
+    if (lower == 'rohan sharma' || lower == 'creator_rohan_fitness') {
+      return creatorRohan;
+    }
+    if (lower == 'aditya kulkarni' || lower == 'creator_aditya_food') {
+      return creatorAditya;
+    }
+    if (lower == 'neha sharma' || lower == 'creator_neha_travel') {
+      return creatorNeha;
+    }
+    if (lower == 'vikram joshi' || lower == 'creator_vikram_finance') {
+      return creatorVikram;
+    }
+    if (lower == 'sneha reddy' || lower == 'creator_sneha_fashion') {
+      return creatorSneha;
+    }
+    if (lower == 'kabir singhania' || lower == 'creator_kabir_gaming') {
+      return creatorKabir;
+    }
+    if (lower == 'tanvi deshmukh' || lower == 'creator_tanvi_beauty') {
+      return creatorTanvi;
+    }
 
     // Real imported spreadsheet creators must show polished initials avatar until real photos arrive
     return null;

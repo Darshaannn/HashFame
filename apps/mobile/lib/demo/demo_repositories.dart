@@ -439,7 +439,11 @@ class DemoDiscoveryRepository implements DiscoveryRepository {
         final q = filters.query.toLowerCase().trim().replaceAll('@', '');
         final matchName =
             c.displayName.toLowerCase().contains(q) ||
-            (c.professionalName?.toLowerCase().replaceAll('@', '').contains(q) ?? false);
+            (c.professionalName
+                    ?.toLowerCase()
+                    .replaceAll('@', '')
+                    .contains(q) ??
+                false);
         final matchCategory = c.primaryCategoryNames.any(
           (cat) => cat.toLowerCase().contains(q),
         );
@@ -1598,7 +1602,9 @@ class DemoContactOutreachRepository implements ContactOutreachRepository {
   final DemoStore store;
 
   @override
-  Future<CreatorContactPreferences> getCreatorContactPreferences(String creatorId) async {
+  Future<CreatorContactPreferences> getCreatorContactPreferences(
+    String creatorId,
+  ) async {
     return store.contactPreferences[creatorId] ??
         CreatorContactPreferences(
           creatorId: creatorId,
@@ -1611,7 +1617,9 @@ class DemoContactOutreachRepository implements ContactOutreachRepository {
   }
 
   @override
-  Future<void> updateCreatorContactPreferences(CreatorContactPreferences preferences) async {
+  Future<void> updateCreatorContactPreferences(
+    CreatorContactPreferences preferences,
+  ) async {
     store.contactPreferences[preferences.creatorId] = preferences;
   }
 
@@ -1659,14 +1667,18 @@ class DemoContactOutreachRepository implements ContactOutreachRepository {
     store.contactRequests[id] = request;
 
     if (recipientCreatorId != null) {
-      final acts = store.userActivities.putIfAbsent(recipientCreatorId, () => []);
+      final acts = store.userActivities.putIfAbsent(
+        recipientCreatorId,
+        () => [],
+      );
       acts.insert(
         0,
         ActivityEvent(
           id: 'act_${DateTime.now().millisecondsSinceEpoch}',
           userId: recipientCreatorId,
           title: 'New Collaboration Request',
-          subtitle: '$senderOrganizationName sent you a proposal for "${campaignName ?? 'Collaboration'}"',
+          subtitle:
+              '$senderOrganizationName sent you a proposal for "${campaignName ?? 'Collaboration'}"',
           activityType: 'contact_request_received',
           route: '/creator/contact-requests',
           createdAt: DateTime.now(),
@@ -1702,7 +1714,8 @@ class DemoContactOutreachRepository implements ContactOutreachRepository {
       recipientAvatarPath: recipientAvatarPath,
       isRegisteredCreator: recipientCreatorId != null,
       requestType: ContactRequestType.brandCollaboration,
-      collaborationRequirement: notes ?? 'External outreach initiated via ${contactMethod.name}',
+      collaborationRequirement:
+          notes ?? 'External outreach initiated via ${contactMethod.name}',
       status: ContactRequestStatus.pending,
       contactMethod: contactMethod,
       externalStage: stage,
@@ -1720,7 +1733,10 @@ class DemoContactOutreachRepository implements ContactOutreachRepository {
   }) async {
     final req = store.contactRequests[requestId];
     if (req == null) throw Exception('Request not found');
-    final updated = req.copyWith(externalStage: stage, updatedAt: DateTime.now());
+    final updated = req.copyWith(
+      externalStage: stage,
+      updatedAt: DateTime.now(),
+    );
     store.contactRequests[requestId] = updated;
     return updated;
   }
@@ -1767,7 +1783,10 @@ class DemoContactOutreachRepository implements ContactOutreachRepository {
     store.contactRequests[requestId] = updated;
 
     // Notify sender
-    final senderActs = store.userActivities.putIfAbsent(req.senderUserId, () => []);
+    final senderActs = store.userActivities.putIfAbsent(
+      req.senderUserId,
+      () => [],
+    );
     senderActs.insert(
       0,
       ActivityEvent(
@@ -1825,10 +1844,11 @@ class DemoContactOutreachRepository implements ContactOutreachRepository {
   }) async {
     return store.contactRequests.values.where((r) {
       if (r.senderUserId == userId) return true;
-      if (organizationId != null && r.senderOrganizationId == organizationId) return true;
+      if (organizationId != null && r.senderOrganizationId == organizationId) {
+        return true;
+      }
       return false;
-    }).toList()
-      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    }).toList()..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
   @override
@@ -1871,14 +1891,18 @@ class DemoContactOutreachRepository implements ContactOutreachRepository {
 
     store.privateQuotations[requestId] = quote;
 
-    final senderActs = store.userActivities.putIfAbsent(req.senderUserId, () => []);
+    final senderActs = store.userActivities.putIfAbsent(
+      req.senderUserId,
+      () => [],
+    );
     senderActs.insert(
       0,
       ActivityEvent(
         id: 'act_${DateTime.now().millisecondsSinceEpoch}',
         userId: req.senderUserId,
         title: 'New Quotation Received',
-        subtitle: '${req.recipientDisplayName} sent a private quotation for ₹${proposedAmount.toStringAsFixed(0)}',
+        subtitle:
+            '${req.recipientDisplayName} sent a private quotation for ₹${proposedAmount.toStringAsFixed(0)}',
         activityType: 'quotation_received',
         route: '/outreach',
         createdAt: DateTime.now(),
@@ -1900,8 +1924,7 @@ class DemoContactOutreachRepository implements ContactOutreachRepository {
   }) async {
     return store.outreachConversations.values.where((c) {
       return c.brandUserId == userId || c.creatorUserId == userId;
-    }).toList()
-      ..sort((a, b) => b.lastMessageAt.compareTo(a.lastMessageAt));
+    }).toList()..sort((a, b) => b.lastMessageAt.compareTo(a.lastMessageAt));
   }
 
   @override
@@ -1937,7 +1960,9 @@ class DemoContactOutreachRepository implements ContactOutreachRepository {
 
     final conv = store.outreachConversations[conversationId];
     if (conv != null) {
-      store.outreachConversations[conversationId] = conv.copyWith(lastMessageAt: DateTime.now());
+      store.outreachConversations[conversationId] = conv.copyWith(
+        lastMessageAt: DateTime.now(),
+      );
     }
 
     return msg;

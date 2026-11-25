@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../domain/instagram_models.dart';
 import '../domain/instagram_repository.dart';
 
@@ -36,7 +38,10 @@ class SupabaseInstagramRepository implements InstagramRepository {
       'instagram_username': username.replaceAll('@', '').trim(),
       'account_type': 'BUSINESS',
       'status': 'connected',
-      'authorized_scopes': ['instagram_business_basic', 'instagram_business_manage_insights'],
+      'authorized_scopes': [
+        'instagram_business_basic',
+        'instagram_business_manage_insights',
+      ],
       'last_synced_at': DateTime.now().toIso8601String(),
     };
 
@@ -81,7 +86,11 @@ class SupabaseInstagramRepository implements InstagramRepository {
           .limit(12);
 
       return (res as List)
-          .map((e) => InstagramMediaItem.fromJson(Map<String, dynamic>.from(e as Map)))
+          .map(
+            (e) => InstagramMediaItem.fromJson(
+              Map<String, dynamic>.from(e as Map),
+            ),
+          )
           .toList();
     } catch (_) {
       return [];

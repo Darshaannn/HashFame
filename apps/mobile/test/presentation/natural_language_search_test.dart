@@ -8,17 +8,20 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Phase 05 Natural-Language Search Interpreter Tests', () {
-    test('Parses English query with City, Category, and Numeric Follower Range', () {
-      final criteria = NaturalLanguageSearchInterpreter.parse(
-        'Find Mumbai beauty influencers between 50K and 200K followers',
-      );
+    test(
+      'Parses English query with City, Category, and Numeric Follower Range',
+      () {
+        final criteria = NaturalLanguageSearchInterpreter.parse(
+          'Find Mumbai beauty influencers between 50K and 200K followers',
+        );
 
-      expect(criteria.city, 'Mumbai');
-      expect(criteria.category, 'Beauty & Skincare');
-      expect(criteria.minFollowers, 50000);
-      expect(criteria.maxFollowers, 200000);
-      expect(criteria.isNaturalLanguage, isTrue);
-    });
+        expect(criteria.city, 'Mumbai');
+        expect(criteria.category, 'Beauty & Skincare');
+        expect(criteria.minFollowers, 50000);
+        expect(criteria.maxFollowers, 200000);
+        expect(criteria.isNaturalLanguage, isTrue);
+      },
+    );
 
     test('Parses Hindi / Hinglish phrasing accurately', () {
       final criteria = NaturalLanguageSearchInterpreter.parse(
@@ -55,13 +58,17 @@ void main() {
     });
 
     test('Parses Influencer Tiers (Nano, Micro, Macro, Mega)', () {
-      final microCriteria = NaturalLanguageSearchInterpreter.parse('Find micro influencers in fitness');
+      final microCriteria = NaturalLanguageSearchInterpreter.parse(
+        'Find micro influencers in fitness',
+      );
       expect(microCriteria.tier, InfluencerTier.micro);
       expect(microCriteria.minFollowers, 10000);
       expect(microCriteria.maxFollowers, 100000);
       expect(microCriteria.category, 'Health & Fitness');
 
-      final nanoCriteria = NaturalLanguageSearchInterpreter.parse('Nano fashion creators');
+      final nanoCriteria = NaturalLanguageSearchInterpreter.parse(
+        'Nano fashion creators',
+      );
       expect(nanoCriteria.tier, InfluencerTier.nano);
       expect(nanoCriteria.minFollowers, 1000);
       expect(nanoCriteria.maxFollowers, 10000);
@@ -76,48 +83,78 @@ void main() {
       expect(criteria.category, 'Fashion & Style');
       expect(criteria.unsupportedConditions.isNotEmpty, isTrue);
       expect(
-        criteria.unsupportedConditions.any((c) => c.contains('Demographic / Gender')),
+        criteria.unsupportedConditions.any(
+          (c) => c.contains('Demographic / Gender'),
+        ),
         isTrue,
       );
       expect(
-        criteria.unsupportedConditions.any((c) => c.contains('Engagement rates')),
+        criteria.unsupportedConditions.any(
+          (c) => c.contains('Engagement rates'),
+        ),
         isTrue,
       );
     });
 
-    test('Warns that Rate Cards were removed in Phase 01 when user asks for rates', () {
-      final criteria = NaturalLanguageSearchInterpreter.parse('Cheap lifestyle influencers under 5000 rs');
-      expect(
-        criteria.unsupportedConditions.any((c) => c.contains('Rate Cards were removed in Phase 01')),
-        isTrue,
-      );
-    });
+    test(
+      'Warns that Rate Cards were removed in Phase 01 when user asks for rates',
+      () {
+        final criteria = NaturalLanguageSearchInterpreter.parse(
+          'Cheap lifestyle influencers under 5000 rs',
+        );
+        expect(
+          criteria.unsupportedConditions.any(
+            (c) => c.contains('Rate Cards were removed in Phase 01'),
+          ),
+          isTrue,
+        );
+      },
+    );
   });
 
   group('Phase 05 Creator Search Ranker & Relevance Tests', () {
-    test('Enforces hard constraints: excludes creators from non-matching city', () {
-      final records = CreatorDirectoryLoader.loadDirectoryRecordsSync();
-      final creators = CreatorDirectoryLoader.mapToDiscoveryItems(records);
+    test(
+      'Enforces hard constraints: excludes creators from non-matching city',
+      () {
+        final records = CreatorDirectoryLoader.loadDirectoryRecordsSync();
+        final creators = CreatorDirectoryLoader.mapToDiscoveryItems(records);
 
-      final criteria = NaturalLanguageSearchInterpreter.parse('Mumbai travel creators');
-      final ranked = CreatorSearchRanker.rankCreators(creators: creators, criteria: criteria);
+        final criteria = NaturalLanguageSearchInterpreter.parse(
+          'Mumbai travel creators',
+        );
+        final ranked = CreatorSearchRanker.rankCreators(
+          creators: creators,
+          criteria: criteria,
+        );
 
-      for (final c in ranked) {
-        expect(c.city?.toLowerCase().contains('mumbai'), isTrue);
-      }
-    });
+        for (final c in ranked) {
+          expect(c.city?.toLowerCase().contains('mumbai'), isTrue);
+        }
+      },
+    );
 
-    test('Enforces follower constraints accurately against real directory items', () {
-      final records = CreatorDirectoryLoader.loadDirectoryRecordsSync();
-      final creators = CreatorDirectoryLoader.mapToDiscoveryItems(records);
+    test(
+      'Enforces follower constraints accurately against real directory items',
+      () {
+        final records = CreatorDirectoryLoader.loadDirectoryRecordsSync();
+        final creators = CreatorDirectoryLoader.mapToDiscoveryItems(records);
 
-      final criteria = NaturalLanguageSearchInterpreter.parse('Travel creators between 50K and 500K');
-      final ranked = CreatorSearchRanker.rankCreators(creators: creators, criteria: criteria);
+        final criteria = NaturalLanguageSearchInterpreter.parse(
+          'Travel creators between 50K and 500K',
+        );
+        final ranked = CreatorSearchRanker.rankCreators(
+          creators: creators,
+          criteria: criteria,
+        );
 
-      for (final c in ranked) {
-        expect(c.totalFollowers, isNotNull);
-        expect(c.totalFollowers! >= 50000 && c.totalFollowers! <= 500000, isTrue);
-      }
-    });
+        for (final c in ranked) {
+          expect(c.totalFollowers, isNotNull);
+          expect(
+            c.totalFollowers! >= 50000 && c.totalFollowers! <= 500000,
+            isTrue,
+          );
+        }
+      },
+    );
   });
 }

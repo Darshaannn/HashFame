@@ -25,7 +25,8 @@ class ContactRequestDialog extends ConsumerStatefulWidget {
   final ContactRequestType initialRequestType;
 
   @override
-  ConsumerState<ContactRequestDialog> createState() => _ContactRequestDialogState();
+  ConsumerState<ContactRequestDialog> createState() =>
+      _ContactRequestDialogState();
 }
 
 class _ContactRequestDialogState extends ConsumerState<ContactRequestDialog> {
@@ -60,7 +61,8 @@ class _ContactRequestDialogState extends ConsumerState<ContactRequestDialog> {
       final session = ref.read(sessionProvider);
       final repo = ref.read(contactOutreachRepositoryProvider);
       final senderId = session.snapshot?.account.id ?? 'sender_id';
-      final senderOrgName = session.snapshot?.account.primaryRoleLabel?.wire == 'agency'
+      final senderOrgName =
+          session.snapshot?.account.primaryRoleLabel?.wire == 'agency'
           ? 'Agency Partner'
           : 'Brand Partner';
 
@@ -90,14 +92,19 @@ class _ContactRequestDialogState extends ConsumerState<ContactRequestDialog> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: AppColors.burgundy,
-            content: Text('Contact request sent to ${widget.recipientDisplayName}!'),
+            content: Text(
+              'Contact request sent to ${widget.recipientDisplayName}!',
+            ),
           ),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: AppColors.error, content: Text('Error: $e')),
+          SnackBar(
+            backgroundColor: AppColors.error,
+            content: Text('Error: $e'),
+          ),
         );
       }
     } finally {
@@ -120,7 +127,11 @@ class _ContactRequestDialogState extends ConsumerState<ContactRequestDialog> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.send_rounded, color: AppColors.burgundy, size: 24),
+                    const Icon(
+                      Icons.send_rounded,
+                      color: AppColors.burgundy,
+                      size: 24,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -182,7 +193,8 @@ class _ContactRequestDialogState extends ConsumerState<ContactRequestDialog> {
                   maxLines: 3,
                   decoration: const InputDecoration(
                     labelText: 'Deliverables & Requirement *',
-                    hintText: 'e.g. 1 Reel (60s), 2 Instagram Stories with link...',
+                    hintText:
+                        'e.g. 1 Reel (60s), 2 Instagram Stories with link...',
                     border: OutlineInputBorder(),
                   ),
                   validator: (v) => (v == null || v.trim().length < 5)
@@ -213,7 +225,9 @@ class _ContactRequestDialogState extends ConsumerState<ContactRequestDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: _submitting ? null : () => Navigator.pop(context),
+                      onPressed: _submitting
+                          ? null
+                          : () => Navigator.pop(context),
                       child: const Text('Cancel'),
                     ),
                     const SizedBox(width: 8),
@@ -227,7 +241,10 @@ class _ContactRequestDialogState extends ConsumerState<ContactRequestDialog> {
                           ? const SizedBox(
                               width: 20,
                               height: 20,
-                              child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
+                              child: CircularProgressIndicator(
+                                color: AppColors.white,
+                                strokeWidth: 2,
+                              ),
                             )
                           : const Text('Send Request'),
                     ),

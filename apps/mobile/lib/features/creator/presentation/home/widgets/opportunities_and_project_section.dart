@@ -5,10 +5,7 @@ import '../../../../../core/design_system/tokens.dart';
 import '../../../../collaboration/domain/active_collaboration.dart';
 
 class OpportunitiesAndProjectSection extends StatelessWidget {
-  const OpportunitiesAndProjectSection({
-    super.key,
-    this.activeCollaboration,
-  });
+  const OpportunitiesAndProjectSection({super.key, this.activeCollaboration});
 
   final ActiveCollaboration? activeCollaboration;
 
@@ -161,7 +158,11 @@ class OpportunitiesAndProjectSection extends StatelessWidget {
                   fit: BoxFit.cover,
                   errorBuilder: (_, _, _) => Container(
                     color: AppColors.lightGray,
-                    child: Icon(fallbackIcon, size: 20, color: AppColors.burgundy),
+                    child: Icon(
+                      fallbackIcon,
+                      size: 20,
+                      color: AppColors.burgundy,
+                    ),
                   ),
                 ),
               ),
@@ -227,13 +228,15 @@ class OpportunitiesAndProjectSection extends StatelessWidget {
 
   Widget _buildActiveProjectCard(BuildContext context) {
     final hasCollab = activeCollaboration != null;
-    final collabTitle = (hasCollab && activeCollaboration!.campaignTitle?.isNotEmpty == true)
+    final collabTitle =
+        (hasCollab && activeCollaboration!.campaignTitle?.isNotEmpty == true)
         ? activeCollaboration!.campaignTitle!
         : 'GlowHer Skincare';
-    final deliverableSummary = hasCollab && activeCollaboration!.deliverableRequirements.isNotEmpty
+    final deliverableSummary =
+        hasCollab && activeCollaboration!.deliverableRequirements.isNotEmpty
         ? 'Deliverables: ${activeCollaboration!.deliverableRequirements.join(', ')}'
         : 'Deliverables: 2 Reels + 3 Photos';
-    
+
     final dueDate = (hasCollab && activeCollaboration!.dueDate != null)
         ? 'Due: ${activeCollaboration!.dueDate!.day}/${activeCollaboration!.dueDate!.month}/${activeCollaboration!.dueDate!.year}'
         : 'Due: Jan 28, 2025';
@@ -318,7 +321,10 @@ class OpportunitiesAndProjectSection extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.lightGray.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.borderGray.withValues(alpha: 0.6), width: 0.5),
+                border: Border.all(
+                  color: AppColors.borderGray.withValues(alpha: 0.6),
+                  width: 0.5,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -365,7 +371,10 @@ class OpportunitiesAndProjectSection extends StatelessWidget {
                             ),
                             const SizedBox(height: 3),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
                                 color: const Color(0xFFFDE8E8),
                                 borderRadius: BorderRadius.circular(4),

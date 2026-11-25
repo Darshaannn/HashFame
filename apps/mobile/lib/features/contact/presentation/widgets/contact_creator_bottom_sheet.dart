@@ -58,10 +58,12 @@ class ContactCreatorBottomSheet extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<ContactCreatorBottomSheet> createState() => _ContactCreatorBottomSheetState();
+  ConsumerState<ContactCreatorBottomSheet> createState() =>
+      _ContactCreatorBottomSheetState();
 }
 
-class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottomSheet> {
+class _ContactCreatorBottomSheetState
+    extends ConsumerState<ContactCreatorBottomSheet> {
   CreatorContactPreferences? _preferences;
   bool _loading = false;
 
@@ -138,7 +140,9 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
                 radius: 24,
                 backgroundColor: AppColors.burgundy.withValues(alpha: 0.1),
                 child: Text(
-                  widget.displayName.isNotEmpty ? widget.displayName[0].toUpperCase() : 'C',
+                  widget.displayName.isNotEmpty
+                      ? widget.displayName[0].toUpperCase()
+                      : 'C',
                   style: const TextStyle(
                     fontFamily: AppTypography.khandFont,
                     fontWeight: FontWeight.bold,
@@ -164,7 +168,9 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
                           ? 'Registered Creator • Direct Outreach Available'
                           : 'Directory Influencer • External Outreach',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: widget.isRegistered ? AppColors.success : Colors.grey,
+                        color: widget.isRegistered
+                            ? AppColors.success
+                            : Colors.grey,
                       ),
                     ),
                   ],
@@ -177,7 +183,12 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
           const SizedBox(height: 12),
 
           if (_loading)
-            const Center(child: Padding(padding: EdgeInsets.all(24), child: CircularProgressIndicator()))
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: CircularProgressIndicator(),
+              ),
+            )
           else ...[
             if (widget.isRegistered) ...[
               _ActionTile(
@@ -224,11 +235,17 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
                 decoration: BoxDecoration(
                   color: AppColors.burgundy.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.burgundy.withValues(alpha: 0.2)),
+                  border: Border.all(
+                    color: AppColors.burgundy.withValues(alpha: 0.2),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.info_outline, color: AppColors.burgundy, size: 20),
+                    const Icon(
+                      Icons.info_outline,
+                      color: AppColors.burgundy,
+                      size: 20,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -245,13 +262,16 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
             ],
 
             // Direct External Channels
-            if (widget.instagramHandle != null && widget.instagramHandle!.isNotEmpty)
+            if (widget.instagramHandle != null &&
+                widget.instagramHandle!.isNotEmpty)
               _ActionTile(
                 icon: Icons.camera_alt_outlined,
                 iconColor: const Color(0xFFE1306C),
                 title: 'Instagram Profile',
                 subtitle: '@${widget.instagramHandle!.replaceAll('@', '')}',
-                onTap: () => ExternalCommunicationLauncher.openInstagram(widget.instagramHandle!),
+                onTap: () => ExternalCommunicationLauncher.openInstagram(
+                  widget.instagramHandle!,
+                ),
               ),
 
             if (effectiveWhatsapp != null && effectiveWhatsapp.isNotEmpty)
@@ -262,7 +282,8 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
                 subtitle: effectiveWhatsapp,
                 onTap: () => ExternalCommunicationLauncher.openWhatsApp(
                   phone: effectiveWhatsapp,
-                  message: 'Hello ${widget.displayName}, we discovered your profile on GGs and would love to collaborate!',
+                  message:
+                      'Hello ${widget.displayName}, we discovered your profile on GGs and would love to collaborate!',
                 ),
               ),
 
@@ -275,7 +296,8 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
                 onTap: () => ExternalCommunicationLauncher.openEmail(
                   email: effectiveEmail,
                   subject: 'Collaboration Enquiry via GGs',
-                  body: 'Hello ${widget.displayName},\n\nWe are interested in collaborating with you...',
+                  body:
+                      'Hello ${widget.displayName},\n\nWe are interested in collaborating with you...',
                 ),
               ),
 
@@ -285,7 +307,9 @@ class _ContactCreatorBottomSheetState extends ConsumerState<ContactCreatorBottom
                 iconColor: Colors.green,
                 title: 'Call Direct',
                 subtitle: effectivePhone,
-                onTap: () => ExternalCommunicationLauncher.openPhoneDialer(effectivePhone),
+                onTap: () => ExternalCommunicationLauncher.openPhoneDialer(
+                  effectivePhone,
+                ),
               ),
           ],
         ],

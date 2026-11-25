@@ -42,7 +42,9 @@ class _CreatorContactRequestsScreenState
       final session = ref.read(sessionProvider);
       final repo = ref.read(contactOutreachRepositoryProvider);
       final creatorId = session.snapshot?.account.id ?? 'demo_creator_user_id';
-      final requests = await repo.listCreatorIncomingRequests(creatorId: creatorId);
+      final requests = await repo.listCreatorIncomingRequests(
+        creatorId: creatorId,
+      );
       if (mounted) {
         setState(() {
           _requests = requests;
@@ -82,8 +84,16 @@ class _CreatorContactRequestsScreenState
           : TabBarView(
               controller: _tabController,
               children: [
-                _buildList(_requests.where((r) => r.status == ContactRequestStatus.pending).toList()),
-                _buildList(_requests.where((r) => r.status == ContactRequestStatus.accepted).toList()),
+                _buildList(
+                  _requests
+                      .where((r) => r.status == ContactRequestStatus.pending)
+                      .toList(),
+                ),
+                _buildList(
+                  _requests
+                      .where((r) => r.status == ContactRequestStatus.accepted)
+                      .toList(),
+                ),
                 _buildList(_requests),
               ],
             ),
@@ -183,13 +193,19 @@ class _IncomingCard extends ConsumerWidget {
                       ),
                       Text(
                         request.campaignName ?? 'Collaboration Inquiry',
-                        style: const TextStyle(color: Colors.grey, fontSize: 12),
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
@@ -220,7 +236,10 @@ class _IncomingCard extends ConsumerWidget {
                 ),
                 child: Text(
                   '"${request.personalMessage}"',
-                  style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                  style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ],
@@ -230,12 +249,15 @@ class _IncomingCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
-                    style: OutlinedButton.styleFrom(foregroundColor: AppColors.error),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.error,
+                    ),
                     onPressed: () => _decline(context, ref),
                     child: const Text('Decline'),
                   ),
                   const SizedBox(width: 8),
-                  if (request.requestType == ContactRequestType.requestQuotation)
+                  if (request.requestType ==
+                      ContactRequestType.requestQuotation)
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.burgundy,
@@ -246,7 +268,8 @@ class _IncomingCard extends ConsumerWidget {
                           context: context,
                           builder: (ctx) => SubmitQuotationDialog(
                             requestId: request.id,
-                            senderOrganizationName: request.senderOrganizationName,
+                            senderOrganizationName:
+                                request.senderOrganizationName,
                             campaignName: request.campaignName,
                           ),
                         ).then((_) => onRefresh());
@@ -311,7 +334,10 @@ class _IncomingCard extends ConsumerWidget {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: AppColors.error, content: Text('Error: $e')),
+          SnackBar(
+            backgroundColor: AppColors.error,
+            content: Text('Error: $e'),
+          ),
         );
       }
     }
@@ -320,17 +346,22 @@ class _IncomingCard extends ConsumerWidget {
   Future<void> _decline(BuildContext context, WidgetRef ref) async {
     final repo = ref.read(contactOutreachRepositoryProvider);
     try {
-      await repo.declineContactRequest(requestId: request.id, reason: 'Not available currently');
+      await repo.declineContactRequest(
+        requestId: request.id,
+        reason: 'Not available currently',
+      );
       onRefresh();
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Request declined.')),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Request declined.')));
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: AppColors.error, content: Text('Error: $e')),
+          SnackBar(
+            backgroundColor: AppColors.error,
+            content: Text('Error: $e'),
+          ),
         );
       }
     }

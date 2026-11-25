@@ -160,8 +160,12 @@ async function processTask(params: {
       const title = String(contextData.title || "Campaign");
       const objective = String(contextData.objective || "Brand awareness and creator engagement");
       return {
-        suggestion: `Looking for authentic creators to showcase ${title}. Primary goal: ${objective}. Deliverables include 1 high-resolution Reel/Video and 2 Story frames highlighting real product utility. Compensation includes direct fixed fee with milestone payment terms.`,
-        rationale: "Optimized for clear expectations, concise scope, and high applicant response rates.",
+        suggestion: `Looking for authentic creators to showcase ${title}. ` +
+          `Primary goal: ${objective}. Deliverables include 1 high-resolution ` +
+          "Reel/Video and 2 Story frames highlighting real product utility. " +
+          "Compensation includes direct fixed fee with milestone payment terms.",
+        rationale:
+          "Optimized for clear expectations, concise scope, and high applicant response rates.",
         fields: {
           suggestedDeliverables: "1x Dedicated Video/Reel, 2x Story frames with swipe-up/link",
           suggestedSlots: 3,
@@ -171,8 +175,12 @@ async function processTask(params: {
 
     case "suggest_deliverables": {
       return {
-        suggestion: "1x High-Resolution Reel/Video (60s), 2x Story posts with brand tags, 30-day organic digital usage rights.",
-        rationale: "Standard high-performing deliverable bundle for Indian creator collabs with transparent deliverables.",
+        suggestion:
+          "1x High-Resolution Reel/Video (60s), 2x Story posts with brand tags, " +
+          "30-day organic digital usage rights.",
+        rationale:
+          "Standard high-performing deliverable bundle for Indian creator collabs " +
+          "with transparent deliverables.",
         fields: {
           deliverablesList: [
             "1x 60s Reel / Short Video",
@@ -185,7 +193,9 @@ async function processTask(params: {
 
     case "explain_filters": {
       return {
-        suggestion: "Filters help narrow down talent by verified location, platform, and content category. The 'Verified Only' toggle ensures creators with authenticated platform identity.",
+        suggestion:
+          "Filters help narrow down talent by verified location, platform, and content category. " +
+          "The 'Verified Only' toggle ensures creators with authenticated platform identity.",
         rationale: "Using Category and Location filters together yields the best shortlist match.",
       };
     }
@@ -195,8 +205,12 @@ async function processTask(params: {
       const campaignTitle = String(contextData.campaignTitle || "the campaign");
       const categories = String(contextData.categories || "content creation");
       return {
-        suggestion: `Hi team, I would love to collaborate on ${campaignTitle}! My audience is deeply engaged in ${categories}, and my style aligns naturally with your brand voice. I provide prompt communication, high-production deliverables, and on-time milestones. Excited to make this a win-win partnership!`,
-        rationale: "Structured to emphasize category relevance, audience engagement, and reliability.",
+        suggestion: `Hi team, I would love to collaborate on ${campaignTitle}! ` +
+          `My audience is deeply engaged in ${categories}, and my style aligns naturally ` +
+          "with your brand voice. I provide prompt communication, high-production deliverables, " +
+          "and on-time milestones. Excited to make this a win-win partnership!",
+        rationale:
+          "Structured to emphasize category relevance, audience engagement, and reliability.",
       };
     }
 
@@ -207,11 +221,13 @@ async function processTask(params: {
 
       const suggestionText = missingFields.length > 0
         ? `To improve profile discovery by brands, we recommend: \n• ${missingFields.join("\n• ")}`
-        : "Your profile contains all core verification fields! Keeping your portfolio and biography up to date ensures faster brand selections.";
+        : "Your profile contains all core verification fields! Keeping your portfolio and " +
+          "biography up to date ensures faster brand selections.";
 
       return {
         suggestion: suggestionText,
-        rationale: "Profiles with complete portfolios and biographies get 3x higher shortlist rates.",
+        rationale:
+          "Profiles with complete portfolios and biographies get 3x higher shortlist rates.",
       };
     }
 
@@ -220,7 +236,8 @@ async function processTask(params: {
       const handle = String(contextData.handle || "");
       const primaryCategory = String(contextData.primaryCategory || "General");
       return {
-        suggestion: `${name} (${handle}) specializes in ${primaryCategory}. Suitable for category-aligned brand briefs with direct deliverable workflows.`,
+        suggestion: `${name} (${handle}) specializes in ${primaryCategory}. ` +
+          "Suitable for category-aligned brand briefs with direct deliverable workflows.",
         rationale: "Quick talent briefing based purely on verified profile records.",
       };
     }

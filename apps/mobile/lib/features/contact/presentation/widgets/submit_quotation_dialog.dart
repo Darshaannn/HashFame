@@ -18,14 +18,17 @@ class SubmitQuotationDialog extends ConsumerStatefulWidget {
   final String? campaignName;
 
   @override
-  ConsumerState<SubmitQuotationDialog> createState() => _SubmitQuotationDialogState();
+  ConsumerState<SubmitQuotationDialog> createState() =>
+      _SubmitQuotationDialogState();
 }
 
 class _SubmitQuotationDialogState extends ConsumerState<SubmitQuotationDialog> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
   final _deliverableController = TextEditingController();
-  final _usageRightsController = TextEditingController(text: 'Digital Organic & 30 Days Repost');
+  final _usageRightsController = TextEditingController(
+    text: 'Digital Organic & 30 Days Repost',
+  );
   final _timelineController = TextEditingController();
   final _notesController = TextEditingController();
   bool _submitting = false;
@@ -48,7 +51,9 @@ class _SubmitQuotationDialogState extends ConsumerState<SubmitQuotationDialog> {
       final session = ref.read(sessionProvider);
       final repo = ref.read(contactOutreachRepositoryProvider);
       final creatorId = session.snapshot?.account.id ?? 'demo_creator_user_id';
-      final amount = double.parse(_amountController.text.trim().replaceAll(',', ''));
+      final amount = double.parse(
+        _amountController.text.trim().replaceAll(',', ''),
+      );
 
       await repo.submitPrivateQuotation(
         requestId: widget.requestId,
@@ -56,9 +61,15 @@ class _SubmitQuotationDialogState extends ConsumerState<SubmitQuotationDialog> {
         proposedAmount: amount,
         currency: 'INR',
         deliverableDescription: _deliverableController.text.trim(),
-        usageRights: _usageRightsController.text.trim().isEmpty ? null : _usageRightsController.text.trim(),
-        timeline: _timelineController.text.trim().isEmpty ? null : _timelineController.text.trim(),
-        notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+        usageRights: _usageRightsController.text.trim().isEmpty
+            ? null
+            : _usageRightsController.text.trim(),
+        timeline: _timelineController.text.trim().isEmpty
+            ? null
+            : _timelineController.text.trim(),
+        notes: _notesController.text.trim().isEmpty
+            ? null
+            : _notesController.text.trim(),
       );
 
       if (mounted) {
@@ -73,7 +84,10 @@ class _SubmitQuotationDialogState extends ConsumerState<SubmitQuotationDialog> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: AppColors.error, content: Text('Error: $e')),
+          SnackBar(
+            backgroundColor: AppColors.error,
+            content: Text('Error: $e'),
+          ),
         );
       }
     } finally {
@@ -96,7 +110,11 @@ class _SubmitQuotationDialogState extends ConsumerState<SubmitQuotationDialog> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.request_quote_rounded, color: AppColors.burgundy, size: 24),
+                    const Icon(
+                      Icons.request_quote_rounded,
+                      color: AppColors.burgundy,
+                      size: 24,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -125,9 +143,13 @@ class _SubmitQuotationDialogState extends ConsumerState<SubmitQuotationDialog> {
                     border: OutlineInputBorder(),
                   ),
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Enter proposed amount';
+                    if (v == null || v.trim().isEmpty) {
+                      return 'Enter proposed amount';
+                    }
                     final num = double.tryParse(v.trim().replaceAll(',', ''));
-                    if (num == null || num <= 0) return 'Enter a valid positive amount';
+                    if (num == null || num <= 0) {
+                      return 'Enter a valid positive amount';
+                    }
                     return null;
                   },
                 ),
@@ -177,7 +199,9 @@ class _SubmitQuotationDialogState extends ConsumerState<SubmitQuotationDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: _submitting ? null : () => Navigator.pop(context),
+                      onPressed: _submitting
+                          ? null
+                          : () => Navigator.pop(context),
                       child: const Text('Cancel'),
                     ),
                     const SizedBox(width: 8),
@@ -191,7 +215,10 @@ class _SubmitQuotationDialogState extends ConsumerState<SubmitQuotationDialog> {
                           ? const SizedBox(
                               width: 20,
                               height: 20,
-                              child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
+                              child: CircularProgressIndicator(
+                                color: AppColors.white,
+                                strokeWidth: 2,
+                              ),
                             )
                           : const Text('Submit Quotation'),
                     ),

@@ -76,11 +76,7 @@ class _ShortcutCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: AppColors.burgundy,
-              size: 22,
-            ),
+            Icon(icon, color: AppColors.burgundy, size: 22),
             const SizedBox(width: 8),
             Expanded(
               child: Column(
@@ -123,4 +119,3 @@ class _ShortcutCard extends StatelessWidget {
     );
   }
 }
-

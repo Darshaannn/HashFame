@@ -1,12 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-enum ExternalCommunicationType {
-  instagram,
-  whatsapp,
-  email,
-  phone,
-}
+enum ExternalCommunicationType { instagram, whatsapp, email, phone }
 
 class ExternalCommunicationLauncher {
   const ExternalCommunicationLauncher._();
@@ -47,10 +42,7 @@ class ExternalCommunicationLauncher {
     final uri = Uri(
       scheme: 'mailto',
       path: cleanEmail,
-      queryParameters: {
-        'subject': subject,
-        'body': body,
-      },
+      queryParameters: {'subject': subject, 'body': body},
     );
     return _launchExternal(uri);
   }

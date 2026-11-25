@@ -4,8 +4,16 @@ import 'package:flutter/foundation.dart';
 enum InfluencerTier {
   nano(minFollowers: 1000, maxFollowers: 10000, label: 'Nano (1K - 10K)'),
   micro(minFollowers: 10000, maxFollowers: 100000, label: 'Micro (10K - 100K)'),
-  midTier(minFollowers: 100000, maxFollowers: 500000, label: 'Mid-Tier (100K - 500K)'),
-  macro(minFollowers: 500000, maxFollowers: 1000000, label: 'Macro (500K - 1M)'),
+  midTier(
+    minFollowers: 100000,
+    maxFollowers: 500000,
+    label: 'Mid-Tier (100K - 500K)',
+  ),
+  macro(
+    minFollowers: 500000,
+    maxFollowers: 1000000,
+    label: 'Macro (500K - 1M)',
+  ),
   mega(minFollowers: 1000000, maxFollowers: null, label: 'Mega (1M+)');
 
   const InfluencerTier({
@@ -61,7 +69,9 @@ class ParsedSearchCriteria {
     if (tier != null) {
       parts.add(tier!.label);
     } else if (minFollowers != null && maxFollowers != null) {
-      parts.add('${_formatCount(minFollowers!)} - ${_formatCount(maxFollowers!)} followers');
+      parts.add(
+        '${_formatCount(minFollowers!)} - ${_formatCount(maxFollowers!)} followers',
+      );
     } else if (minFollowers != null) {
       parts.add('>${_formatCount(minFollowers!)} followers');
     } else if (maxFollowers != null) {
@@ -102,7 +112,8 @@ class ParsedSearchCriteria {
       maxFollowers: maxFollowers ?? this.maxFollowers,
       tier: tier ?? this.tier,
       platform: platform ?? this.platform,
-      unsupportedConditions: unsupportedConditions ?? this.unsupportedConditions,
+      unsupportedConditions:
+          unsupportedConditions ?? this.unsupportedConditions,
       isNaturalLanguage: isNaturalLanguage ?? this.isNaturalLanguage,
     );
   }

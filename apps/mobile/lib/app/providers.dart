@@ -59,7 +59,8 @@ final activityRepositoryProvider = Provider<ActivityRepository>(
   (ref) => throw StateError('Bootstrap must supply activity repository'),
 );
 final contactOutreachRepositoryProvider = Provider<ContactOutreachRepository>(
-  (ref) => throw StateError('Bootstrap must supply contact outreach repository'),
+  (ref) =>
+      throw StateError('Bootstrap must supply contact outreach repository'),
 );
 final instagramRepositoryProvider = Provider<InstagramRepository>(
   (ref) => throw StateError('Bootstrap must supply instagram repository'),
@@ -70,4 +71,3 @@ final assistantServiceProvider = Provider<AssistantService>(
 final analyticsProvider = Provider<AnalyticsService>(
   (ref) => const NoopAnalyticsService(),
 );
-

@@ -19,7 +19,6 @@ import 'package:ggs_mobile/features/contact/domain/contact_models.dart';
 
 import 'creator_directory_loader.dart';
 
-
 class DemoStore {
   DemoStore._() {
     reset();
@@ -95,17 +94,18 @@ class DemoStore {
 
   void _seedContactOutreach() {
     // Preferences for Priya Mehra (demo_creator_user_id)
-    contactPreferences['demo_creator_user_id'] = const CreatorContactPreferences(
-      creatorId: 'demo_creator_user_id',
-      allowCollaborationRequests: true,
-      allowBusinessEmail: true,
-      businessEmail: 'priya.collabs@priyamehra.in',
-      allowPhone: false,
-      allowWhatsapp: true,
-      whatsappNumber: '+91 98765 43210',
-      preferredContactMethod: OutreachContactMethod.inApp,
-      responseTimeHours: 24,
-    );
+    contactPreferences['demo_creator_user_id'] =
+        const CreatorContactPreferences(
+          creatorId: 'demo_creator_user_id',
+          allowCollaborationRequests: true,
+          allowBusinessEmail: true,
+          businessEmail: 'priya.collabs@priyamehra.in',
+          allowPhone: false,
+          allowWhatsapp: true,
+          whatsappNumber: '+91 98765 43210',
+          preferredContactMethod: OutreachContactMethod.inApp,
+          responseTimeHours: 24,
+        );
 
     // Initial Request from Agency to Priya Mehra
     const req1Id = 'req_demo_agency_priya';
@@ -122,12 +122,13 @@ class DemoStore {
       isRegisteredCreator: true,
       requestType: ContactRequestType.requestQuotation,
       campaignName: 'Summer Glow Beauty Reel',
-      collaborationRequirement:
-          'We require 1 Instagram Reel and 2 Stories highlighting clean beauty essentials for a premier cosmetics brand.',
-      deliverables: const ['1x Instagram Reel (60s)', '2x Instagram Stories with Link'],
+      collaborationRequirement: 'We require 1 Instagram Reel and 2 Stories highlighting clean beauty essentials for a premier cosmetics brand.',
+      deliverables: const [
+        '1x Instagram Reel (60s)',
+        '2x Instagram Stories with Link',
+      ],
       expectedTimeline: '14 days after product delivery',
-      personalMessage:
-          'Hi Priya! Love your recent aesthetic reels. We have an exclusive campaign matching your audience perfectly.',
+      personalMessage: 'Hi Priya! Love your recent aesthetic reels. We have an exclusive campaign matching your audience perfectly.',
       status: ContactRequestStatus.accepted,
       contactMethod: OutreachContactMethod.inApp,
       conversationId: conv1Id,
@@ -143,7 +144,8 @@ class DemoStore {
       creatorId: 'demo_creator_user_id',
       proposedAmount: 45000.0,
       currency: 'INR',
-      deliverableDescription: '1 Dedicated Reel (60s, 4K) + 2 Stories with swipe-up link',
+      deliverableDescription:
+          '1 Dedicated Reel (60s, 4K) + 2 Stories with swipe-up link',
       usageRights: 'Digital Organic & 30 Days Brand Social repost',
       timeline: 'Script in 3 days, Final edit in 5 days',
       notes: 'Includes one round of minor revisions. Product samples needed 3 days prior.',
@@ -205,8 +207,7 @@ class DemoStore {
       isRegisteredCreator: true,
       requestType: ContactRequestType.brandCollaboration,
       campaignName: 'Festive Season Launch',
-      collaborationRequirement:
-          'Seeking an authentic festive lookbook reel showcasing our new ethnic collection.',
+      collaborationRequirement: 'Seeking an authentic festive lookbook reel showcasing our new ethnic collection.',
       deliverables: const ['1x Reel', '1x Carousel Post'],
       expectedTimeline: 'Delivery before Diwali week',
       personalMessage: 'Hi Priya, we would love to collaborate on our flagship festive collection!',

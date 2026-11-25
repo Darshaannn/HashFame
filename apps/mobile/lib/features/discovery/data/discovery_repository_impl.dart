@@ -84,7 +84,9 @@ class SupabaseDiscoveryDataSource {
 
       if (filters.query.isNotEmpty) {
         final q = '%${filters.query}%';
-        dirQuery = dirQuery.or('display_name.ilike.$q,instagram_handle.ilike.$q');
+        dirQuery = dirQuery.or(
+          'display_name.ilike.$q,instagram_handle.ilike.$q',
+        );
       }
 
       if (filters.city != null && filters.city!.isNotEmpty) {
@@ -121,8 +123,11 @@ class SupabaseDiscoveryDataSource {
     );
   }
 
-  CreatorDiscoveryItem _mapDirectoryRowToDiscoveryItem(Map<String, dynamic> row) {
-    final catList = (row['categories'] as List?)?.map((e) => e.toString()).toList() ?? [];
+  CreatorDiscoveryItem _mapDirectoryRowToDiscoveryItem(
+    Map<String, dynamic> row,
+  ) {
+    final catList =
+        (row['categories'] as List?)?.map((e) => e.toString()).toList() ?? [];
     final followers = row['followers_count'] is int
         ? row['followers_count'] as int
         : int.tryParse(row['followers_count']?.toString() ?? '');
@@ -130,7 +135,9 @@ class SupabaseDiscoveryDataSource {
     return CreatorDiscoveryItem(
       creatorId: row['directory_id'] as String,
       displayName: row['display_name'] as String? ?? '',
-      professionalName: row['instagram_handle'] != null ? '@${row['instagram_handle']}' : null,
+      professionalName: row['instagram_handle'] != null
+          ? '@${row['instagram_handle']}'
+          : null,
       avatarPath: row['image_path'] as String?,
       city: row['city'] as String?,
       country: 'IN',

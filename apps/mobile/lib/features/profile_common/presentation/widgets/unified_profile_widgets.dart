@@ -392,9 +392,7 @@ class GGDemoControlsCard extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.person, color: AppColors.primary),
                 title: const Text('Creator (Aisha Mehta)'),
-                subtitle: const Text(
-                  'Opportunities, applications, portfolio',
-                ),
+                subtitle: const Text('Opportunities, applications, portfolio'),
                 onTap: () {
                   Navigator.pop(ctx);
                   _switchRole(context, ref, ProfessionalRole.creator);

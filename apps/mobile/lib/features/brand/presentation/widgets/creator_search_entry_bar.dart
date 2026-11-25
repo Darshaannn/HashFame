@@ -9,7 +9,8 @@ class CreatorSearchEntryBar extends ConsumerStatefulWidget {
   const CreatorSearchEntryBar({super.key});
 
   @override
-  ConsumerState<CreatorSearchEntryBar> createState() => _CreatorSearchEntryBarState();
+  ConsumerState<CreatorSearchEntryBar> createState() =>
+      _CreatorSearchEntryBarState();
 }
 
 class _CreatorSearchEntryBarState extends ConsumerState<CreatorSearchEntryBar> {
@@ -23,9 +24,9 @@ class _CreatorSearchEntryBarState extends ConsumerState<CreatorSearchEntryBar> {
 
   void _triggerSearch(String query) {
     if (query.trim().isNotEmpty) {
-      ref.read(creatorSearchFiltersProvider.notifier).update(
-            (state) => state.copyWith(query: query.trim()),
-          );
+      ref
+          .read(creatorSearchFiltersProvider.notifier)
+          .update((state) => state.copyWith(query: query.trim()));
       ref.read(discoveryControllerProvider.notifier).search(initial: true);
     }
     context.push('/discover');
@@ -46,11 +47,7 @@ class _CreatorSearchEntryBarState extends ConsumerState<CreatorSearchEntryBar> {
           padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Row(
             children: [
-              const Icon(
-                Icons.search,
-                color: AppColors.burgundy,
-                size: 20,
-              ),
+              const Icon(Icons.search, color: AppColors.burgundy, size: 20),
               const SizedBox(width: 10),
               Expanded(
                 child: TextField(
@@ -85,4 +82,3 @@ class _CreatorSearchEntryBarState extends ConsumerState<CreatorSearchEntryBar> {
     );
   }
 }
-

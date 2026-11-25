@@ -11,10 +11,7 @@ import '../../../../auth/presentation/session_controller.dart';
 import '../../profile/creator_profile_controller.dart';
 
 class CreatorHomeHeader extends ConsumerWidget {
-  const CreatorHomeHeader({
-    super.key,
-    this.onRoleSelected,
-  });
+  const CreatorHomeHeader({super.key, this.onRoleSelected});
 
   final ValueChanged<ProfessionalRole>? onRoleSelected;
 
@@ -42,11 +39,7 @@ class CreatorHomeHeader extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Container(
-              height: 18,
-              width: 1,
-              color: Colors.white24,
-            ),
+            Container(height: 18, width: 1, color: Colors.white24),
             const SizedBox(width: 8),
             const Text(
               'Creator Home',
@@ -103,7 +96,8 @@ class CreatorHomeHeader extends ConsumerWidget {
 
   Widget _buildRoleDropdown(BuildContext context, WidgetRef ref) {
     final session = ref.watch(sessionProvider);
-    final currentRole = session.snapshot?.account.primaryRoleLabel ?? ProfessionalRole.creator;
+    final currentRole =
+        session.snapshot?.account.primaryRoleLabel ?? ProfessionalRole.creator;
 
     final roles = [
       (ProfessionalRole.brandMarketer, 'Brand Demo'),
@@ -168,7 +162,9 @@ class CreatorHomeHeader extends ConsumerWidget {
                       ? Icons.check_circle_rounded
                       : Icons.radio_button_unchecked,
                   size: 16,
-                  color: role == currentRole ? AppColors.burgundy : Colors.white60,
+                  color: role == currentRole
+                      ? AppColors.burgundy
+                      : Colors.white60,
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -176,8 +172,12 @@ class CreatorHomeHeader extends ConsumerWidget {
                   style: TextStyle(
                     fontFamily: AppTypography.hindFont,
                     fontSize: 13,
-                    fontWeight: role == currentRole ? FontWeight.w600 : FontWeight.w400,
-                    color: role == currentRole ? AppColors.white : Colors.white70,
+                    fontWeight: role == currentRole
+                        ? FontWeight.w600
+                        : FontWeight.w400,
+                    color: role == currentRole
+                        ? AppColors.white
+                        : Colors.white70,
                   ),
                 ),
               ],

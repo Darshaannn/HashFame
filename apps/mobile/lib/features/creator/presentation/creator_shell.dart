@@ -37,28 +37,64 @@ class CreatorShell extends StatelessWidget {
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.home_outlined, color: AppColors.secondaryGray, size: 22),
+            icon: Icon(
+              Icons.home_outlined,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
             selectedIcon: Icon(Icons.home, color: AppColors.burgundy, size: 22),
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.search_rounded, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.search_rounded, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.search_rounded,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.search_rounded,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Discover Work',
           ),
           NavigationDestination(
-            icon: Icon(Icons.assignment_outlined, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.assignment, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.assignment_outlined,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.assignment,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Applications',
           ),
           NavigationDestination(
-            icon: Icon(Icons.notifications_outlined, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.notifications, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.notifications_outlined,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.notifications,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Activity',
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_outline, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.person, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.person_outline,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.person,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Profile',
           ),
         ],

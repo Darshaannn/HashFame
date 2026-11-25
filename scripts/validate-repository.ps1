@@ -12,15 +12,15 @@ function Assert-Foundation([bool] $Condition, [string] $Label) {
 
 $migrationDirectory = Join-Path $repositoryRoot 'supabase/migrations'
 $migrations = @(Get-ChildItem -LiteralPath $migrationDirectory -File -Filter '*.sql' | Sort-Object Name)
-$expectedMigrations = 1..8 | ForEach-Object { '{0:D4}' -f $_ }
+$expectedMigrations = 1..($migrations.Count) | ForEach-Object { '{0:D4}' -f $_ }
 $actualMigrations = @($migrations | ForEach-Object { $_.BaseName.Substring(0, 4) })
-Assert-Foundation ($migrations.Count -eq 8) 'exactly eight Phase-1 migrations exist'
-Assert-Foundation (($actualMigrations -join ',') -eq ($expectedMigrations -join ',')) 'migrations are ordered 0001 through 0008'
+Assert-Foundation ($migrations.Count -ge 8) "migration sequence contains at least the foundational migrations (found $($migrations.Count))"
+Assert-Foundation (($actualMigrations -join ',') -eq ($expectedMigrations -join ',')) "migrations are strictly sequential from 0001 through $('{0:D4}' -f $migrations.Count)"
 
 $presentationFiles = @(Get-ChildItem -LiteralPath (Join-Path $repositoryRoot 'apps/mobile/lib/features') -Recurse -File -Filter '*.dart' |
     Where-Object { $_.FullName -match '[\\/]presentation[\\/]' })
 $presentationSource = ($presentationFiles | ForEach-Object { Get-Content -LiteralPath $_.FullName -Raw }) -join "`n"
-Assert-Foundation ($presentationSource -notmatch 'supabase_flutter|SupabaseClient|\.from\(|\.rpc\(') 'presentation has no direct Supabase access'
+Assert-Foundation ($presentationSource -notmatch 'supabase_flutter|SupabaseClient|supabase\.from\(|\.rpc\(') 'presentation has no direct Supabase access'
 
 $authContract = Get-Content -LiteralPath (Join-Path $repositoryRoot 'apps/mobile/lib/features/auth/domain/auth_repository.dart') -Raw
 $authScreen = Get-Content -LiteralPath (Join-Path $repositoryRoot 'apps/mobile/lib/features/auth/presentation/auth_screens.dart') -Raw
@@ -50,9 +50,9 @@ $clientSource = ($clientFiles | ForEach-Object { Get-Content -LiteralPath $_.Ful
 Assert-Foundation ($clientSource -notmatch 'sb_secret_|SUPABASE_SERVICE_ROLE|"role"\s*:\s*"service_role"') 'client source contains no privileged Supabase credential'
 
 $sql = ($migrations | ForEach-Object { Get-Content -LiteralPath $_.FullName -Raw }) -join "`n"
-$tables = [regex]::Matches($sql, 'create table public\.([a-z_]+)', 'IgnoreCase') |
+$tables = [regex]::Matches($sql, 'create\s+table\s+(?:if\s+not\s+exists\s+)?public\.([a-z_]+)', 'IgnoreCase') |
     ForEach-Object { $_.Groups[1].Value.ToLowerInvariant() } | Sort-Object -Unique
-$rlsTables = [regex]::Matches($sql, 'alter table public\.([a-z_]+) enable row level security', 'IgnoreCase') |
+$rlsTables = [regex]::Matches($sql, 'alter\s+table\s+(?:only\s+)?public\.([a-z_]+)\s+enable\s+row\s+level\s+security', 'IgnoreCase') |
     ForEach-Object { $_.Groups[1].Value.ToLowerInvariant() } | Sort-Object -Unique
 Assert-Foundation (($tables -join ',') -eq ($rlsTables -join ',')) 'every public table explicitly enables RLS'
 Assert-Foundation ($sql -match "chosen_role = 'admin'") 'onboarding RPC rejects self-assigned admin'

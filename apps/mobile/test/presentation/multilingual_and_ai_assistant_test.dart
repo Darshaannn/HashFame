@@ -28,17 +28,20 @@ void main() {
       expect(AppSupportedLocale.fromCode('en'), AppSupportedLocale.english);
       expect(AppSupportedLocale.fromCode('hi'), AppSupportedLocale.hindi);
       expect(AppSupportedLocale.fromCode('mr'), AppSupportedLocale.marathi);
-      expect(AppSupportedLocale.fromCode('unknown'), AppSupportedLocale.english);
+      expect(
+        AppSupportedLocale.fromCode('unknown'),
+        AppSupportedLocale.english,
+      );
     });
 
-    testWidgets('Language switching updates MaterialApp locale', (tester) async {
+    testWidgets('Language switching updates MaterialApp locale', (
+      tester,
+    ) async {
       final fakeService = _FakeLocaleService();
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            localeServiceProvider.overrideWithValue(fakeService),
-          ],
+          overrides: [localeServiceProvider.overrideWithValue(fakeService)],
           child: Consumer(
             builder: (context, ref, _) {
               final locale = ref.watch(activeLocaleProvider);
@@ -130,84 +133,88 @@ void main() {
       expect(response.fields['suggestedSlots'], 3);
     });
 
-    test('DemoAssistantServiceImpl handles error simulation honestly', () async {
-      const service = DemoAssistantServiceImpl(simulateError: true);
-      final response = await service.executeTask(
-        const AssistantRequest(
-          role: AssistantRole.creator,
-          task: AssistantTask.draftPitch,
-          contextData: {'campaignTitle': 'Summer Glow'},
-        ),
-      );
+    test(
+      'DemoAssistantServiceImpl handles error simulation honestly',
+      () async {
+        const service = DemoAssistantServiceImpl(simulateError: true);
+        final response = await service.executeTask(
+          const AssistantRequest(
+            role: AssistantRole.creator,
+            task: AssistantTask.draftPitch,
+            contextData: {'campaignTitle': 'Summer Glow'},
+          ),
+        );
 
-      expect(response.success, isFalse);
-      expect(response.errorMessage, contains('temporary service failure'));
-    });
+        expect(response.success, isFalse);
+        expect(response.errorMessage, contains('temporary service failure'));
+      },
+    );
 
-    testWidgets('AssistantModalSheet renders suggestion, accepts and rejects cleanly', (
-      tester,
-    ) async {
-      AssistantResponse? accepted;
+    testWidgets(
+      'AssistantModalSheet renders suggestion, accepts and rejects cleanly',
+      (tester) async {
+        AssistantResponse? accepted;
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            assistantServiceProvider.overrideWithValue(const DemoAssistantServiceImpl()),
-          ],
-          child: MaterialApp(
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              assistantServiceProvider.overrideWithValue(
+                const DemoAssistantServiceImpl(),
+              ),
             ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(
-              body: Builder(
-                builder: (context) => ElevatedButton(
-                  onPressed: () {
-                    AssistantModalSheet.show(
-                      context: context,
-                      role: AssistantRole.creator,
-                      task: AssistantTask.draftPitch,
-                      title: 'Draft Pitch Note',
-                      contextData: {
-                        'campaignTitle': 'Fitness Energy Drink',
-                      },
-                      onSuggestionAccepted: (resp) {
-                        accepted = resp;
-                      },
-                    );
-                  },
-                  child: const Text('OPEN_AI_MODAL'),
+            child: MaterialApp(
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Scaffold(
+                body: Builder(
+                  builder: (context) => ElevatedButton(
+                    onPressed: () {
+                      AssistantModalSheet.show(
+                        context: context,
+                        role: AssistantRole.creator,
+                        task: AssistantTask.draftPitch,
+                        title: 'Draft Pitch Note',
+                        contextData: {'campaignTitle': 'Fitness Energy Drink'},
+                        onSuggestionAccepted: (resp) {
+                          accepted = resp;
+                        },
+                      );
+                    },
+                    child: const Text('OPEN_AI_MODAL'),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      // Open Modal
-      await tester.tap(find.text('OPEN_AI_MODAL'));
-      await tester.pump();
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        // Open Modal
+        await tester.tap(find.text('OPEN_AI_MODAL'));
+        await tester.pump();
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-      // Settle delayed async task
-      await tester.pump(const Duration(milliseconds: 500));
-      await tester.pumpAndSettle();
+        // Settle delayed async task
+        await tester.pump(const Duration(milliseconds: 500));
+        await tester.pumpAndSettle();
 
-      expect(find.text('Draft Pitch Note'), findsOneWidget);
-      expect(find.textContaining('Fitness Energy Drink'), findsOneWidget);
-      expect(find.text('Accept & Apply Suggestion'), findsOneWidget);
-      expect(find.text('Discard Suggestion'), findsOneWidget);
+        expect(find.text('Draft Pitch Note'), findsOneWidget);
+        expect(find.textContaining('Fitness Energy Drink'), findsOneWidget);
+        expect(find.text('Accept & Apply Suggestion'), findsOneWidget);
+        expect(find.text('Discard Suggestion'), findsOneWidget);
 
-      // Tap Accept & Apply
-      await tester.tap(find.text('Accept & Apply Suggestion'));
-      await tester.pumpAndSettle();
+        // Tap Accept & Apply
+        await tester.tap(find.text('Accept & Apply Suggestion'));
+        await tester.pumpAndSettle();
 
-      expect(accepted, isNotNull);
-      expect(accepted?.suggestion, contains('Fitness Energy Drink'));
-    });
+        expect(accepted, isNotNull);
+        expect(accepted?.suggestion, contains('Fitness Energy Drink'));
+      },
+    );
   });
 }

@@ -95,11 +95,7 @@ class CampaignSpotlightAndActivitySection extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 6),
-              Container(
-                width: 20,
-                height: 1.5,
-                color: AppColors.burgundy,
-              ),
+              Container(width: 20, height: 1.5, color: AppColors.burgundy),
             ],
           ),
           const SizedBox(height: 12),
@@ -173,7 +169,10 @@ class CampaignSpotlightAndActivitySection extends StatelessWidget {
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 7,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFFDE8E8),
                               borderRadius: BorderRadius.circular(4),
@@ -242,11 +241,7 @@ class CampaignSpotlightAndActivitySection extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 6),
-              Container(
-                width: 20,
-                height: 1.5,
-                color: AppColors.burgundy,
-              ),
+              Container(width: 20, height: 1.5, color: AppColors.burgundy),
             ],
           ),
           const SizedBox(height: 10),
@@ -331,4 +326,3 @@ class CampaignSpotlightAndActivitySection extends StatelessWidget {
     );
   }
 }
-

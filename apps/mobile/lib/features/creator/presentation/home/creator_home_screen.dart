@@ -114,7 +114,9 @@ class CreatorHomeScreen extends ConsumerWidget {
                 // Backwards-compatibility anchors for tests
                 Builder(
                   builder: (context) {
-                    final name = account.displayName.isNotEmpty ? account.displayName : 'New Creator';
+                    final name = account.displayName.isNotEmpty
+                        ? account.displayName
+                        : 'New Creator';
                     return SizedBox(
                       height: 0,
                       width: 0,
@@ -126,7 +128,9 @@ class CreatorHomeScreen extends ConsumerWidget {
                         child: Column(
                           children: [
                             Text('Welcome, $name'),
-                            Text('Applications: ${appsAsync.value?.length ?? 0}'),
+                            Text(
+                              'Applications: ${appsAsync.value?.length ?? 0}',
+                            ),
                           ],
                         ),
                       ),
@@ -138,7 +142,9 @@ class CreatorHomeScreen extends ConsumerWidget {
                 Expanded(
                   child: profileAsync.when(
                     loading: () => const Center(
-                      child: CircularProgressIndicator(color: AppColors.burgundy),
+                      child: CircularProgressIndicator(
+                        color: AppColors.burgundy,
+                      ),
                     ),
                     error: (e, _) => Center(
                       child: AppErrorState(message: mapFailure(e).message),
@@ -150,9 +156,7 @@ class CreatorHomeScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             // 2. Creator Hero Section (High-contrast portrait overlay)
-                            CreatorHeroSection(
-                              profile: profile,
-                            ),
+                            CreatorHeroSection(profile: profile),
 
                             // (NOTE: PROFILE COMPLETENESS SECTION IS COMPLETELY REMOVED AS REQUESTED)
                             const SizedBox(height: 18),
@@ -188,9 +192,12 @@ class CreatorHomeScreen extends ConsumerWidget {
                             // Sign out for integration tests & accessible account actions
                             Center(
                               child: TextButton(
-                                onPressed: ref.watch(accountActionProvider).isLoading
+                                onPressed:
+                                    ref.watch(accountActionProvider).isLoading
                                     ? null
-                                    : () => ref.read(accountActionProvider.notifier).logout(),
+                                    : () => ref
+                                          .read(accountActionProvider.notifier)
+                                          .logout(),
                                 child: const Text(
                                   'Sign Out',
                                   style: TextStyle(

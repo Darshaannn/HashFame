@@ -10,10 +10,12 @@ class InstagramConnectionCard extends ConsumerStatefulWidget {
   const InstagramConnectionCard({super.key});
 
   @override
-  ConsumerState<InstagramConnectionCard> createState() => _InstagramConnectionCardState();
+  ConsumerState<InstagramConnectionCard> createState() =>
+      _InstagramConnectionCardState();
 }
 
-class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCard> {
+class _InstagramConnectionCardState
+    extends ConsumerState<InstagramConnectionCard> {
   InstagramConnectedProfile? _profile;
   List<InstagramMediaItem> _media = [];
   bool _loading = true;
@@ -86,7 +88,10 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.burgundy,
@@ -104,7 +109,8 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
       try {
         final session = ref.read(sessionProvider);
         final repo = ref.read(instagramRepositoryProvider);
-        final creatorId = session.snapshot?.account.id ?? 'demo_creator_user_id';
+        final creatorId =
+            session.snapshot?.account.id ?? 'demo_creator_user_id';
         await repo.connectInstagram(
           creatorId: creatorId,
           username: handleCtrl.text.trim(),
@@ -114,14 +120,19 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               backgroundColor: AppColors.success,
-              content: Text('Instagram account connected and verified via official Meta API!'),
+              content: Text(
+                'Instagram account connected and verified via official Meta API!',
+              ),
             ),
           );
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(backgroundColor: AppColors.error, content: Text('Connection error: $e')),
+            SnackBar(
+              backgroundColor: AppColors.error,
+              content: Text('Connection error: $e'),
+            ),
           );
         }
       } finally {
@@ -146,7 +157,10 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: AppColors.error, content: Text('Refresh error: $e')),
+          SnackBar(
+            backgroundColor: AppColors.error,
+            content: Text('Refresh error: $e'),
+          ),
         );
       }
     } finally {
@@ -163,9 +177,15 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
           'This will revoke access and remove your verified follower metrics and media showcase from GGs.',
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error, foregroundColor: AppColors.white),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+              foregroundColor: AppColors.white,
+            ),
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text('Disconnect'),
           ),
@@ -178,7 +198,8 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
       try {
         final session = ref.read(sessionProvider);
         final repo = ref.read(instagramRepositoryProvider);
-        final creatorId = session.snapshot?.account.id ?? 'demo_creator_user_id';
+        final creatorId =
+            session.snapshot?.account.id ?? 'demo_creator_user_id';
         await repo.disconnectInstagram(creatorId);
         await _loadConnection();
         if (mounted) {
@@ -195,10 +216,17 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Center(child: Padding(padding: EdgeInsets.all(16), child: CircularProgressIndicator()));
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
 
-    final isConnected = _profile != null && _profile!.status == InstagramConnectionStatus.connected;
+    final isConnected =
+        _profile != null &&
+        _profile!.status == InstagramConnectionStatus.connected;
 
     return Card(
       elevation: 1,
@@ -217,7 +245,11 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
                     color: Color(0xFFE1306C),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.camera_alt_outlined, color: Colors.white, size: 20),
+                  child: const Icon(
+                    Icons.camera_alt_outlined,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -236,15 +268,22 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
                         isConnected
                             ? 'Verified Meta Graph API Link'
                             : 'Connect to verify identity & sync metrics',
-                        style: const TextStyle(fontSize: 11, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: (isConnected ? AppColors.success : Colors.grey).withValues(alpha: 0.12),
+                    color: (isConnected ? AppColors.success : Colors.grey)
+                        .withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -307,8 +346,13 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
                           width: 90,
                           color: AppColors.surfaceSubtle,
                           child: m.thumbnailUrl != null
-                              ? Image.network(m.thumbnailUrl!, fit: BoxFit.cover)
-                              : const Center(child: Icon(Icons.image, color: Colors.grey)),
+                              ? Image.network(
+                                  m.thumbnailUrl!,
+                                  fit: BoxFit.cover,
+                                )
+                              : const Center(
+                                  child: Icon(Icons.image, color: Colors.grey),
+                                ),
                         ),
                       );
                     },
@@ -327,7 +371,9 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
                   ),
                   const SizedBox(width: 8),
                   TextButton.icon(
-                    style: TextButton.styleFrom(foregroundColor: AppColors.error),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.error,
+                    ),
                     icon: const Icon(Icons.link_off, size: 14),
                     label: const Text('Disconnect'),
                     onPressed: _busy ? null : _disconnect,
@@ -363,10 +409,7 @@ class _InstagramConnectionCardState extends ConsumerState<InstagramConnectionCar
           value,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         ),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 11, color: Colors.grey),
-        ),
+        Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
       ],
     );
   }

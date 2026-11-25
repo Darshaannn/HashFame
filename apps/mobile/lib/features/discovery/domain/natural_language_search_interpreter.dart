@@ -90,12 +90,53 @@ class NaturalLanguageSearchInterpreter {
   };
 
   static const List<String> _ignoredStopwords = [
-    'find', 'show', 'search', 'get', 'need', 'i', 'me', 'the', 'a', 'an',
-    'influencer', 'influencers', 'creator', 'creators', 'blogger', 'bloggers',
-    'who', 'make', 'makes', 'content', 'with', 'having', 'in', 'from', 'at',
-    'between', 'to', 'and', 'or', 'for', 'over', 'more', 'than', 'less',
-    'greater', 'under', 'dikhao', 'dakhva', 'ke', 'madhle', 'madhil', 'wale', 'wali',
-    'pahije', 'chahiye', 'batao', 'khojo',
+    'find',
+    'show',
+    'search',
+    'get',
+    'need',
+    'i',
+    'me',
+    'the',
+    'a',
+    'an',
+    'influencer',
+    'influencers',
+    'creator',
+    'creators',
+    'blogger',
+    'bloggers',
+    'who',
+    'make',
+    'makes',
+    'content',
+    'with',
+    'having',
+    'in',
+    'from',
+    'at',
+    'between',
+    'to',
+    'and',
+    'or',
+    'for',
+    'over',
+    'more',
+    'than',
+    'less',
+    'greater',
+    'under',
+    'dikhao',
+    'dakhva',
+    'ke',
+    'madhle',
+    'madhil',
+    'wale',
+    'wali',
+    'pahije',
+    'chahiye',
+    'batao',
+    'khojo',
   ];
 
   /// Parses natural language query into structured criteria
@@ -114,18 +155,30 @@ class NaturalLanguageSearchInterpreter {
     final unsupported = <String>[];
 
     // 1. Detect Unsupported Constraints (Gender, Engagement, Cost/Rates)
-    if (RegExp(r'\b(female|male|women|woman|men|man|girl|boy|ladki|ladka)\b').hasMatch(lower)) {
-      unsupported.add('Demographic / Gender filter is not tracked in the directory');
+    if (RegExp(r'\b(female|male|women|woman|men|man|girl|boy|ladki|ladka)\b')
+        .hasMatch(lower)) {
+      unsupported.add(
+        'Demographic / Gender filter is not tracked in the directory',
+      );
     }
-    if (RegExp(r'\b(engagement|er|views|impressions|reach|roi)\b').hasMatch(lower)) {
-      unsupported.add('Engagement rates / Reach metrics are currently unverified');
+    if (RegExp(r'\b(engagement|er|views|impressions|reach|roi)\b')
+        .hasMatch(lower)) {
+      unsupported.add(
+        'Engagement rates / Reach metrics are currently unverified',
+      );
     }
-    if (RegExp(r'\b(rate|price|cost|budget|rupees|rs|inr|charges|sasta|cheap)\b').hasMatch(lower)) {
-      unsupported.add('Public Rate Cards were removed in Phase 01. Request private quotation instead');
+    if (RegExp(
+      r'\b(rate|price|cost|budget|rupees|rs|inr|charges|sasta|cheap)\b',
+    ).hasMatch(lower)) {
+      unsupported.add(
+        'Public Rate Cards were removed in Phase 01. Request private quotation instead',
+      );
     }
 
     // 2. Detect Platform
-    if (lower.contains('instagram') || lower.contains('insta') || lower.contains('ig')) {
+    if (lower.contains('instagram') ||
+        lower.contains('insta') ||
+        lower.contains('ig')) {
       matchedPlatform = 'Instagram';
     }
 
@@ -180,8 +233,14 @@ class NaturalLanguageSearchInterpreter {
       ).firstMatch(lower);
 
       if (rangeMatch != null) {
-        final val1 = _parseFollowerValue(rangeMatch.group(1)!, rangeMatch.group(2) ?? rangeMatch.group(4));
-        final val2 = _parseFollowerValue(rangeMatch.group(3)!, rangeMatch.group(4) ?? rangeMatch.group(2));
+        final val1 = _parseFollowerValue(
+          rangeMatch.group(1)!,
+          rangeMatch.group(2) ?? rangeMatch.group(4),
+        );
+        final val2 = _parseFollowerValue(
+          rangeMatch.group(3)!,
+          rangeMatch.group(4) ?? rangeMatch.group(2),
+        );
         if (val1 != null && val2 != null) {
           minFollowers = val1 < val2 ? val1 : val2;
           maxFollowers = val1 < val2 ? val2 : val1;
@@ -192,7 +251,10 @@ class NaturalLanguageSearchInterpreter {
           r'(?:over|more than|greater than|above|>|\+)\s*(\d+(?:\.\d+)?)\s*(k|m|lakh|lakhs|l|lac|crore|cr)?',
         ).firstMatch(lower);
         if (minMatch != null) {
-          minFollowers = _parseFollowerValue(minMatch.group(1)!, minMatch.group(2));
+          minFollowers = _parseFollowerValue(
+            minMatch.group(1)!,
+            minMatch.group(2),
+          );
         }
 
         // Single Bound: less than X / under X / below X / < X
@@ -200,7 +262,10 @@ class NaturalLanguageSearchInterpreter {
           r'(?:less than|under|below|<)\s*(\d+(?:\.\d+)?)\s*(k|m|lakh|lakhs|l|lac|crore|cr)?',
         ).firstMatch(lower);
         if (maxMatch != null) {
-          maxFollowers = _parseFollowerValue(maxMatch.group(1)!, maxMatch.group(2));
+          maxFollowers = _parseFollowerValue(
+            maxMatch.group(1)!,
+            maxMatch.group(2),
+          );
         }
       }
     }
@@ -210,15 +275,20 @@ class NaturalLanguageSearchInterpreter {
     cleanedTokens = cleanedTokens.where((t) {
       if (_ignoredStopwords.contains(t)) return false;
       if (matchedCity != null && _cityAliases.containsKey(t)) return false;
-      if (matchedCategory != null && _categorySynonyms.containsKey(t)) return false;
-      if (t == 'nano' || t == 'micro' || t == 'macro' || t == 'mega') return false;
+      if (matchedCategory != null && _categorySynonyms.containsKey(t)) {
+        return false;
+      }
+      if (t == 'nano' || t == 'micro' || t == 'macro' || t == 'mega') {
+        return false;
+      }
       if (RegExp(r'^\d+[kml]?$').hasMatch(t)) return false;
       return true;
     }).toList();
 
     final keyword = cleanedTokens.isNotEmpty ? cleanedTokens.join(' ') : null;
 
-    final isNl = matchedCity != null ||
+    final isNl =
+        matchedCity != null ||
         matchedCategory != null ||
         minFollowers != null ||
         maxFollowers != null ||
@@ -246,7 +316,9 @@ class NaturalLanguageSearchInterpreter {
 
     if (u == 'k') return (num * 1000).round();
     if (u == 'm') return (num * 1000000).round();
-    if (u == 'lakh' || u == 'lakhs' || u == 'l' || u == 'lac') return (num * 100000).round();
+    if (u == 'lakh' || u == 'lakhs' || u == 'l' || u == 'lac') {
+      return (num * 100000).round();
+    }
     if (u == 'crore' || u == 'cr') return (num * 10000000).round();
     return num.round();
   }

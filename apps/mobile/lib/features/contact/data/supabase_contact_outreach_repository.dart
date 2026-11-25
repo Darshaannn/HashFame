@@ -1,4 +1,3 @@
-
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/errors/app_failure.dart';
@@ -29,24 +28,28 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
     OutreachContactMethod contactMethod = OutreachContactMethod.inApp,
   }) async {
     try {
-      final res = await _client.from('creator_contact_requests').insert({
-        'sender_user_id': senderUserId,
-        'sender_organization_id': senderOrganizationId,
-        'sender_organization_name': senderOrganizationName,
-        'recipient_creator_id': recipientCreatorId,
-        'recipient_directory_id': recipientDirectoryId,
-        'recipient_display_name': recipientDisplayName,
-        'recipient_avatar_path': recipientAvatarPath,
-        'is_registered_creator': isRegisteredCreator,
-        'request_type': requestType.wire,
-        'campaign_name': campaignName,
-        'collaboration_requirement': collaborationRequirement,
-        'deliverables': deliverables,
-        'expected_timeline': expectedTimeline,
-        'personal_message': personalMessage,
-        'status': ContactRequestStatus.pending.wire,
-        'contact_method': contactMethod.wire,
-      }).select().single();
+      final res = await _client
+          .from('creator_contact_requests')
+          .insert({
+            'sender_user_id': senderUserId,
+            'sender_organization_id': senderOrganizationId,
+            'sender_organization_name': senderOrganizationName,
+            'recipient_creator_id': recipientCreatorId,
+            'recipient_directory_id': recipientDirectoryId,
+            'recipient_display_name': recipientDisplayName,
+            'recipient_avatar_path': recipientAvatarPath,
+            'is_registered_creator': isRegisteredCreator,
+            'request_type': requestType.wire,
+            'campaign_name': campaignName,
+            'collaboration_requirement': collaborationRequirement,
+            'deliverables': deliverables,
+            'expected_timeline': expectedTimeline,
+            'personal_message': personalMessage,
+            'status': ContactRequestStatus.pending.wire,
+            'contact_method': contactMethod.wire,
+          })
+          .select()
+          .single();
 
       return CreatorContactRequest.fromJson(Map<String, dynamic>.from(res));
     } catch (e) {
@@ -68,21 +71,27 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
     String? notes,
   }) async {
     try {
-      final res = await _client.from('creator_contact_requests').insert({
-        'sender_user_id': senderUserId,
-        'sender_organization_id': senderOrganizationId,
-        'sender_organization_name': senderOrganizationName,
-        'recipient_directory_id': recipientDirectoryId,
-        'recipient_creator_id': recipientCreatorId,
-        'recipient_display_name': recipientDisplayName,
-        'recipient_avatar_path': recipientAvatarPath,
-        'is_registered_creator': recipientCreatorId != null,
-        'request_type': ContactRequestType.brandCollaboration.wire,
-        'collaboration_requirement': notes ?? 'External communication initiated via ${contactMethod.label}',
-        'status': ContactRequestStatus.pending.wire,
-        'contact_method': contactMethod.wire,
-        'external_stage': stage.wire,
-      }).select().single();
+      final res = await _client
+          .from('creator_contact_requests')
+          .insert({
+            'sender_user_id': senderUserId,
+            'sender_organization_id': senderOrganizationId,
+            'sender_organization_name': senderOrganizationName,
+            'recipient_directory_id': recipientDirectoryId,
+            'recipient_creator_id': recipientCreatorId,
+            'recipient_display_name': recipientDisplayName,
+            'recipient_avatar_path': recipientAvatarPath,
+            'is_registered_creator': recipientCreatorId != null,
+            'request_type': ContactRequestType.brandCollaboration.wire,
+            'collaboration_requirement':
+                notes ??
+                'External communication initiated via ${contactMethod.label}',
+            'status': ContactRequestStatus.pending.wire,
+            'contact_method': contactMethod.wire,
+            'external_stage': stage.wire,
+          })
+          .select()
+          .single();
 
       return CreatorContactRequest.fromJson(Map<String, dynamic>.from(res));
     } catch (e) {
@@ -98,7 +107,10 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
     try {
       final res = await _client
           .from('creator_contact_requests')
-          .update({'external_stage': stage.wire, 'updated_at': DateTime.now().toIso8601String()})
+          .update({
+            'external_stage': stage.wire,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
           .eq('id', requestId)
           .select()
           .single();
@@ -116,13 +128,19 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
     try {
       var query = _client.from('creator_contact_requests').select();
       if (organizationId != null && organizationId.isNotEmpty) {
-        query = query.or('sender_organization_id.eq.$organizationId,sender_user_id.eq.$userId');
+        query = query.or(
+          'sender_organization_id.eq.$organizationId,sender_user_id.eq.$userId',
+        );
       } else {
         query = query.eq('sender_user_id', userId);
       }
       final res = await query.order('created_at', ascending: false);
       return (res as List)
-          .map((r) => CreatorContactRequest.fromJson(Map<String, dynamic>.from(r as Map)))
+          .map(
+            (r) => CreatorContactRequest.fromJson(
+              Map<String, dynamic>.from(r as Map),
+            ),
+          )
           .toList();
     } catch (e) {
       throw mapFailure(e);
@@ -140,7 +158,11 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
           .eq('recipient_creator_id', creatorId)
           .order('created_at', ascending: false);
       return (res as List)
-          .map((r) => CreatorContactRequest.fromJson(Map<String, dynamic>.from(r as Map)))
+          .map(
+            (r) => CreatorContactRequest.fromJson(
+              Map<String, dynamic>.from(r as Map),
+            ),
+          )
           .toList();
     } catch (e) {
       throw mapFailure(e);
@@ -154,17 +176,27 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
   }) async {
     try {
       // 1. Fetch request details to create conversation
-      final reqMap = await _client.from('creator_contact_requests').select().eq('id', requestId).single();
-      final req = CreatorContactRequest.fromJson(Map<String, dynamic>.from(reqMap));
+      final reqMap = await _client
+          .from('creator_contact_requests')
+          .select()
+          .eq('id', requestId)
+          .single();
+      final req = CreatorContactRequest.fromJson(
+        Map<String, dynamic>.from(reqMap),
+      );
 
       // 2. Create conversation
-      final convRes = await _client.from('outreach_conversations').insert({
-        'request_id': requestId,
-        'organization_id': req.senderOrganizationId,
-        'brand_user_id': req.senderUserId,
-        'creator_user_id': creatorUserId,
-        'subject': req.campaignName ?? req.requestType.label,
-      }).select().single();
+      final convRes = await _client
+          .from('outreach_conversations')
+          .insert({
+            'request_id': requestId,
+            'organization_id': req.senderOrganizationId,
+            'brand_user_id': req.senderUserId,
+            'creator_user_id': creatorUserId,
+            'subject': req.campaignName ?? req.requestType.label,
+          })
+          .select()
+          .single();
       final convId = convRes['id'] as String;
 
       // 3. Mark request as accepted
@@ -179,7 +211,9 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
           .select()
           .single();
 
-      return CreatorContactRequest.fromJson(Map<String, dynamic>.from(updateRes));
+      return CreatorContactRequest.fromJson(
+        Map<String, dynamic>.from(updateRes),
+      );
     } catch (e) {
       throw mapFailure(e);
     }
@@ -241,16 +275,20 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
     String? notes,
   }) async {
     try {
-      final res = await _client.from('creator_quotations').insert({
-        'request_id': requestId,
-        'creator_id': creatorId,
-        'proposed_amount': proposedAmount,
-        'currency': currency,
-        'deliverable_description': deliverableDescription,
-        'usage_rights': usageRights,
-        'timeline': timeline,
-        'notes': notes,
-      }).select().single();
+      final res = await _client
+          .from('creator_quotations')
+          .insert({
+            'request_id': requestId,
+            'creator_id': creatorId,
+            'proposed_amount': proposedAmount,
+            'currency': currency,
+            'deliverable_description': deliverableDescription,
+            'usage_rights': usageRights,
+            'timeline': timeline,
+            'notes': notes,
+          })
+          .select()
+          .single();
       return PrivateQuotation.fromJson(Map<String, dynamic>.from(res));
     } catch (e) {
       throw mapFailure(e);
@@ -273,7 +311,9 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
   }
 
   @override
-  Future<CreatorContactPreferences> getCreatorContactPreferences(String creatorId) async {
+  Future<CreatorContactPreferences> getCreatorContactPreferences(
+    String creatorId,
+  ) async {
     try {
       final res = await _client
           .from('creator_contact_preferences')
@@ -290,9 +330,13 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
   }
 
   @override
-  Future<void> updateCreatorContactPreferences(CreatorContactPreferences preferences) async {
+  Future<void> updateCreatorContactPreferences(
+    CreatorContactPreferences preferences,
+  ) async {
     try {
-      await _client.from('creator_contact_preferences').upsert(preferences.toJson());
+      await _client
+          .from('creator_contact_preferences')
+          .upsert(preferences.toJson());
     } catch (e) {
       throw mapFailure(e);
     }
@@ -306,13 +350,19 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
     try {
       var query = _client.from('outreach_conversations').select();
       if (organizationId != null && organizationId.isNotEmpty) {
-        query = query.or('organization_id.eq.$organizationId,creator_user_id.eq.$userId,brand_user_id.eq.$userId');
+        query = query.or(
+          'organization_id.eq.$organizationId,creator_user_id.eq.$userId,brand_user_id.eq.$userId',
+        );
       } else {
         query = query.or('creator_user_id.eq.$userId,brand_user_id.eq.$userId');
       }
       final res = await query.order('last_message_at', ascending: false);
       return (res as List)
-          .map((r) => OutreachConversation.fromJson(Map<String, dynamic>.from(r as Map)))
+          .map(
+            (r) => OutreachConversation.fromJson(
+              Map<String, dynamic>.from(r as Map),
+            ),
+          )
           .toList();
     } catch (e) {
       throw mapFailure(e);
@@ -343,7 +393,12 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
           .eq('conversation_id', conversationId)
           .order('created_at', ascending: true);
       return (res as List)
-          .map((r) => OutreachMessage.fromJson(Map<String, dynamic>.from(r as Map), currentUserId: uid))
+          .map(
+            (r) => OutreachMessage.fromJson(
+              Map<String, dynamic>.from(r as Map),
+              currentUserId: uid,
+            ),
+          )
           .toList();
     } catch (e) {
       throw mapFailure(e);
@@ -358,19 +413,26 @@ class SupabaseContactOutreachRepository implements ContactOutreachRepository {
     required String content,
   }) async {
     try {
-      final res = await _client.from('outreach_messages').insert({
-        'conversation_id': conversationId,
-        'sender_id': senderId,
-        'sender_name': senderName,
-        'content': content,
-      }).select().single();
+      final res = await _client
+          .from('outreach_messages')
+          .insert({
+            'conversation_id': conversationId,
+            'sender_id': senderId,
+            'sender_name': senderName,
+            'content': content,
+          })
+          .select()
+          .single();
 
       await _client
           .from('outreach_conversations')
           .update({'last_message_at': DateTime.now().toIso8601String()})
           .eq('id', conversationId);
 
-      return OutreachMessage.fromJson(Map<String, dynamic>.from(res), currentUserId: senderId);
+      return OutreachMessage.fromJson(
+        Map<String, dynamic>.from(res),
+        currentUserId: senderId,
+      );
     } catch (e) {
       throw mapFailure(e);
     }

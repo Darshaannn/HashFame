@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -70,8 +71,12 @@ void main() {
         collaborationRepositoryProvider.overrideWithValue(collabRepo),
         activityRepositoryProvider.overrideWithValue(activityRepo),
         contactOutreachRepositoryProvider.overrideWithValue(contactRepo),
-        instagramRepositoryProvider.overrideWithValue(DemoInstagramRepository()),
-        assistantServiceProvider.overrideWithValue(const DemoAssistantServiceImpl()),
+        instagramRepositoryProvider.overrideWithValue(
+          DemoInstagramRepository(),
+        ),
+        assistantServiceProvider.overrideWithValue(
+          const DemoAssistantServiceImpl(),
+        ),
       ],
       child: const DemoAppRoot(),
     ),

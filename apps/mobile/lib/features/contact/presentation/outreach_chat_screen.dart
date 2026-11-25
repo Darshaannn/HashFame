@@ -97,7 +97,10 @@ class _OutreachChatScreenState extends ConsumerState<OutreachChatScreen> {
       if (mounted) {
         setState(() => _sending = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: AppColors.error, content: Text('Error: $e')),
+          SnackBar(
+            backgroundColor: AppColors.error,
+            content: Text('Error: $e'),
+          ),
         );
       }
     }
@@ -135,28 +138,40 @@ class _OutreachChatScreenState extends ConsumerState<OutreachChatScreen> {
                 Expanded(
                   child: ListView.builder(
                     controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     itemCount: _messages.length,
                     itemBuilder: (ctx, i) {
                       final msg = _messages[i];
-                      final isMe = msg.senderId == currentUserId ||
-                          (currentUserId.contains('creator') && msg.senderId.contains('creator')) ||
-                          (!currentUserId.contains('creator') && !msg.senderId.contains('creator'));
+                      final isMe =
+                          msg.senderId == currentUserId ||
+                          (currentUserId.contains('creator') &&
+                              msg.senderId.contains('creator')) ||
+                          (!currentUserId.contains('creator') &&
+                              !msg.senderId.contains('creator'));
 
                       return Align(
-                        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                        alignment: isMe
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
                         child: Container(
                           margin: const EdgeInsets.symmetric(vertical: 4),
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
                           constraints: BoxConstraints(
                             maxWidth: MediaQuery.of(context).size.width * 0.75,
                           ),
                           decoration: BoxDecoration(
                             color: isMe
                                 ? AppColors.burgundy
-                                : (Theme.of(context).brightness == Brightness.dark
-                                    ? AppColors.surfaceDark
-                                    : AppColors.lightGray),
+                                : (Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? AppColors.surfaceDark
+                                      : AppColors.lightGray),
                             borderRadius: BorderRadius.only(
                               topLeft: const Radius.circular(14),
                               topRight: const Radius.circular(14),
@@ -165,15 +180,18 @@ class _OutreachChatScreenState extends ConsumerState<OutreachChatScreen> {
                             ),
                           ),
                           child: Column(
-                            crossAxisAlignment:
-                                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                            crossAxisAlignment: isMe
+                                ? CrossAxisAlignment.end
+                                : CrossAxisAlignment.start,
                             children: [
                               Text(
                                 msg.senderName,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 11,
-                                  color: isMe ? Colors.white70 : AppColors.secondaryGray,
+                                  color: isMe
+                                      ? Colors.white70
+                                      : AppColors.secondaryGray,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -200,10 +218,17 @@ class _OutreachChatScreenState extends ConsumerState<OutreachChatScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
-                    border: Border(top: BorderSide(color: Colors.grey.withValues(alpha: 0.2))),
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.grey.withValues(alpha: 0.2),
+                      ),
+                    ),
                   ),
                   child: SafeArea(
                     child: Row(
@@ -216,7 +241,9 @@ class _OutreachChatScreenState extends ConsumerState<OutreachChatScreen> {
                             decoration: const InputDecoration(
                               hintText: 'Type your message...',
                               border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                              ),
                             ),
                           ),
                         ),
@@ -225,9 +252,14 @@ class _OutreachChatScreenState extends ConsumerState<OutreachChatScreen> {
                               ? const SizedBox(
                                   width: 20,
                                   height: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 )
-                              : const Icon(Icons.send_rounded, color: AppColors.burgundy),
+                              : const Icon(
+                                  Icons.send_rounded,
+                                  color: AppColors.burgundy,
+                                ),
                           onPressed: _sending ? null : _sendMessage,
                         ),
                       ],

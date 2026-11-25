@@ -10,10 +10,12 @@ class ContactPreferencesScreen extends ConsumerStatefulWidget {
   const ContactPreferencesScreen({super.key});
 
   @override
-  ConsumerState<ContactPreferencesScreen> createState() => _ContactPreferencesScreenState();
+  ConsumerState<ContactPreferencesScreen> createState() =>
+      _ContactPreferencesScreenState();
 }
 
-class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScreen> {
+class _ContactPreferencesScreenState
+    extends ConsumerState<ContactPreferencesScreen> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _whatsappController = TextEditingController();
@@ -76,11 +78,17 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
         creatorId: creatorId,
         allowCollaborationRequests: _allowCollabs,
         allowBusinessEmail: _allowEmail,
-        businessEmail: _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
+        businessEmail: _emailController.text.trim().isEmpty
+            ? null
+            : _emailController.text.trim(),
         allowPhone: _allowPhone,
-        phoneNumber: _phoneController.text.trim().isEmpty ? null : _phoneController.text.trim(),
+        phoneNumber: _phoneController.text.trim().isEmpty
+            ? null
+            : _phoneController.text.trim(),
         allowWhatsapp: _allowWhatsapp,
-        whatsappNumber: _whatsappController.text.trim().isEmpty ? null : _whatsappController.text.trim(),
+        whatsappNumber: _whatsappController.text.trim().isEmpty
+            ? null
+            : _whatsappController.text.trim(),
         preferredContactMethod: _preferredMethod,
       );
 
@@ -99,7 +107,10 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
       if (mounted) {
         setState(() => _saving = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: AppColors.error, content: Text('Error: $e')),
+          SnackBar(
+            backgroundColor: AppColors.error,
+            content: Text('Error: $e'),
+          ),
         );
       }
     }
@@ -123,8 +134,13 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
               padding: const EdgeInsets.all(16),
               children: [
                 SwitchListTile(
-                  title: const Text('Accept Collaboration Requests', style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: const Text('Allow Brands & Agencies to send you direct proposals on GGs'),
+                  title: const Text(
+                    'Accept Collaboration Requests',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: const Text(
+                    'Allow Brands & Agencies to send you direct proposals on GGs',
+                  ),
                   value: _allowCollabs,
                   activeTrackColor: AppColors.burgundy,
                   onChanged: (val) => setState(() => _allowCollabs = val),
@@ -152,7 +168,10 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
                 ),
                 if (_allowEmail)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     child: TextField(
                       controller: _emailController,
                       decoration: const InputDecoration(
@@ -170,7 +189,10 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
                 ),
                 if (_allowWhatsapp)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     child: TextField(
                       controller: _whatsappController,
                       decoration: const InputDecoration(
@@ -188,7 +210,10 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
                 ),
                 if (_allowPhone)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     child: TextField(
                       controller: _phoneController,
                       decoration: const InputDecoration(
@@ -210,9 +235,15 @@ class _ContactPreferencesScreenState extends ConsumerState<ContactPreferencesScr
                       ? const SizedBox(
                           width: 20,
                           height: 20,
-                          child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            color: AppColors.white,
+                            strokeWidth: 2,
+                          ),
                         )
-                      : const Text('Save Preferences', style: TextStyle(fontWeight: FontWeight.bold)),
+                      : const Text(
+                          'Save Preferences',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                 ),
               ],
             ),

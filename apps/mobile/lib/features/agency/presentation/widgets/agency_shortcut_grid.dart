@@ -101,11 +101,7 @@ class AgencyShortcutGrid extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 20,
-              color: AppColors.burgundy,
-            ),
+            Icon(icon, size: 20, color: AppColors.burgundy),
             const SizedBox(width: 6),
             Expanded(
               child: Text(
@@ -136,4 +132,3 @@ class AgencyShortcutGrid extends StatelessWidget {
     );
   }
 }
-

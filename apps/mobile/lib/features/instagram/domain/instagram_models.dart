@@ -77,7 +77,11 @@ class InstagramConnectedProfile {
       username: json['instagram_username'] as String? ?? '',
       accountType: json['account_type'] as String? ?? 'BUSINESS',
       status: InstagramConnectionStatus.fromWire(json['status'] as String?),
-      authorizedScopes: (json['authorized_scopes'] as List?)?.map((e) => e.toString()).toList() ?? [],
+      authorizedScopes:
+          (json['authorized_scopes'] as List?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
       followersCount: json['followers_count'] is int
           ? json['followers_count'] as int
           : int.tryParse(json['followers_count']?.toString() ?? ''),
@@ -145,7 +149,9 @@ class InstagramMediaItem {
       thumbnailUrl: json['thumbnail_url'] as String?,
       permalink: json['permalink'] as String?,
       caption: json['caption'] as String?,
-      timestamp: json['timestamp'] != null ? DateTime.parse(json['timestamp'] as String) : null,
+      timestamp: json['timestamp'] != null
+          ? DateTime.parse(json['timestamp'] as String)
+          : null,
       likeCount: json['like_count'] as int? ?? 0,
       commentsCount: json['comments_count'] as int? ?? 0,
     );

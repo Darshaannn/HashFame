@@ -64,158 +64,158 @@ class _CreatorOpportunitiesScreenState
           title: 'Discover Work',
           showBackButton: true,
           fallbackPath: '/home/creator',
-        actions: [
-          IconButton(
-            icon: Stack(
-              children: [
-                const Icon(Icons.filter_list),
-                if (filters.hasActiveFilters)
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(2),
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 8,
-                        minHeight: 8,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (_) => CampaignFilterSheet(
-                  initialFilters: filters,
-                  onApply: (updated) {
-                    ref.read(campaignFiltersProvider.notifier).set(updated);
-                    _refresh();
-                  },
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async => _refresh(),
-        child: Column(
-          children: [
-            // Search Input
-            Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: AppSearchField(
-                onChanged: (val) {
-                  ref
-                      .read(campaignFiltersProvider.notifier)
-                      .set(filters.copyWith(query: val.trim()));
-                  _refresh();
-                },
-              ),
-            ),
-
-            // Opportunity List
-            Expanded(
-              child: Builder(
-                builder: (context) {
-                  if (state.isLoading && state.items.isEmpty) {
-                    return const Center(child: AppLoader());
-                  }
-
-                  if (state.error != null && state.items.isEmpty) {
-                    return Center(
-                      child: AppErrorState(
-                        message: state.error!,
-                        onRetry: _refresh,
-                      ),
-                    );
-                  }
-
-                  if (state.items.isEmpty) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(AppSpacing.md),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AppEmptyState(
-                              title: 'No Campaigns Found',
-                              message: filters.hasActiveFilters
-                                  ? 'No live campaigns match your filter criteria.'
-                                  : 'There are currently no live creator opportunities.',
-                            ),
-                            if (filters.hasActiveFilters) ...[
-                              const SizedBox(height: AppSpacing.sm),
-                              OutlinedButton(
-                                onPressed: () {
-                                  ref
-                                      .read(campaignFiltersProvider.notifier)
-                                      .set(const CampaignSearchFilters());
-                                  _searchController.clear();
-                                  _refresh();
-                                },
-                                child: const Text('Clear Filters'),
-                              ),
-                            ],
-                          ],
+          actions: [
+            IconButton(
+              icon: Stack(
+                children: [
+                  const Icon(Icons.filter_list),
+                  if (filters.hasActiveFilters)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 8,
+                          minHeight: 8,
                         ),
                       ),
-                    );
-                  }
-
-                  return ListView.separated(
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    itemCount: state.items.length + (state.hasMore ? 1 : 0),
-                    separatorBuilder: (_, _) =>
-                        const SizedBox(height: AppSpacing.sm),
-                    itemBuilder: (context, index) {
-                      if (index == state.items.length) {
-                        return Center(
-                          child: state.isLoadingMore
-                              ? const AppLoader()
-                              : TextButton(
-                                  onPressed: () {
-                                    final userId = ref
-                                        .read(sessionProvider)
-                                        .snapshot
-                                        ?.account
-                                        .id;
-                                    ref
-                                        .read(
-                                          opportunitySearchControllerProvider
-                                              .notifier,
-                                        )
-                                        .loadMore(
-                                          filters: filters,
-                                          creatorId: userId,
-                                        );
-                                  },
-                                  child: const Text('Load More'),
-                                ),
-                        );
-                      }
-
-                      final item = state.items[index];
-                      return CampaignOpportunityCard(
-                        item: item,
-                        onTap: () =>
-                            context.push('/opportunities/${item.campaignId}'),
-                      );
-                    },
-                  );
-                },
+                    ),
+                ],
               ),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (_) => CampaignFilterSheet(
+                    initialFilters: filters,
+                    onApply: (updated) {
+                      ref.read(campaignFiltersProvider.notifier).set(updated);
+                      _refresh();
+                    },
+                  ),
+                );
+              },
             ),
           ],
         ),
+        body: RefreshIndicator(
+          onRefresh: () async => _refresh(),
+          child: Column(
+            children: [
+              // Search Input
+              Padding(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                child: AppSearchField(
+                  onChanged: (val) {
+                    ref
+                        .read(campaignFiltersProvider.notifier)
+                        .set(filters.copyWith(query: val.trim()));
+                    _refresh();
+                  },
+                ),
+              ),
+
+              // Opportunity List
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    if (state.isLoading && state.items.isEmpty) {
+                      return const Center(child: AppLoader());
+                    }
+
+                    if (state.error != null && state.items.isEmpty) {
+                      return Center(
+                        child: AppErrorState(
+                          message: state.error!,
+                          onRetry: _refresh,
+                        ),
+                      );
+                    }
+
+                    if (state.items.isEmpty) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(AppSpacing.md),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AppEmptyState(
+                                title: 'No Campaigns Found',
+                                message: filters.hasActiveFilters
+                                    ? 'No live campaigns match your filter criteria.'
+                                    : 'There are currently no live creator opportunities.',
+                              ),
+                              if (filters.hasActiveFilters) ...[
+                                const SizedBox(height: AppSpacing.sm),
+                                OutlinedButton(
+                                  onPressed: () {
+                                    ref
+                                        .read(campaignFiltersProvider.notifier)
+                                        .set(const CampaignSearchFilters());
+                                    _searchController.clear();
+                                    _refresh();
+                                  },
+                                  child: const Text('Clear Filters'),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    return ListView.separated(
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      itemCount: state.items.length + (state.hasMore ? 1 : 0),
+                      separatorBuilder: (_, _) =>
+                          const SizedBox(height: AppSpacing.sm),
+                      itemBuilder: (context, index) {
+                        if (index == state.items.length) {
+                          return Center(
+                            child: state.isLoadingMore
+                                ? const AppLoader()
+                                : TextButton(
+                                    onPressed: () {
+                                      final userId = ref
+                                          .read(sessionProvider)
+                                          .snapshot
+                                          ?.account
+                                          .id;
+                                      ref
+                                          .read(
+                                            opportunitySearchControllerProvider
+                                                .notifier,
+                                          )
+                                          .loadMore(
+                                            filters: filters,
+                                            creatorId: userId,
+                                          );
+                                    },
+                                    child: const Text('Load More'),
+                                  ),
+                          );
+                        }
+
+                        final item = state.items[index];
+                        return CampaignOpportunityCard(
+                          item: item,
+                          onTap: () =>
+                              context.push('/opportunities/${item.campaignId}'),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

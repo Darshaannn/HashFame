@@ -54,7 +54,9 @@ Widget createTestApp({ProfessionalRole? initialRole}) {
       campaignRepositoryProvider.overrideWithValue(campaignRepo),
       collaborationRepositoryProvider.overrideWithValue(collabRepo),
       activityRepositoryProvider.overrideWithValue(activityRepo),
-      assistantServiceProvider.overrideWithValue(const DemoAssistantServiceImpl()),
+      assistantServiceProvider.overrideWithValue(
+        const DemoAssistantServiceImpl(),
+      ),
     ],
     child: const FoundationApp(),
   );
@@ -507,7 +509,9 @@ void main() {
         expect(find.text('Discover Work'), findsOneWidget);
 
         // 3. Campaign Detail
-        final campaignCard = find.text('Glow Forward — Festive Beauty Creator Campaign');
+        final campaignCard = find.text(
+          'Glow Forward — Festive Beauty Creator Campaign',
+        );
         if (campaignCard.evaluate().isNotEmpty) {
           await tester.tap(campaignCard);
           await tester.pumpAndSettle();

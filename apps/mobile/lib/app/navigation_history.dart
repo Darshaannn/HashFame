@@ -17,7 +17,8 @@ class NavigationHistoryManager with ChangeNotifier {
 
   String? get currentPath => _history.isNotEmpty ? _history.last : null;
 
-  String? get previousPath => _history.length > 1 ? _history[_history.length - 2] : null;
+  String? get previousPath =>
+      _history.length > 1 ? _history[_history.length - 2] : null;
 
   /// Records a path in navigation history. Avoids duplicate adjacent entries.
   void record(String path) {
@@ -65,7 +66,10 @@ class NavigationHistoryManager with ChangeNotifier {
   /// Helper to handle back navigation logic across the app.
   /// Returns true if navigation was handled (popped stack or previous tab/screen),
   /// or false if at root and exit confirmation is needed.
-  static Future<bool> handleBack(BuildContext context, {String? fallbackPath}) async {
+  static Future<bool> handleBack(
+    BuildContext context, {
+    String? fallbackPath,
+  }) async {
     // 1. If an active modal, dialog or pushed Navigator route can pop, pop it first!
     try {
       final nav = Navigator.maybeOf(context);
@@ -93,7 +97,9 @@ class NavigationHistoryManager with ChangeNotifier {
     }
 
     if (instance.canPop || instance._history.isNotEmpty) {
-      final prev = instance._history.isNotEmpty ? instance._history.removeLast() : null;
+      final prev = instance._history.isNotEmpty
+          ? instance._history.removeLast()
+          : null;
       if (prev != null && prev != currentLoc && context.mounted) {
         instance.notifyListeners();
         context.go(prev);
@@ -169,10 +175,7 @@ class NavigationHistoryObserver extends NavigatorObserver {
 /// Global Root Back Guard wrapping MaterialApp router to provide unified system Back &
 /// in-app Back handling, including "Exit GGs?" confirmation only at the root screen.
 class RootNavigationGuard extends StatelessWidget {
-  const RootNavigationGuard({
-    super.key,
-    required this.child,
-  });
+  const RootNavigationGuard({super.key, required this.child});
 
   final Widget child;
 

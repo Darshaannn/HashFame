@@ -4,10 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/tokens.dart';
 
 class QuickOperationalAccess extends StatelessWidget {
-  const QuickOperationalAccess({
-    super.key,
-    this.onDemoModeTap,
-  });
+  const QuickOperationalAccess({super.key, this.onDemoModeTap});
 
   final VoidCallback? onDemoModeTap;
 
@@ -86,11 +83,7 @@ class QuickOperationalAccess extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Container(
-                width: 24,
-                height: 1.5,
-                color: AppColors.burgundy,
-              ),
+              Container(width: 24, height: 1.5, color: AppColors.burgundy),
             ],
           ),
         ),
@@ -115,11 +108,7 @@ class QuickOperationalAccess extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        action.icon,
-                        size: 22,
-                        color: AppColors.burgundy,
-                      ),
+                      Icon(action.icon, size: 22, color: AppColors.burgundy),
                       const SizedBox(height: 4),
                       Text(
                         action.label,
@@ -157,4 +146,3 @@ class _OperationalAction {
   final IconData icon;
   final VoidCallback onTap;
 }
-

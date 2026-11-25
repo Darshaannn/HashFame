@@ -103,14 +103,17 @@ class CreatorContactPreferences {
   factory CreatorContactPreferences.fromJson(Map<String, dynamic> json) {
     return CreatorContactPreferences(
       creatorId: json['creator_id'] as String? ?? '',
-      allowCollaborationRequests: json['allow_collaboration_requests'] as bool? ?? true,
+      allowCollaborationRequests:
+          json['allow_collaboration_requests'] as bool? ?? true,
       allowBusinessEmail: json['allow_business_email'] as bool? ?? false,
       businessEmail: json['business_email'] as String?,
       allowPhone: json['allow_phone'] as bool? ?? false,
       phoneNumber: json['phone_number'] as String?,
       allowWhatsapp: json['allow_whatsapp'] as bool? ?? false,
       whatsappNumber: json['whatsapp_number'] as String?,
-      preferredContactMethod: OutreachContactMethod.fromWire(json['preferred_contact_method'] as String?),
+      preferredContactMethod: OutreachContactMethod.fromWire(
+        json['preferred_contact_method'] as String?,
+      ),
       responseTimeHours: json['response_time_hours'] as int? ?? 48,
     );
   }
@@ -228,23 +231,33 @@ class CreatorContactRequest {
       senderOrganizationName: json['sender_organization_name'] as String? ?? '',
       recipientCreatorId: json['recipient_creator_id'] as String?,
       recipientDirectoryId: json['recipient_directory_id'] as String?,
-      recipientDisplayName: json['recipient_display_name'] as String? ?? 'Creator',
+      recipientDisplayName:
+          json['recipient_display_name'] as String? ?? 'Creator',
       recipientAvatarPath: json['recipient_avatar_path'] as String?,
       isRegisteredCreator: json['is_registered_creator'] as bool? ?? false,
       requestType: ContactRequestType.fromWire(json['request_type'] as String?),
       campaignName: json['campaign_name'] as String?,
-      collaborationRequirement: json['collaboration_requirement'] as String? ?? '',
+      collaborationRequirement:
+          json['collaboration_requirement'] as String? ?? '',
       deliverables: (json['deliverables'] as List?)?.cast<String>() ?? const [],
       expectedTimeline: json['expected_timeline'] as String?,
       personalMessage: json['personal_message'] as String?,
       status: ContactRequestStatus.fromWire(json['status'] as String?),
-      contactMethod: OutreachContactMethod.fromWire(json['contact_method'] as String?),
-      externalStage: ExternalOutreachStage.fromWire(json['external_stage'] as String?),
+      contactMethod: OutreachContactMethod.fromWire(
+        json['contact_method'] as String?,
+      ),
+      externalStage: ExternalOutreachStage.fromWire(
+        json['external_stage'] as String?,
+      ),
       declineReason: json['decline_reason'] as String?,
       cancellationReason: json['cancellation_reason'] as String?,
       conversationId: json['conversation_id'] as String?,
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at'] as String) : DateTime.now(),
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at'] as String) : DateTime.now(),
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : DateTime.now(),
     );
   }
 
@@ -313,8 +326,12 @@ class PrivateQuotation {
       usageRights: json['usage_rights'] as String?,
       timeline: json['timeline'] as String?,
       notes: json['notes'] as String?,
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at'] as String) : DateTime.now(),
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at'] as String) : DateTime.now(),
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : DateTime.now(),
     );
   }
 
@@ -400,8 +417,12 @@ class OutreachConversation {
       brandUserId: json['brand_user_id'] as String? ?? '',
       creatorUserId: json['creator_user_id'] as String? ?? '',
       subject: json['subject'] as String? ?? '',
-      lastMessageAt: json['last_message_at'] != null ? DateTime.parse(json['last_message_at'] as String) : DateTime.now(),
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at'] as String) : DateTime.now(),
+      lastMessageAt: json['last_message_at'] != null
+          ? DateTime.parse(json['last_message_at'] as String)
+          : DateTime.now(),
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
       creatorName: json['creator_name'] as String?,
       brandName: json['brand_name'] as String?,
       creatorAvatarPath: json['creator_avatar_path'] as String?,
@@ -431,7 +452,10 @@ class OutreachMessage {
   final DateTime createdAt;
   final bool isMine;
 
-  factory OutreachMessage.fromJson(Map<String, dynamic> json, {String? currentUserId}) {
+  factory OutreachMessage.fromJson(
+    Map<String, dynamic> json, {
+    String? currentUserId,
+  }) {
     final sender = json['sender_id'] as String? ?? '';
     return OutreachMessage(
       id: json['id'] as String? ?? '',
@@ -439,8 +463,12 @@ class OutreachMessage {
       senderId: sender,
       senderName: json['sender_name'] as String? ?? '',
       content: json['content'] as String? ?? '',
-      readAt: json['read_at'] != null ? DateTime.parse(json['read_at'] as String) : null,
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at'] as String) : DateTime.now(),
+      readAt: json['read_at'] != null
+          ? DateTime.parse(json['read_at'] as String)
+          : null,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
       isMine: currentUserId != null && sender == currentUserId,
     );
   }

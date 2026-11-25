@@ -28,7 +28,7 @@ const String _kLanguageStorageKey = 'ggs_app_selected_locale';
 /// Service for loading and saving the user's interface language
 class LocaleService {
   LocaleService({FlutterSecureStorage? storage})
-      : _storage = storage ?? const FlutterSecureStorage();
+    : _storage = storage ?? const FlutterSecureStorage();
 
   final FlutterSecureStorage _storage;
 
@@ -86,5 +86,6 @@ class LocaleController extends Notifier<Locale> {
 }
 
 /// Active application locale provider
-final activeLocaleProvider =
-    NotifierProvider<LocaleController, Locale>(LocaleController.new);
+final activeLocaleProvider = NotifierProvider<LocaleController, Locale>(
+  LocaleController.new,
+);

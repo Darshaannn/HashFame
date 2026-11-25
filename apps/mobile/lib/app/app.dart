@@ -21,9 +21,8 @@ class FoundationApp extends ConsumerWidget {
       theme: buildAppTheme(),
       debugShowCheckedModeBanner: false,
       routerConfig: ref.watch(routerProvider),
-      builder: (context, child) => RootNavigationGuard(
-        child: child ?? const SizedBox.shrink(),
-      ),
+      builder: (context, child) =>
+          RootNavigationGuard(child: child ?? const SizedBox.shrink()),
       locale: activeLocale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -35,4 +34,3 @@ class FoundationApp extends ConsumerWidget {
     );
   }
 }
-

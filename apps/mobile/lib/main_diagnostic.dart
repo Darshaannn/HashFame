@@ -1,17 +1,27 @@
 import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  developer.log('=== GGs BOOT TEST: WidgetsBinding initialized ===', name: 'GGsBoot');
+  developer.log(
+    '=== GGs BOOT TEST: WidgetsBinding initialized ===',
+    name: 'GGsBoot',
+  );
 
   FlutterError.onError = (FlutterErrorDetails details) {
-    developer.log('=== GGs BOOT TEST FLUTTER ERROR: ${details.exception} ===', name: 'GGsBoot');
+    developer.log(
+      '=== GGs BOOT TEST FLUTTER ERROR: ${details.exception} ===',
+      name: 'GGsBoot',
+    );
     FlutterError.presentError(details);
   };
 
   WidgetsBinding.instance.addPostFrameCallback((_) {
-    developer.log('=== GGs BOOT TEST: First frame rendered successfully! ===', name: 'GGsBoot');
+    developer.log(
+      '=== GGs BOOT TEST: First frame rendered successfully! ===',
+      name: 'GGsBoot',
+    );
   });
 
   runApp(const GGsBootTestApp());
@@ -42,7 +52,10 @@ class _GGsBootTestAppState extends State<GGsBootTestApp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFF8B0000),
                       borderRadius: BorderRadius.circular(8),
@@ -83,7 +96,10 @@ class _GGsBootTestAppState extends State<GGsBootTestApp> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF8B0000),
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -92,10 +108,15 @@ class _GGsBootTestAppState extends State<GGsBootTestApp> {
                       setState(() {
                         _counter++;
                       });
-                      developer.log('=== GGs BOOT TEST: Button tapped! Counter: $_counter ===', name: 'GGsBoot');
+                      developer.log(
+                        '=== GGs BOOT TEST: Button tapped! Counter: $_counter ===',
+                        name: 'GGsBoot',
+                      );
                     },
                     child: Text(
-                      _counter == 0 ? 'TAP TO TEST INTERACTION' : 'TAPPED $_counter TIMES (OK!)',
+                      _counter == 0
+                          ? 'TAP TO TEST INTERACTION'
+                          : 'TAPPED $_counter TIMES (OK!)',
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
@@ -111,4 +132,3 @@ class _GGsBootTestAppState extends State<GGsBootTestApp> {
     );
   }
 }
-

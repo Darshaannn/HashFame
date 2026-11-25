@@ -119,11 +119,7 @@ class _QuickActionTile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 20,
-              color: AppColors.burgundy,
-            ),
+            Icon(icon, size: 20, color: AppColors.burgundy),
             const SizedBox(height: 4),
             Text(
               label,
@@ -144,4 +140,3 @@ class _QuickActionTile extends StatelessWidget {
     );
   }
 }
-

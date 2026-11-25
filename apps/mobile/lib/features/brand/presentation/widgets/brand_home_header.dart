@@ -44,11 +44,7 @@ class BrandHomeHeader extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 6),
-            Container(
-              height: 18,
-              width: 1,
-              color: AppColors.borderGray,
-            ),
+            Container(height: 18, width: 1, color: AppColors.borderGray),
             const SizedBox(width: 6),
 
             // Role Selector Pill (Brand / Marketer with dropdown)
@@ -57,7 +53,10 @@ class BrandHomeHeader extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(16),
                 onTap: () => _showRoleSwitchSheet(context, ref),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: AppColors.borderGray, width: 1),
@@ -65,11 +64,7 @@ class BrandHomeHeader extends ConsumerWidget {
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.swap_horiz,
-                        size: 14,
-                        color: AppColors.black,
-                      ),
+                      Icon(Icons.swap_horiz, size: 14, color: AppColors.black),
                       SizedBox(width: 3),
                       Flexible(
                         child: Text(
@@ -98,11 +93,7 @@ class BrandHomeHeader extends ConsumerWidget {
 
             if (isDemo) ...[
               const SizedBox(width: 6),
-              Container(
-                height: 18,
-                width: 1,
-                color: AppColors.borderGray,
-              ),
+              Container(height: 18, width: 1, color: AppColors.borderGray),
               const SizedBox(width: 6),
               const Text(
                 'PREVIEW',
@@ -171,7 +162,10 @@ class BrandHomeHeader extends ConsumerWidget {
                   ),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.business, color: AppColors.burgundy),
+                  leading: const Icon(
+                    Icons.business,
+                    color: AppColors.burgundy,
+                  ),
                   title: const Text('Brand / Marketer (Current)'),
                   trailing: const Icon(Icons.check, color: AppColors.burgundy),
                   onTap: () => Navigator.pop(sheetContext),
@@ -200,11 +194,7 @@ class BrandHomeHeader extends ConsumerWidget {
     );
   }
 
-  void _switchRole(
-    BuildContext context,
-    WidgetRef ref,
-    ProfessionalRole role,
-  ) {
+  void _switchRole(BuildContext context, WidgetRef ref, ProfessionalRole role) {
     DemoStore.instance.currentRole = role;
     final authRepo = ref.read(authRepositoryProvider);
     if (authRepo is DemoAuthRepository) {

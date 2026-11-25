@@ -66,7 +66,9 @@ class DemoLauncherScreen extends ConsumerWidget {
                             ),
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(AppRadius.full),
+                              borderRadius: BorderRadius.circular(
+                                AppRadius.full,
+                              ),
                               border: Border.all(
                                 color: Colors.white.withValues(alpha: 0.16),
                               ),
@@ -226,8 +228,7 @@ class DemoLauncherScreen extends ConsumerWidget {
                       // VIEW AS BRAND BUTTON
                       _PremiumRoleCard(
                         title: 'VIEW AS BRAND',
-                        subtitle:
-                            'Discover & shortlist creators, launch campaigns, review applicants',
+                        subtitle: 'Discover & shortlist creators, launch campaigns, review applicants',
                         roleBadge: 'CAMPAIGN MARKETER',
                         icon: Icons.business_center_outlined,
                         gradientColors: const [
@@ -249,8 +250,7 @@ class DemoLauncherScreen extends ConsumerWidget {
                       // VIEW AS CREATOR BUTTON
                       _PremiumRoleCard(
                         title: 'VIEW AS CREATOR',
-                        subtitle:
-                            'Professional portfolio, discover brand briefs, submit applications',
+                        subtitle: 'Professional portfolio, discover brand briefs, submit applications',
                         roleBadge: 'CREATOR ECONOMY',
                         icon: Icons.person_outline,
                         gradientColors: const [
@@ -396,7 +396,9 @@ class _HeroShowcaseCard extends StatelessWidget {
               children: [
                 Expanded(child: _metricItem('Curated', 'Talent Roster')),
                 _divider(),
-                Expanded(child: _metricItem('Milestones', 'Tracked Deliverables')),
+                Expanded(
+                  child: _metricItem('Milestones', 'Tracked Deliverables'),
+                ),
                 _divider(),
                 Expanded(child: _metricItem('Direct', 'Collab Workspace')),
               ],
@@ -570,9 +572,7 @@ class _PremiumRoleCard extends StatelessWidget {
                                   alpha: 0.35,
                                 ),
                                 borderRadius: BorderRadius.circular(4),
-                                border: Border.all(
-                                  color: AppColors.burgundy,
-                                ),
+                                border: Border.all(color: AppColors.burgundy),
                               ),
                               child: const Text(
                                 'PRIMARY',
@@ -679,10 +679,7 @@ class _AgencyRoleCard extends StatelessWidget {
                       SizedBox(height: 2),
                       Text(
                         'Manage creator rosters, campaign pitches & client deliverables',
-                        style: TextStyle(
-                          color: Colors.white60,
-                          fontSize: 11,
-                        ),
+                        style: TextStyle(color: Colors.white60, fontSize: 11),
                       ),
                     ],
                   ),
@@ -700,4 +697,3 @@ class _AgencyRoleCard extends StatelessWidget {
     );
   }
 }
-

@@ -302,7 +302,8 @@ class _CampaignCreationScreenState
                           onSuggestionAccepted: (response) {
                             if (response.suggestion != null) {
                               setState(() {
-                                _descriptionController.text = response.suggestion!;
+                                _descriptionController.text =
+                                    response.suggestion!;
                               });
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -422,8 +423,8 @@ class _CampaignCreationScreenState
                                     CampaignDeliverable(
                                       id: 'del_${DateTime.now().millisecondsSinceEpoch + 1}',
                                       campaignId: _savedCampaignId ?? '',
-                                      deliverableType:
-                                          CampaignDeliverableType.instagramStory,
+                                      deliverableType: CampaignDeliverableType
+                                          .instagramStory,
                                       platform: 'Instagram',
                                       quantity: 2,
                                     ),
@@ -432,7 +433,9 @@ class _CampaignCreationScreenState
                               });
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('AI deliverable requirements applied!'),
+                                  content: Text(
+                                    'AI deliverable requirements applied!',
+                                  ),
                                   duration: Duration(seconds: 2),
                                 ),
                               );

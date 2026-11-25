@@ -110,7 +110,7 @@ create trigger campaigns_updated before update on public.campaigns for each row 
 create table public.campaign_categories (
   id uuid primary key default gen_random_uuid(),
   campaign_id uuid not null references public.campaigns(id) on delete cascade,
-  category_id text not null references public.categories(id) on delete cascade,
+  category_id uuid not null references public.categories(id) on delete cascade,
   is_primary boolean not null default false,
   constraint campaign_categories_unique unique (campaign_id, category_id)
 );

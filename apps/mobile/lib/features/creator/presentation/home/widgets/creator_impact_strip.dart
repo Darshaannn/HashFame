@@ -66,10 +66,7 @@ class CreatorImpactStrip extends StatelessWidget {
             // Stat 2: Completed
             Expanded(
               flex: 3,
-              child: _buildMetric(
-                value: '$completedCount',
-                label: 'Completed',
-              ),
+              child: _buildMetric(value: '$completedCount', label: 'Completed'),
             ),
 
             // Divider 3
@@ -78,10 +75,7 @@ class CreatorImpactStrip extends StatelessWidget {
             // Stat 3: Avg. Rating
             Expanded(
               flex: 3,
-              child: _buildRatingMetric(
-                rating: rating,
-                label: 'Avg. Rating',
-              ),
+              child: _buildRatingMetric(rating: rating, label: 'Avg. Rating'),
             ),
           ],
         ),
@@ -147,11 +141,7 @@ class CreatorImpactStrip extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 2),
-            const Icon(
-              Icons.star_rounded,
-              color: Colors.white,
-              size: 14,
-            ),
+            const Icon(Icons.star_rounded, color: Colors.white, size: 14),
           ],
         ),
         const SizedBox(height: 1),
@@ -170,4 +160,3 @@ class CreatorImpactStrip extends StatelessWidget {
     );
   }
 }
-

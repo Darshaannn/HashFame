@@ -89,7 +89,10 @@ class CreatorProfileScreen extends ConsumerWidget {
 
           if (isOwn) ...[
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 4),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: 4,
+              ),
               child: InstagramConnectionCard(),
             ),
             CreatorCompletionCard(
@@ -97,7 +100,10 @@ class CreatorProfileScreen extends ConsumerWidget {
               onRecommendationTap: (rec) => context.push(rec.actionRoute),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 4),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: 4,
+              ),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: AssistantActionChip(
@@ -109,7 +115,8 @@ class CreatorProfileScreen extends ConsumerWidget {
                       task: AssistantTask.suggestProfileImprovements,
                       title: 'Profile Optimization Advice',
                       contextData: {
-                        'hasBio': profile.bio != null && profile.bio!.isNotEmpty,
+                        'hasBio':
+                            profile.bio != null && profile.bio!.isNotEmpty,
                         'hasLanguages': profile.languages.isNotEmpty,
                       },
                     );

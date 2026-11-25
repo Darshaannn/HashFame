@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import '../domain/instagram_models.dart';
 import '../domain/instagram_repository.dart';
 
