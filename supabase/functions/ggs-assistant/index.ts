@@ -56,7 +56,7 @@ export function createAssistantHandler() {
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return new Response(
         JSON.stringify({ error: "Unauthorized. Missing authentication token." }),
-        { status: 401, headers: { "Content-Type": "application/json" } }
+        { status: 401, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -69,7 +69,7 @@ export function createAssistantHandler() {
         JSON.stringify({
           error: "Backend configuration error. Edge function unconfigured.",
         }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
+        { status: 500, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -83,7 +83,7 @@ export function createAssistantHandler() {
     if (userError || !userData?.user) {
       return new Response(
         JSON.stringify({ error: "Invalid or expired user session." }),
-        { status: 401, headers: { "Content-Type": "application/json" } }
+        { status: 401, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -95,7 +95,7 @@ export function createAssistantHandler() {
           error: "Rate limit exceeded. Please wait 60 seconds before retrying.",
           rateLimitRemaining: 0,
         }),
-        { status: 429, headers: { "Content-Type": "application/json" } }
+        { status: 429, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -105,7 +105,7 @@ export function createAssistantHandler() {
     } catch {
       return new Response(
         JSON.stringify({ error: "Malformed JSON payload." }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -113,7 +113,7 @@ export function createAssistantHandler() {
     if (!role || !task) {
       return new Response(
         JSON.stringify({ error: "Missing required role or task." }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -124,7 +124,7 @@ export function createAssistantHandler() {
     // If an external AI provider is configured in environment, invoke it.
     // Otherwise, generate structured contextual guidance based on the verified input context data.
     // Notice: Never invent fake follower counts or verified stats!
-    const result = await processTask({
+    const result = processTask({
       role,
       task,
       contextData,
@@ -141,19 +141,19 @@ export function createAssistantHandler() {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   };
 }
 
-async function processTask(params: {
+function processTask(params: {
   role: string;
   task: string;
   contextData: Record<string, unknown>;
   geminiApiKey?: string;
   openAiApiKey?: string;
-}): Promise<{ suggestion: string; rationale: string; fields?: Record<string, unknown> }> {
-  const { role, task, contextData } = params;
+}): { suggestion: string; rationale: string; fields?: Record<string, unknown> } {
+  const { _role = params.role, task, contextData } = { _role: params.role, ...params };
 
   switch (task) {
     case "draft_brief": {
@@ -175,11 +175,9 @@ async function processTask(params: {
 
     case "suggest_deliverables": {
       return {
-        suggestion:
-          "1x High-Resolution Reel/Video (60s), 2x Story posts with brand tags, " +
+        suggestion: "1x High-Resolution Reel/Video (60s), 2x Story posts with brand tags, " +
           "30-day organic digital usage rights.",
-        rationale:
-          "Standard high-performing deliverable bundle for Indian creator collabs " +
+        rationale: "Standard high-performing deliverable bundle for Indian creator collabs " +
           "with transparent deliverables.",
         fields: {
           deliverablesList: [
@@ -201,7 +199,7 @@ async function processTask(params: {
     }
 
     case "draft_pitch": {
-      const creatorName = String(contextData.creatorName || "Creator");
+      const _creatorName = String(contextData.creatorName || "Creator");
       const campaignTitle = String(contextData.campaignTitle || "the campaign");
       const categories = String(contextData.categories || "content creation");
       return {

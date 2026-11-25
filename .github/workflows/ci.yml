@@ -73,11 +73,17 @@ jobs:
       - name: Fresh rebuild and security tests (run 1)
         run: |
           supabase db reset --local
-          psql postgresql://postgres:postgres@127.0.0.1:54322/postgres --set ON_ERROR_STOP=1 --file supabase/tests/foundation.sql
+          for f in supabase/tests/*.sql; do
+            echo "Running test: $f"
+            psql postgresql://postgres:postgres@127.0.0.1:54322/postgres --set ON_ERROR_STOP=1 --file "$f"
+          done
       - name: Fresh rebuild and security tests (run 2)
         run: |
           supabase db reset --local
-          psql postgresql://postgres:postgres@127.0.0.1:54322/postgres --set ON_ERROR_STOP=1 --file supabase/tests/foundation.sql
+          for f in supabase/tests/*.sql; do
+            echo "Running test: $f"
+            psql postgresql://postgres:postgres@127.0.0.1:54322/postgres --set ON_ERROR_STOP=1 --file "$f"
+          done
       - if: always()
         run: supabase stop --no-backup
 

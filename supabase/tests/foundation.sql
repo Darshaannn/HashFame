@@ -12,7 +12,10 @@ begin
 end;
 $$;
 
-select pg_temp.assert_true((select count(*) = 6 from pg_tables where schemaname = 'public' and rowsecurity), 'all six tables have RLS');
+select pg_temp.assert_true(
+  (select count(*) > 0 and count(*) = count(*) filter (where rowsecurity) from pg_tables where schemaname = 'public'),
+  'all public application tables have RLS enabled'
+);
 select pg_temp.assert_true((select count(*) = 2 from storage.buckets where not public and id in ('avatars','verification')), 'private storage buckets');
 select pg_temp.denied($s$insert into public.professional_roles(user_id, role_type) values ('11111111-1111-4111-8111-111111111111','creator')$s$, 'duplicate active role rejected');
 select pg_temp.denied($s$insert into public.professional_roles(user_id, role_type, is_primary) values ('11111111-1111-4111-8111-111111111111','agency',true)$s$, 'duplicate primary rejected');
