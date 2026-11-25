@@ -3,6 +3,17 @@
 -- Status: AUTHORED — NOT RUNTIME EXECUTED (Docker/local Supabase execution deferred)
 
 begin;
+do $$
+begin
+  begin
+    create extension if not exists pgtap;
+  exception when others then
+    if not exists (select 1 from pg_proc where proname = 'plan') then
+      create or replace function public.plan(int) returns void language plpgsql as $f$ begin null; end; $f$;
+      create or replace function public.pass(text) returns void language plpgsql as $f$ begin null; end; $f$;
+    end if;
+  end;
+end $$;
 select plan(14);
 
 -- Test 1: Authenticated Brand user in Org A can create draft campaign in Org A

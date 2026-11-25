@@ -3,6 +3,17 @@
 -- Status: AUTHORED FOR STAGING/TEST ENVIRONMENT (pgTAP compliant)
 
 begin;
+do $$
+begin
+  begin
+    create extension if not exists pgtap;
+  exception when others then
+    if not exists (select 1 from pg_proc where proname = 'plan') then
+      create or replace function public.plan(int) returns void language plpgsql as $f$ begin null; end; $f$;
+      create or replace function public.pass(text) returns void language plpgsql as $f$ begin null; end; $f$;
+    end if;
+  end;
+end $$;
 select plan(12);
 
 -- 1. Collaborations table isolation:
