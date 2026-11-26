@@ -44,7 +44,14 @@ returns table (
   is_registered boolean,
   relevance_rank real
 ) language plpgsql security definer set search_path = public as $$
+declare
+  v_limit int := least(greatest(coalesce(p_limit, 20), 1), 50);
+  v_offset int := greatest(coalesce(p_offset, 0), 0);
 begin
+  if auth.uid() is null then
+    raise exception 'Authentication required for creator search';
+  end if;
+
   return query
   select
     d.directory_id as id,
@@ -74,9 +81,10 @@ begin
       or d.instagram_handle ilike '%' || p_query || '%'
     )
   order by relevance_rank desc, d.followers_count desc nulls last
-  limit p_limit
-  offset p_offset;
+  limit v_limit
+  offset v_offset;
 end;
 $$;
 
-grant execute on function public.search_creators_intelligent(text, text, text, bigint, bigint, int, int) to authenticated, anon;
+revoke all on function public.search_creators_intelligent(text, text, text, bigint, bigint, int, int) from public, anon;
+grant execute on function public.search_creators_intelligent(text, text, text, bigint, bigint, int, int) to authenticated;

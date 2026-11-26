@@ -72,12 +72,15 @@ language plpgsql security definer set search_path = public as $$
 declare
   v_current_user uuid := auth.uid();
   v_existing_link uuid;
+  v_dir_handle text;
+  v_is_verified_owner boolean := false;
 begin
   if v_current_user is null then
     raise exception 'Authentication required to claim directory profile';
   end if;
 
-  select linked_creator_user_id into v_existing_link
+  select linked_creator_user_id, instagram_handle
+  into v_existing_link, v_dir_handle
   from public.creator_directory
   where directory_id = p_directory_id
   for update;
@@ -92,6 +95,22 @@ begin
     else
       raise exception 'This directory profile has already been claimed by another creator';
     end if;
+  end if;
+
+  -- Require either an authorized admin or a connected Instagram account matching the directory handle
+  if private.is_admin() then
+    v_is_verified_owner := true;
+  elsif v_dir_handle is not null then
+    select exists (
+      select 1 from public.creator_instagram_connections c
+      where c.creator_id = v_current_user
+        and c.status = 'connected'
+        and lower(ltrim(c.instagram_username, '@')) = lower(ltrim(v_dir_handle, '@'))
+    ) into v_is_verified_owner;
+  end if;
+
+  if not v_is_verified_owner then
+    raise exception 'Ownership verification required: connect the matching Instagram account or contact an administrator';
   end if;
 
   update public.creator_directory

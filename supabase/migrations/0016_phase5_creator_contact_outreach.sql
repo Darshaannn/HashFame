@@ -188,19 +188,11 @@ alter table public.contact_safety_reports enable row level security;
 -- 9. RLS Policies
 
 -- Preferences:
--- Privacy Rule: Authenticated users can only see public flags unless they are the creator themselves,
--- or contact info is exposed only if the creator explicitly allowed it AND the requester is not blocked.
+-- Privacy Rule: Direct table SELECT is restricted strictly to the owning creator (or admin).
+-- Other authenticated users must use public.get_creator_contact_options() for consent-approved fields.
 create policy "creator_contact_pref_select"
   on public.creator_contact_preferences for select to authenticated
-  using (
-    creator_id = auth.uid() or (
-      not exists (
-        select 1 from public.user_blocks b
-        where (b.blocker_user_id = creator_contact_preferences.creator_id and b.blocked_user_id = auth.uid())
-           or (b.blocker_user_id = auth.uid() and b.blocked_user_id = creator_contact_preferences.creator_id)
-      )
-    )
-  );
+  using (creator_id = auth.uid() or private.is_admin());
 
 create policy "creator_contact_pref_write"
   on public.creator_contact_preferences for all to authenticated
@@ -275,18 +267,12 @@ create policy "contact_requests_insert"
     )
   );
 
+-- Status transitions are enforced exclusively through validated SECURITY DEFINER RPCs
+-- (accept_contact_request, decline_contact_request, cancel_contact_request).
 create policy "contact_requests_update"
   on public.creator_contact_requests for update to authenticated
-  using (
-    sender_user_id = auth.uid() or
-    recipient_creator_id = auth.uid() or
-    (sender_organization_id is not null and exists (
-      select 1 from public.organization_memberships om
-      where om.organization_id = creator_contact_requests.sender_organization_id
-      and om.user_id = auth.uid()
-      and om.membership_status = 'active'
-    ))
-  );
+  using (false)
+  with check (false);
 
 -- Quotations: Only authorized sender or recipient creator
 create policy "quotations_select"
@@ -377,13 +363,8 @@ create policy "outreach_messages_insert"
 
 create policy "outreach_messages_update"
   on public.outreach_messages for update to authenticated
-  using (
-    exists (
-      select 1 from public.outreach_conversations c
-      where c.id = outreach_messages.conversation_id
-      and (c.brand_user_id = auth.uid() or c.creator_user_id = auth.uid())
-    )
-  );
+  using (sender_user_id = auth.uid())
+  with check (sender_user_id = auth.uid());
 
 -- Blocks
 create policy "user_blocks_policy"
