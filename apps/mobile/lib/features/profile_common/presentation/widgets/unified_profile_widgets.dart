@@ -279,7 +279,7 @@ class GGAccountActionTile extends StatelessWidget {
 /// Standardized Sign Out confirmation dialog for Production & Demo
 class GGSignOutDialog {
   static Future<void> show(BuildContext context, WidgetRef ref) async {
-    final isDemo = DemoStore.instance.currentRole != ProfessionalRole.admin;
+    final isDemo = ref.read(authRepositoryProvider) is DemoAuthRepository;
 
     final confirmed = await showDialog<bool>(
       context: context,

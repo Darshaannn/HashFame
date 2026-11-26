@@ -5,12 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/providers.dart';
 import '../../../../core/design_system/tokens.dart';
 import '../../../../demo/demo_repositories.dart';
-import '../../../../demo/demo_store.dart';
-import '../../../account/domain/account.dart';
-import '../../../auth/presentation/session_controller.dart';
-import '../../../creator/presentation/profile/creator_profile_controller.dart';
-import '../../../discovery/presentation/discovery_controller.dart';
-import '../../../shortlist/presentation/shortlist_controller.dart';
+import '../../../profile_common/presentation/widgets/account_switcher_menu.dart';
 
 class BrandHomeHeader extends ConsumerWidget {
   const BrandHomeHeader({super.key});
@@ -47,11 +42,11 @@ class BrandHomeHeader extends ConsumerWidget {
             Container(height: 18, width: 1, color: AppColors.borderGray),
             const SizedBox(width: 6),
 
-            // Role Selector Pill (Brand / Marketer with dropdown)
+            // Role Selector Pill (interactive only in Demo Mode)
             Flexible(
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
-                onTap: () => _showRoleSwitchSheet(context, ref),
+                onTap: isDemo ? () => GGAccountSwitcherMenu.show(context) : null,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 6,
@@ -119,99 +114,12 @@ class BrandHomeHeader extends ConsumerWidget {
               onPressed: () => context.push('/activity'),
             ),
 
-            // Settings Icon
-            IconButton(
-              icon: const Icon(Icons.settings_outlined, size: 20),
-              color: AppColors.black,
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-              tooltip: 'Settings',
-              onPressed: () => context.push('/settings'),
-            ),
+            // Top-right Account Menu Button
+            const SizedBox(width: 4),
+            const GGAccountAvatarButton(),
           ],
         ),
       ),
     );
-  }
-
-  void _showRoleSwitchSheet(BuildContext context, WidgetRef ref) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (sheetContext) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  child: Text(
-                    'SWITCH VIEWING ROLE',
-                    style: TextStyle(
-                      fontFamily: AppTypography.khandFont,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.black,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.business,
-                    color: AppColors.burgundy,
-                  ),
-                  title: const Text('Brand / Marketer (Current)'),
-                  trailing: const Icon(Icons.check, color: AppColors.burgundy),
-                  onTap: () => Navigator.pop(sheetContext),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.person, color: AppColors.black),
-                  title: const Text('Creator Workspace'),
-                  onTap: () {
-                    Navigator.pop(sheetContext);
-                    _switchRole(context, ref, ProfessionalRole.creator);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.apartment, color: AppColors.black),
-                  title: const Text('Agency Talent Manager'),
-                  onTap: () {
-                    Navigator.pop(sheetContext);
-                    _switchRole(context, ref, ProfessionalRole.agency);
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _switchRole(BuildContext context, WidgetRef ref, ProfessionalRole role) {
-    DemoStore.instance.currentRole = role;
-    final authRepo = ref.read(authRepositoryProvider);
-    if (authRepo is DemoAuthRepository) {
-      authRepo.notifyRoleChanged();
-    }
-    ref.read(sessionProvider.notifier).refresh();
-    ref.invalidate(shortlistsListProvider);
-    ref.invalidate(discoveryControllerProvider);
-    ref.invalidate(currentCreatorProfileProvider);
-
-    if (context.mounted) {
-      final path = switch (role) {
-        ProfessionalRole.creator => '/home/creator',
-        ProfessionalRole.agency => '/home/agency',
-        _ => '/home/brand_marketer',
-      };
-      context.go(path);
-    }
   }
 }

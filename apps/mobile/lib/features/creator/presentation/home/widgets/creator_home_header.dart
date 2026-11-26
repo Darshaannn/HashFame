@@ -8,6 +8,7 @@ import '../../../../../demo/demo_repositories.dart';
 import '../../../../../demo/demo_store.dart';
 import '../../../../account/domain/account.dart';
 import '../../../../auth/presentation/session_controller.dart';
+import '../../../../profile_common/presentation/widgets/account_switcher_menu.dart';
 import '../../profile/creator_profile_controller.dart';
 
 class CreatorHomeHeader extends ConsumerWidget {
@@ -88,6 +89,8 @@ class CreatorHomeHeader extends ConsumerWidget {
               tooltip: 'Notifications',
               onPressed: () => context.go('/activity'),
             ),
+            const SizedBox(width: 4),
+            const GGAccountAvatarButton(darkBackground: true),
           ],
         ),
       ),

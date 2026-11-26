@@ -9,6 +9,7 @@ import '../../../../demo/demo_store.dart';
 import '../../../account/domain/account.dart';
 import '../../../auth/presentation/session_controller.dart';
 import '../../../creator/presentation/profile/creator_profile_controller.dart';
+import '../../../profile_common/presentation/widgets/account_switcher_menu.dart';
 
 class AgencyHomeHeader extends ConsumerWidget {
   const AgencyHomeHeader({super.key, this.onRoleSelected});
@@ -84,18 +85,8 @@ class AgencyHomeHeader extends ConsumerWidget {
 
             const SizedBox(width: 4),
 
-            // Profile Icon
-            IconButton(
-              icon: const Icon(
-                Icons.account_circle_outlined,
-                color: AppColors.black,
-                size: 23,
-              ),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
-              tooltip: 'Agency Profile',
-              onPressed: () => context.go('/profile'),
-            ),
+            // Top-right Account Menu Button
+            const GGAccountAvatarButton(),
           ],
         ),
       ),
