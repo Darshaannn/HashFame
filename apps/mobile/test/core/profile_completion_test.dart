@@ -48,50 +48,53 @@ void main() {
 
     // ─── Full profile ──────────────────────────────────────────────────────────
 
-    test('scores 100% for a fully populated profile without rate card requirement', () {
-      final profile = CreatorProfile(
-        userId: 'test-user',
-        displayName: 'Aarav Sharma',
-        avatarPath: 'avatars/aarav.jpg', // 10
-        bio: 'Tech reviewer and digital creator based in Bengaluru.', // 15
-        location: const LocationData(city: 'Bengaluru', state: 'KA'), // 10
-        primaryCategories: const [
-          Category(id: 'cat-1', name: 'Technology', slug: 'tech'),
-        ], // 20
-        languages: const [
-          Language(code: 'en', name: 'English', nativeName: 'English'),
-        ], // 10
-        socialAccounts: const [
-          SocialAccount(
-            id: 'soc-1',
-            userId: 'test-user',
-            platform: SocialPlatform.youtube,
-            handle: 'techguy',
-          ),
-        ], // 15
-        portfolio: const [
-          PortfolioItem(
-            id: 'port-1',
-            userId: 'test-user',
-            title: 'Top 10 Gadgets 2026',
-          ),
-        ], // 15
-        // availability is always 5
-      );
+    test(
+      'scores 100% for a fully populated profile without rate card requirement',
+      () {
+        final profile = CreatorProfile(
+          userId: 'test-user',
+          displayName: 'Aarav Sharma',
+          avatarPath: 'avatars/aarav.jpg', // 10
+          bio: 'Tech reviewer and digital creator based in Bengaluru.', // 15
+          location: const LocationData(city: 'Bengaluru', state: 'KA'), // 10
+          primaryCategories: const [
+            Category(id: 'cat-1', name: 'Technology', slug: 'tech'),
+          ], // 20
+          languages: const [
+            Language(code: 'en', name: 'English', nativeName: 'English'),
+          ], // 10
+          socialAccounts: const [
+            SocialAccount(
+              id: 'soc-1',
+              userId: 'test-user',
+              platform: SocialPlatform.youtube,
+              handle: 'techguy',
+            ),
+          ], // 15
+          portfolio: const [
+            PortfolioItem(
+              id: 'port-1',
+              userId: 'test-user',
+              title: 'Top 10 Gadgets 2026',
+            ),
+          ], // 15
+          // availability is always 5
+        );
 
-      final result = ProfileCompletionCalculator.calculate(profile);
+        final result = ProfileCompletionCalculator.calculate(profile);
 
-      expect(result.percentage, equals(100));
-      expect(result.recommendations, isEmpty);
-      expect(result.completedFields['avatar'], isTrue);
-      expect(result.completedFields['bio'], isTrue);
-      expect(result.completedFields['location'], isTrue);
-      expect(result.completedFields['categories'], isTrue);
-      expect(result.completedFields['languages'], isTrue);
-      expect(result.completedFields['socialAccounts'], isTrue);
-      expect(result.completedFields['portfolio'], isTrue);
-      expect(result.completedFields['availability'], isTrue);
-    });
+        expect(result.percentage, equals(100));
+        expect(result.recommendations, isEmpty);
+        expect(result.completedFields['avatar'], isTrue);
+        expect(result.completedFields['bio'], isTrue);
+        expect(result.completedFields['location'], isTrue);
+        expect(result.completedFields['categories'], isTrue);
+        expect(result.completedFields['languages'], isTrue);
+        expect(result.completedFields['socialAccounts'], isTrue);
+        expect(result.completedFields['portfolio'], isTrue);
+        expect(result.completedFields['availability'], isTrue);
+      },
+    );
 
     // ─── Partial profiles ──────────────────────────────────────────────────────
 
@@ -111,12 +114,7 @@ void main() {
       final missingKeys = result.recommendations.map((r) => r.key).toSet();
       expect(
         missingKeys,
-        containsAll([
-          'categories',
-          'languages',
-          'socialAccounts',
-          'portfolio',
-        ]),
+        containsAll(['categories', 'languages', 'socialAccounts', 'portfolio']),
       );
       expect(missingKeys.contains('rateCard'), isFalse);
     });

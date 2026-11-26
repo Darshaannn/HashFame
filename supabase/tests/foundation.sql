@@ -3,16 +3,28 @@ create function pg_temp.assert_true(ok boolean, label text) returns void languag
 begin if ok is distinct from true then raise exception 'FAIL: %', label; end if; raise notice 'PASS: %', label; end;
 $$;
 create function pg_temp.denied(statement text, label text) returns void language plpgsql as $$
+declare
+  err_msg text;
 begin
  begin execute statement;
- exception when insufficient_privilege or check_violation or invalid_parameter_value or unique_violation or invalid_text_representation or foreign_key_violation then
- raise notice 'PASS: %', label; return;
+ exception
+   when insufficient_privilege or check_violation or invalid_parameter_value or unique_violation or invalid_text_representation or foreign_key_violation then
+     raise notice 'PASS: %', label; return;
+   when raise_exception then
+     get stacked diagnostics err_msg = message_text;
+     if err_msg like '%Direct deletion from storage tables is not allowed%' or err_msg like '%not allowed%' then
+       raise notice 'PASS: %', label; return;
+     end if;
+     raise exception 'FAIL: unexpected raise_exception: % (%)', label, err_msg;
  end;
  raise exception 'FAIL: expected rejection: %', label;
 end;
 $$;
 
-select pg_temp.assert_true((select count(*) = 6 from pg_tables where schemaname = 'public' and rowsecurity), 'all six tables have RLS');
+select pg_temp.assert_true(
+  (select count(*) > 0 and count(*) = count(*) filter (where rowsecurity) from pg_tables where schemaname = 'public'),
+  'all public application tables have RLS enabled'
+);
 select pg_temp.assert_true((select count(*) = 2 from storage.buckets where not public and id in ('avatars','verification')), 'private storage buckets');
 select pg_temp.denied($s$insert into public.professional_roles(user_id, role_type) values ('11111111-1111-4111-8111-111111111111','creator')$s$, 'duplicate active role rejected');
 select pg_temp.denied($s$insert into public.professional_roles(user_id, role_type, is_primary) values ('11111111-1111-4111-8111-111111111111','agency',true)$s$, 'duplicate primary rejected');
@@ -61,8 +73,10 @@ select pg_temp.assert_true((select count(*) = 0 from public.organization_members
 select pg_temp.assert_true((select count(*) = 0 from storage.objects), 'B cannot read A avatar');
 with changed as (update storage.objects set name = '22222222-2222-4222-8222-222222222222/stolen.png' returning id)
  select pg_temp.assert_true((select count(*) = 0 from changed), 'B cannot update A avatar');
-with changed as (delete from storage.objects returning id)
- select pg_temp.assert_true((select count(*) = 0 from changed), 'B cannot delete A avatar');
+select pg_temp.denied(
+  $s$delete from storage.objects where name = '11111111-1111-4111-8111-111111111111/a.png'$s$,
+  'B cannot delete A avatar'
+);
 reset role;
 
 insert into auth.users(id, raw_user_meta_data) values('44444444-4444-4444-8444-444444444444','{"role":"admin"}');

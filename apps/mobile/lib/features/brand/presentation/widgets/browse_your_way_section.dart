@@ -92,10 +92,11 @@ class BrowseYourWaySection extends ConsumerWidget {
   ) {
     return InkWell(
       onTap: () {
-        ref.read(creatorSearchFiltersProvider.notifier).update(
-              (filters) => filters.copyWith(
-                categoryIds: [item.name.toLowerCase()],
-              ),
+        ref
+            .read(creatorSearchFiltersProvider.notifier)
+            .update(
+              (filters) =>
+                  filters.copyWith(categoryIds: [item.name.toLowerCase()]),
             );
         ref.read(discoveryControllerProvider.notifier).search(initial: true);
         context.push('/discover');
@@ -111,11 +112,7 @@ class BrowseYourWaySection extends ConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              item.icon,
-              size: 15,
-              color: AppColors.white,
-            ),
+            Icon(item.icon, size: 15, color: AppColors.white),
             const SizedBox(width: 6),
             Text(
               item.name,

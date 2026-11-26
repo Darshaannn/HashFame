@@ -38,6 +38,10 @@ import '../features/campaign/presentation/campaign_detail_screen.dart';
 import '../features/campaign/presentation/creator_application_detail_screen.dart';
 import '../features/campaign/presentation/creator_applications_screen.dart';
 import '../features/campaign/presentation/creator_opportunities_screen.dart';
+import '../features/contact/presentation/contact_preferences_screen.dart';
+import '../features/contact/presentation/creator_contact_requests_screen.dart';
+import '../features/contact/presentation/my_outreach_screen.dart';
+import '../features/contact/presentation/outreach_chat_screen.dart';
 import 'providers.dart';
 
 String homePath(ProfessionalRole role) => '/home/${role.wire}';
@@ -75,6 +79,10 @@ String? routeRedirect(
               path.startsWith('/collaborations/') ||
               path == '/activity' ||
               path == '/talent' ||
+              path == '/outreach' ||
+              path.startsWith('/outreach/') ||
+              path == '/creator/contact-requests' ||
+              path == '/creator/contact-preferences' ||
               path == '/campaigns' ||
               path == '/campaigns/new' ||
               path.startsWith('/campaigns/') ||
@@ -286,6 +294,30 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/activity',
         name: 'creator_activity',
         builder: (_, state) => const ActivityScreen(),
+      ),
+
+      // Phase 03: Contact & Outreach Routes
+      GoRoute(
+        path: '/outreach',
+        name: 'my_outreach',
+        builder: (_, state) => const MyOutreachScreen(),
+      ),
+      GoRoute(
+        path: '/outreach/chat/:conversationId',
+        name: 'outreach_chat',
+        builder: (_, state) => OutreachChatScreen(
+          conversationId: state.pathParameters['conversationId']!,
+        ),
+      ),
+      GoRoute(
+        path: '/creator/contact-requests',
+        name: 'creator_contact_requests',
+        builder: (_, state) => const CreatorContactRequestsScreen(),
+      ),
+      GoRoute(
+        path: '/creator/contact-preferences',
+        name: 'creator_contact_preferences',
+        builder: (_, state) => const ContactPreferencesScreen(),
       ),
 
       // Agency Talent

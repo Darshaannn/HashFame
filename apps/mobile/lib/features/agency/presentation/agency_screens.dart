@@ -56,12 +56,16 @@ class AgencyHomeScreen extends ConsumerWidget {
         .toList();
 
     // Active campaigns count and active spotlight campaign
-    final activeCampaigns = campaignsList.where((c) => c.status.name == 'live' || c.status.name == 'inProgress').toList();
+    final activeCampaigns = campaignsList
+        .where((c) => c.status.name == 'live' || c.status.name == 'inProgress')
+        .toList();
     final spotlightCampaign = activeCampaigns.isNotEmpty
         ? activeCampaigns.first
         : (campaignsList.isNotEmpty ? campaignsList.first : null);
 
-    final activeCampaignsCount = activeCampaigns.isNotEmpty ? activeCampaigns.length : 3;
+    final activeCampaignsCount = activeCampaigns.isNotEmpty
+        ? activeCampaigns.length
+        : 3;
     final managedTalentCount = talentList.isNotEmpty ? talentList.length : 18;
     const newApplicantsCount = 7;
     const collaborationsCount = 4;
@@ -83,28 +87,64 @@ class AgencyHomeScreen extends ConsumerWidget {
         },
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.home_outlined, color: AppColors.secondaryGray, size: 22),
+            icon: Icon(
+              Icons.home_outlined,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
             selectedIcon: Icon(Icons.home, color: AppColors.burgundy, size: 22),
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.search_rounded, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.search_rounded, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.search_rounded,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.search_rounded,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Creator',
           ),
           NavigationDestination(
-            icon: Icon(Icons.campaign_outlined, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.campaign, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.campaign_outlined,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.campaign,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Campaigns',
           ),
           NavigationDestination(
-            icon: Icon(Icons.groups_outlined, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.groups, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.groups_outlined,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.groups,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Talent',
           ),
           NavigationDestination(
-            icon: Icon(Icons.business_outlined, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.business, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.business_outlined,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.business,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Profile',
           ),
         ],
@@ -172,16 +212,12 @@ class AgencyHomeScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Editorial Hero
-                        AgencyEditorialHero(
-                          agencyName: agencyName,
-                        ),
+                        AgencyEditorialHero(agencyName: agencyName),
 
                         const SizedBox(height: 20),
 
                         // Featured Talent Carousel
-                        FeaturedTalentCarousel(
-                          talentList: talentList,
-                        ),
+                        FeaturedTalentCarousel(talentList: talentList),
 
                         const SizedBox(height: 20),
 

@@ -77,7 +77,13 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
                           title: 'Draft Pitch Note',
                           contextData: {
                             'campaignTitle': campaign.title,
-                            'creatorName': ref.watch(sessionProvider).snapshot?.account.displayName ?? 'Creator',
+                            'creatorName':
+                                ref
+                                    .watch(sessionProvider)
+                                    .snapshot
+                                    ?.account
+                                    .displayName ??
+                                'Creator',
                           },
                           onSuggestionAccepted: (response) {
                             if (response.suggestion != null) {
@@ -196,329 +202,331 @@ class _CampaignDetailScreenState extends ConsumerState<CampaignDetailScreen> {
               title: campaign.title,
               fallbackPath: isCreator ? '/opportunities' : '/campaigns',
             ),
-          bottomNavigationBar: isCreator && isLive
-              ? Container(
-                  padding: const EdgeInsets.all(AppSpacing.md),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, -5),
-                      ),
-                    ],
-                  ),
-                  child: hasPassedDeadline
-                      ? const OutlinedButton(
-                          onPressed: null,
-                          child: Text('Application Deadline Closed'),
-                        )
-                      : AppButton(
-                          label: 'Apply for Campaign',
-                          onPressed: accountId == null
-                              ? null
-                              : () => _showApplyDialog(campaign, accountId),
-                        ),
-                )
-              : null,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Brand Header Card
-                AppCard(
-                  child: Padding(
+            bottomNavigationBar: isCreator && isLive
+                ? Container(
                     padding: const EdgeInsets.all(AppSpacing.md),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainerHighest,
-                              child: Text(
-                                campaign.brandName != null &&
-                                        campaign.brandName!.isNotEmpty
-                                    ? campaign.brandName![0].toUpperCase()
-                                    : 'B',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: AppSpacing.sm),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    campaign.brandName ?? 'Brand',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Status: ${campaign.status.label}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: AppColors.muted,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, -5),
                         ),
-                        const SizedBox(height: AppSpacing.md),
-                        Text(
-                          campaign.title,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        if (campaign.objective != null) ...[
-                          const SizedBox(height: AppSpacing.xs),
-                          Text(
-                            'Objective: ${campaign.objective!}',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.muted,
-                            ),
-                          ),
-                        ],
                       ],
                     ),
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.md),
-
-                // Description
-                _buildSectionHeader('Campaign Description'),
-                AppCard(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    child: Text(
-                      campaign.description,
-                      style: const TextStyle(fontSize: 14, height: 1.5),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.md),
-
-                // Compensation
-                _buildSectionHeader('Compensation'),
-                AppCard(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Type',
-                              style: TextStyle(color: AppColors.muted),
-                            ),
-                            Text(
-                              campaign.compensationType.label,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (campaign.budgetMin != null ||
-                            campaign.budgetMax != null) ...[
-                          const SizedBox(height: AppSpacing.xs),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Budget',
-                                style: TextStyle(color: AppColors.muted),
-                              ),
-                              Text(
-                                '₹${campaign.budgetMin?.toStringAsFixed(0) ?? '0'} - ₹${campaign.budgetMax?.toStringAsFixed(0) ?? '0'}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                    child: hasPassedDeadline
+                        ? const OutlinedButton(
+                            onPressed: null,
+                            child: Text('Application Deadline Closed'),
+                          )
+                        : AppButton(
+                            label: 'Apply for Campaign',
+                            onPressed: accountId == null
+                                ? null
+                                : () => _showApplyDialog(campaign, accountId),
                           ),
-                        ],
-                        if (campaign.barterDescription != null) ...[
-                          const SizedBox(height: AppSpacing.xs),
+                  )
+                : null,
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Brand Header Card
+                  AppCard(
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                'Product Barter',
-                                style: TextStyle(color: AppColors.muted),
-                              ),
-                              Expanded(
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainerHighest,
                                 child: Text(
-                                  campaign.barterDescription!,
-                                  textAlign: TextAlign.end,
+                                  campaign.brandName != null &&
+                                          campaign.brandName!.isNotEmpty
+                                      ? campaign.brandName![0].toUpperCase()
+                                      : 'B',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
+                              const SizedBox(width: AppSpacing.sm),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      campaign.brandName ?? 'Brand',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Status: ${campaign.status.label}',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: AppColors.muted,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
+                          const SizedBox(height: AppSpacing.md),
+                          Text(
+                            campaign.title,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          if (campaign.objective != null) ...[
+                            const SizedBox(height: AppSpacing.xs),
+                            Text(
+                              'Objective: ${campaign.objective!}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColors.muted,
+                              ),
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.md),
 
-                // Deliverables
-                _buildSectionHeader(
-                  'Required Deliverables (${campaign.deliverables.length})',
-                ),
-                if (campaign.deliverables.isEmpty)
-                  const AppCard(
+                  // Description
+                  _buildSectionHeader('Campaign Description'),
+                  AppCard(
                     child: Padding(
-                      padding: EdgeInsets.all(AppSpacing.md),
-                      child: Text('No specific deliverables listed.'),
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      child: Text(
+                        campaign.description,
+                        style: const TextStyle(fontSize: 14, height: 1.5),
+                      ),
                     ),
-                  )
-                else
-                  ...campaign.deliverables.map(
-                    (d) => Padding(
-                      padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-                      child: AppCard(
-                        child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(
-                            '${d.deliverableType.label} (x${d.quantity})',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Compensation
+                  _buildSectionHeader('Compensation'),
+                  AppCard(
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Type',
+                                style: TextStyle(color: AppColors.muted),
+                              ),
+                              Text(
+                                campaign.compensationType.label,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                          subtitle: Text(
-                            'Platform: ${d.platform}${d.description != null ? ' • ${d.description}' : ''}',
-                          ),
-                          trailing: const Icon(
-                            Icons.check_circle_outline,
-                            color: AppColors.primary,
+                          if (campaign.budgetMin != null ||
+                              campaign.budgetMax != null) ...[
+                            const SizedBox(height: AppSpacing.xs),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Budget',
+                                  style: TextStyle(color: AppColors.muted),
+                                ),
+                                Text(
+                                  '₹${campaign.budgetMin?.toStringAsFixed(0) ?? '0'} - ₹${campaign.budgetMax?.toStringAsFixed(0) ?? '0'}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                          if (campaign.barterDescription != null) ...[
+                            const SizedBox(height: AppSpacing.xs),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Product Barter',
+                                  style: TextStyle(color: AppColors.muted),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    campaign.barterDescription!,
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Deliverables
+                  _buildSectionHeader(
+                    'Required Deliverables (${campaign.deliverables.length})',
+                  ),
+                  if (campaign.deliverables.isEmpty)
+                    const AppCard(
+                      child: Padding(
+                        padding: EdgeInsets.all(AppSpacing.md),
+                        child: Text('No specific deliverables listed.'),
+                      ),
+                    )
+                  else
+                    ...campaign.deliverables.map(
+                      (d) => Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+                        child: AppCard(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(
+                              '${d.deliverableType.label} (x${d.quantity})',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(
+                              'Platform: ${d.platform}${d.description != null ? ' • ${d.description}' : ''}',
+                            ),
+                            trailing: const Icon(
+                              Icons.check_circle_outline,
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.md),
 
-                // Creator Requirements
-                _buildSectionHeader('Creator Requirements'),
-                AppCard(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    child: Column(
-                      children: [
-                        _buildRow(
-                          'Target Location',
-                          '${campaign.targetCity ?? 'Any City'}, ${campaign.targetState ?? campaign.targetCountry}',
-                        ),
-                        _buildRow(
-                          'Slots Available',
-                          '${campaign.creatorSlots} Creators',
-                        ),
-                        _buildRow(
-                          'Categories',
-                          campaign.categoryNames.isNotEmpty
-                              ? campaign.categoryNames.join(', ')
-                              : 'Open to all',
-                        ),
-                        _buildRow(
-                          'Languages',
-                          campaign.languageNames.isNotEmpty
-                              ? campaign.languageNames.join(', ')
-                              : 'Open to all',
-                        ),
-                      ],
+                  // Creator Requirements
+                  _buildSectionHeader('Creator Requirements'),
+                  AppCard(
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      child: Column(
+                        children: [
+                          _buildRow(
+                            'Target Location',
+                            '${campaign.targetCity ?? 'Any City'}, ${campaign.targetState ?? campaign.targetCountry}',
+                          ),
+                          _buildRow(
+                            'Slots Available',
+                            '${campaign.creatorSlots} Creators',
+                          ),
+                          _buildRow(
+                            'Categories',
+                            campaign.categoryNames.isNotEmpty
+                                ? campaign.categoryNames.join(', ')
+                                : 'Open to all',
+                          ),
+                          _buildRow(
+                            'Languages',
+                            campaign.languageNames.isNotEmpty
+                                ? campaign.languageNames.join(', ')
+                                : 'Open to all',
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.md),
 
-                // Usage Rights & Approval
-                _buildSectionHeader('Usage Rights & Terms'),
-                AppCard(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    child: Column(
-                      children: [
-                        _buildRow(
-                          'Organic Reposting',
-                          campaign.usageRights.organicRepostingAllowed
-                              ? 'Yes'
-                              : 'No',
-                        ),
-                        _buildRow(
-                          'Paid Ad Usage',
-                          campaign.usageRights.paidUsageRequired
-                              ? 'Paid Ad Usage Required'
-                              : 'No',
-                        ),
-                        _buildRow(
-                          'Whitelisting',
-                          campaign.usageRights.whitelistingRequired
-                              ? 'Required'
-                              : 'No',
-                        ),
-                        _buildRow(
-                          'Content Approval',
-                          campaign.usageRights.contentApprovalRequired
-                              ? 'Required before posting'
-                              : 'Not required',
-                        ),
-                        _buildRow(
-                          'Paid Partnership Tag',
-                          campaign.usageRights.disclosureRequired
-                              ? 'Mandatory'
-                              : 'Optional',
-                        ),
-                      ],
+                  // Usage Rights & Approval
+                  _buildSectionHeader('Usage Rights & Terms'),
+                  AppCard(
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      child: Column(
+                        children: [
+                          _buildRow(
+                            'Organic Reposting',
+                            campaign.usageRights.organicRepostingAllowed
+                                ? 'Yes'
+                                : 'No',
+                          ),
+                          _buildRow(
+                            'Paid Ad Usage',
+                            campaign.usageRights.paidUsageRequired
+                                ? 'Paid Ad Usage Required'
+                                : 'No',
+                          ),
+                          _buildRow(
+                            'Whitelisting',
+                            campaign.usageRights.whitelistingRequired
+                                ? 'Required'
+                                : 'No',
+                          ),
+                          _buildRow(
+                            'Content Approval',
+                            campaign.usageRights.contentApprovalRequired
+                                ? 'Required before posting'
+                                : 'Not required',
+                          ),
+                          _buildRow(
+                            'Paid Partnership Tag',
+                            campaign.usageRights.disclosureRequired
+                                ? 'Mandatory'
+                                : 'Optional',
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.md),
 
-                // Deadlines & Timeline
-                _buildSectionHeader('Timeline'),
-                AppCard(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    child: Column(
-                      children: [
-                        _buildRow(
-                          'Application Deadline',
-                          _formatDateTime(campaign.applicationDeadline),
-                        ),
-                        _buildRow(
-                          'Content Due Date',
-                          _formatDateTime(campaign.contentDeadline),
-                        ),
-                      ],
+                  // Deadlines & Timeline
+                  _buildSectionHeader('Timeline'),
+                  AppCard(
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      child: Column(
+                        children: [
+                          _buildRow(
+                            'Application Deadline',
+                            _formatDateTime(campaign.applicationDeadline),
+                          ),
+                          _buildRow(
+                            'Content Due Date',
+                            _formatDateTime(campaign.contentDeadline),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.xl),
-              ],
+                  const SizedBox(height: AppSpacing.xl),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
   Widget _buildSectionHeader(String title) {
     return Padding(

@@ -36,9 +36,7 @@ class BrandHomeScreen extends ConsumerWidget {
     final snapshot = session.snapshot;
 
     if (snapshot == null) {
-      return const Scaffold(
-        body: Center(child: AppSkeleton()),
-      );
+      return const Scaffold(body: Center(child: AppSkeleton()));
     }
 
     final account = snapshot.account;
@@ -83,8 +81,20 @@ class BrandHomeScreen extends ConsumerWidget {
                         height: 0,
                         child: Row(
                           children: [
-                            Text('Brand Workspace', style: TextStyle(fontSize: 0, color: Colors.transparent)),
-                            Text('Discover Creators', style: TextStyle(fontSize: 0, color: Colors.transparent)),
+                            Text(
+                              'Brand Workspace',
+                              style: TextStyle(
+                                fontSize: 0,
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            Text(
+                              'Discover Creators',
+                              style: TextStyle(
+                                fontSize: 0,
+                                color: Colors.transparent,
+                              ),
+                            ),
                           ],
                         ),
                       ),

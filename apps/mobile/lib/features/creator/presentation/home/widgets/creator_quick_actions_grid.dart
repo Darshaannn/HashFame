@@ -71,17 +71,17 @@ class CreatorQuickActionsGrid extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: _QuickActionTile(
-                  label: 'Activity /\nNotifications',
-                  icon: Icons.notifications_none_outlined,
-                  onTap: () => context.push('/activity'),
+                  label: 'Contact\nRequests',
+                  icon: Icons.inbox_outlined,
+                  onTap: () => context.push('/creator/contact-requests'),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: _QuickActionTile(
-                  label: 'Settings',
-                  icon: Icons.settings_outlined,
-                  onTap: () => context.push('/settings'),
+                  label: 'Privacy\nSettings',
+                  icon: Icons.shield_outlined,
+                  onTap: () => context.push('/creator/contact-preferences'),
                 ),
               ),
             ],
@@ -119,11 +119,7 @@ class _QuickActionTile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 20,
-              color: AppColors.burgundy,
-            ),
+            Icon(icon, size: 20, color: AppColors.burgundy),
             const SizedBox(height: 4),
             Text(
               label,
@@ -144,4 +140,3 @@ class _QuickActionTile extends StatelessWidget {
     );
   }
 }
-

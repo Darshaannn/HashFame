@@ -279,7 +279,7 @@ class GGAccountActionTile extends StatelessWidget {
 /// Standardized Sign Out confirmation dialog for Production & Demo
 class GGSignOutDialog {
   static Future<void> show(BuildContext context, WidgetRef ref) async {
-    final isDemo = DemoStore.instance.currentRole != ProfessionalRole.admin;
+    final isDemo = ref.read(authRepositoryProvider) is DemoAuthRepository;
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -392,9 +392,7 @@ class GGDemoControlsCard extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.person, color: AppColors.primary),
                 title: const Text('Creator (Aisha Mehta)'),
-                subtitle: const Text(
-                  'Opportunities, applications, portfolio',
-                ),
+                subtitle: const Text('Opportunities, applications, portfolio'),
                 onTap: () {
                   Navigator.pop(ctx);
                   _switchRole(context, ref, ProfessionalRole.creator);

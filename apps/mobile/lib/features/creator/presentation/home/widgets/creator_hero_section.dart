@@ -5,10 +5,7 @@ import '../../../../../core/design_system/tokens.dart';
 import '../../../domain/creator_profile.dart';
 
 class CreatorHeroSection extends StatelessWidget {
-  const CreatorHeroSection({
-    super.key,
-    required this.profile,
-  });
+  const CreatorHeroSection({super.key, required this.profile});
 
   final CreatorProfile profile;
 
@@ -17,8 +14,12 @@ class CreatorHeroSection extends StatelessWidget {
     // Creator name (split into first/last for bold stacked typography)
     final displayName = profile.displayName.trim();
     final nameParts = displayName.split(' ');
-    final firstName = nameParts.isNotEmpty ? nameParts.first.toUpperCase() : 'PRIYA';
-    final lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ').toUpperCase() : 'MEHRA';
+    final firstName = nameParts.isNotEmpty
+        ? nameParts.first.toUpperCase()
+        : 'PRIYA';
+    final lastName = nameParts.length > 1
+        ? nameParts.sublist(1).join(' ').toUpperCase()
+        : 'MEHRA';
 
     // Tagline / bio
     final tagline = profile.bio?.isNotEmpty == true
@@ -30,7 +31,8 @@ class CreatorHeroSection extends StatelessWidget {
         ? profile.primaryCategories.map((c) => c.name).join('  •  ')
         : 'Brand Collaborations  •  UGC  •  Lifestyle\nTravel  •  Beauty  •  Everyday Inspiration';
 
-    final photoUrl = profile.avatarPath ?? AppImages.getCreatorPhoto(displayName);
+    final photoUrl =
+        profile.avatarPath ?? AppImages.getCreatorPhoto(displayName);
 
     return Container(
       height: 330,
@@ -180,7 +182,10 @@ class CreatorHeroSection extends StatelessWidget {
                     onTap: () => context.go('/opportunities'),
                     borderRadius: BorderRadius.circular(22),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.burgundy,
                         borderRadius: BorderRadius.circular(22),

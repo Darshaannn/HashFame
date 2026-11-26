@@ -32,7 +32,9 @@ class CreatorDiscoveryCard extends ConsumerWidget {
                 // Creator photograph or initials placeholder
                 AppAvatar(
                   label: creator.displayName,
-                  imageUrl: creator.avatarPath ?? AppImages.getCreatorPhoto(creator.displayName),
+                  imageUrl:
+                      creator.avatarPath ??
+                      AppImages.getCreatorPhoto(creator.displayName),
                   radius: 28,
                 ),
                 const SizedBox(width: AppSpacing.md),
@@ -90,7 +92,9 @@ class CreatorDiscoveryCard extends ConsumerWidget {
                 IconButton(
                   icon: Icon(
                     isSaved ? Icons.bookmark : Icons.bookmark_border,
-                    color: isSaved ? AppColors.burgundy : AppColors.secondaryGray,
+                    color: isSaved
+                        ? AppColors.burgundy
+                        : AppColors.secondaryGray,
                   ),
                   tooltip: isSaved
                       ? 'Saved in shortlists'
@@ -118,7 +122,10 @@ class CreatorDiscoveryCard extends ConsumerWidget {
                   return Chip(
                     label: Text(
                       cat,
-                      style: const TextStyle(fontSize: 11, color: AppColors.black),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.black,
+                      ),
                     ),
                     backgroundColor: AppColors.lightGray,
                     side: const BorderSide(color: AppColors.outlineLight),
@@ -167,13 +174,22 @@ class CreatorDiscoveryCard extends ConsumerWidget {
                     ),
                   )
                 else
-                  const Text('Instagram', style: TextStyle(fontSize: 12, color: AppColors.secondaryGray)),
+                  const Text(
+                    'Instagram',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.secondaryGray,
+                    ),
+                  ),
 
                 TextButton(
                   onPressed: onTap,
                   style: TextButton.styleFrom(
                     visualDensity: VisualDensity.compact,
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     foregroundColor: AppColors.burgundy,
                   ),
                   child: const Row(

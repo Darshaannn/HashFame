@@ -101,7 +101,10 @@ class DiscoverCreatorsSection extends ConsumerWidget {
     );
   }
 
-  Widget _buildCreatorGrid(BuildContext context, List<CreatorDiscoveryItem> creators) {
+  Widget _buildCreatorGrid(
+    BuildContext context,
+    List<CreatorDiscoveryItem> creators,
+  ) {
     return Row(
       children: [
         for (var i = 0; i < creators.length; i++) ...[
@@ -170,7 +173,10 @@ class _CreatorPreviewCard extends StatelessWidget {
             // Right Info
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

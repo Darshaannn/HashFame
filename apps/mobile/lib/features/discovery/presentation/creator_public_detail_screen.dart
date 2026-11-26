@@ -18,6 +18,7 @@ import '../../creator/presentation/profile/widgets/creator_portfolio_grid.dart';
 import '../../creator/presentation/profile/widgets/creator_social_accounts_card.dart';
 import '../../creator/presentation/profile/widgets/creator_verification_card.dart';
 import '../../shortlist/presentation/widgets/add_to_shortlist_dialog.dart';
+import '../../contact/presentation/widgets/contact_creator_bottom_sheet.dart';
 
 class CreatorPublicDetailScreen extends ConsumerWidget {
   const CreatorPublicDetailScreen({super.key, required this.creatorId});
@@ -135,7 +136,8 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
                     _buildDirectoryDetailsCard(context, profile, igAccount),
                     const SizedBox(height: AppSpacing.md),
                   ] else ...[
-                    if (profile.bio != null && profile.bio!.trim().isNotEmpty) ...[
+                    if (profile.bio != null &&
+                        profile.bio!.trim().isNotEmpty) ...[
                       CreatorBioCard(profile: profile),
                       const SizedBox(height: AppSpacing.md),
                     ],
@@ -161,7 +163,20 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
 
                   const SizedBox(height: AppSpacing.xl),
                   AppButton(
-                    label: 'Add to Shortlist',
+                    label: 'Contact Creator',
+                    onPressed: () {
+                      ContactCreatorBottomSheet.show(
+                        context,
+                        creatorId: profile.userId,
+                        displayName: profile.displayName,
+                        avatarPath: profile.avatarPath,
+                        isRegistered: !isDirectoryListing,
+                        instagramHandle: igAccount?.handle,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  OutlinedButton(
                     onPressed: () {
                       showDialog(
                         context: context,
@@ -171,6 +186,7 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
                         ),
                       );
                     },
+                    child: const Text('Add to Shortlist'),
                   ),
                 ],
               ),
@@ -188,7 +204,8 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
   ) {
     final followerCount = igAccount?.userProvidedFollowerCount as int?;
     final igHandle = igAccount?.handle as String?;
-    final igUrl = igAccount?.profileUrl as String? ??
+    final igUrl =
+        igAccount?.profileUrl as String? ??
         (igHandle != null && igHandle.isNotEmpty
             ? 'https://www.instagram.com/$igHandle/'
             : null);
@@ -218,7 +235,10 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
                 return Chip(
                   label: Text(
                     cat.name,
-                    style: const TextStyle(fontSize: 12, color: AppColors.black),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.black,
+                    ),
                   ),
                   backgroundColor: AppColors.lightGray,
                   side: const BorderSide(color: AppColors.outlineLight),
@@ -252,14 +272,20 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.lightGray,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: const Text(
                     'Spreadsheet-supplied • Unverified',
-                    style: TextStyle(fontSize: 11, color: AppColors.secondaryGray),
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppColors.secondaryGray,
+                    ),
                   ),
                 ),
               ],
@@ -281,7 +307,11 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                const Icon(Icons.location_on_outlined, size: 16, color: AppColors.secondaryGray),
+                const Icon(
+                  Icons.location_on_outlined,
+                  size: 16,
+                  color: AppColors.secondaryGray,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   '${profile.location.city}${profile.location.state != null ? ", ${profile.location.state}" : ""}, India',
@@ -313,7 +343,10 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
                 }
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppRadius.control),
                   border: Border.all(color: AppColors.outlineLight),
@@ -321,7 +354,10 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.camera_alt_outlined, color: AppColors.burgundy),
+                    const Icon(
+                      Icons.camera_alt_outlined,
+                      color: AppColors.burgundy,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -333,7 +369,11 @@ class CreatorPublicDetailScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    const Icon(Icons.open_in_new, size: 16, color: AppColors.secondaryGray),
+                    const Icon(
+                      Icons.open_in_new,
+                      size: 16,
+                      color: AppColors.secondaryGray,
+                    ),
                   ],
                 ),
               ),

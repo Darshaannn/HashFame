@@ -66,13 +66,90 @@ class SupabaseDiscoveryDataSource {
       }
     }
 
-    final hasMore = rows.length > limit;
+    // 2. Query creator directory (Unclaimed & Directory listings)
+    try {
+      var dirQuery = client.from('creator_directory').select('''
+            directory_id,
+            display_name,
+            instagram_handle,
+            instagram_profile_url,
+            followers_count,
+            categories,
+            city,
+            image_path,
+            cover_image_path,
+            verification_status,
+            linked_creator_user_id
+          ''');
+
+      if (filters.query.isNotEmpty) {
+        final q = '%${filters.query}%';
+        dirQuery = dirQuery.or(
+          'display_name.ilike.$q,instagram_handle.ilike.$q',
+        );
+      }
+
+      if (filters.city != null && filters.city!.isNotEmpty) {
+        dirQuery = dirQuery.ilike('city', '%${filters.city}%');
+      }
+
+      final dirResponse = await dirQuery.range(offset, offset + limit);
+      final dirRows = dirResponse as List;
+
+      for (final row in dirRows) {
+        final dMap = Map<String, dynamic>.from(row as Map);
+        // If directory profile is linked to an existing registered creator already in items, skip duplicate
+        final linkedId = dMap['linked_creator_user_id'] as String?;
+        if (linkedId != null && items.any((i) => i.creatorId == linkedId)) {
+          continue;
+        }
+
+        final item = _mapDirectoryRowToDiscoveryItem(dMap);
+        if (_matchesInMemoryFilters(item, filters)) {
+          items.add(item);
+        }
+      }
+    } catch (_) {
+      // Graceful fallback if table is still synchronizing
+    }
+
+    final hasMore = items.length > limit;
     final nextOffset = hasMore ? offset + limit : null;
 
     return DiscoverySearchResult(
       items: items.take(limit).toList(),
       nextOffset: nextOffset,
       hasMore: hasMore,
+    );
+  }
+
+  CreatorDiscoveryItem _mapDirectoryRowToDiscoveryItem(
+    Map<String, dynamic> row,
+  ) {
+    final catList =
+        (row['categories'] as List?)?.map((e) => e.toString()).toList() ?? [];
+    final followers = row['followers_count'] is int
+        ? row['followers_count'] as int
+        : int.tryParse(row['followers_count']?.toString() ?? '');
+
+    return CreatorDiscoveryItem(
+      creatorId: row['directory_id'] as String,
+      displayName: row['display_name'] as String? ?? '',
+      professionalName: row['instagram_handle'] != null
+          ? '@${row['instagram_handle']}'
+          : null,
+      avatarPath: row['image_path'] as String?,
+      city: row['city'] as String?,
+      country: 'IN',
+      primaryCategoryNames: catList,
+      subcategoryNames: const [],
+      languageNames: const ['English', 'Hindi'],
+      primaryPlatform: SocialPlatform.instagram,
+      totalFollowers: followers,
+      startingRate: null,
+      startingRateDeliverable: null,
+      availabilityStatus: AvailabilityStatus.open,
+      isRepresented: false,
     );
   }
 
@@ -210,6 +287,22 @@ class DiscoveryRepositoryImpl implements DiscoveryRepository {
   Future<CreatorDiscoveryItem?> getCreatorDiscoveryDetail({
     required String creatorId,
   }) async {
+    // If it's a directory ID (starts with dir_), query creator_directory directly
+    if (creatorId.startsWith('dir_')) {
+      try {
+        final res = await dataSource.client
+            .from('creator_directory')
+            .select()
+            .eq('directory_id', creatorId)
+            .maybeSingle();
+        if (res != null) {
+          return dataSource._mapDirectoryRowToDiscoveryItem(
+            Map<String, dynamic>.from(res as Map),
+          );
+        }
+      } catch (_) {}
+    }
+
     final result = await dataSource.searchCreators(
       filters: CreatorSearchFilters(query: creatorId),
       limit: 1,

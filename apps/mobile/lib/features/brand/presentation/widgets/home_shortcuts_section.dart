@@ -21,7 +21,18 @@ class HomeShortcutsSection extends StatelessWidget {
               onTap: () => context.push('/shortlists'),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
+
+          // Outreach Shortcut
+          Expanded(
+            child: _ShortcutCard(
+              title: 'Outreach',
+              subtitle: 'Proposals & Quotes',
+              icon: Icons.send_rounded,
+              onTap: () => context.push('/outreach'),
+            ),
+          ),
+          const SizedBox(width: 8),
 
           // Profile Shortcut
           Expanded(
@@ -65,11 +76,7 @@ class _ShortcutCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: AppColors.burgundy,
-              size: 22,
-            ),
+            Icon(icon, color: AppColors.burgundy, size: 22),
             const SizedBox(width: 8),
             Expanded(
               child: Column(
@@ -112,4 +119,3 @@ class _ShortcutCard extends StatelessWidget {
     );
   }
 }
-

@@ -14,6 +14,9 @@ import '../domain/creator_search_filters.dart';
 import 'discovery_controller.dart';
 import 'widgets/creator_discovery_card.dart';
 import 'widgets/discover_filter_sheet.dart';
+import 'widgets/smart_search_indicator_bar.dart';
+import '../domain/natural_language_search_interpreter.dart';
+import '../domain/parsed_search_criteria.dart';
 
 class DiscoverScreen extends ConsumerStatefulWidget {
   const DiscoverScreen({super.key});
@@ -25,6 +28,9 @@ class DiscoverScreen extends ConsumerStatefulWidget {
 class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
+  ParsedSearchCriteria _parsedCriteria = const ParsedSearchCriteria(
+    rawQuery: '',
+  );
 
   @override
   void initState() {
@@ -72,210 +78,270 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
           title: 'Discover Creators',
           showBackButton: true,
           fallbackPath: fallbackPath,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.auto_awesome, color: AppColors.burgundy, size: 20),
-            tooltip: 'AI: Explain Search Filters',
-            onPressed: () {
-              AssistantModalSheet.show(
-                context: context,
-                role: AssistantRole.brand,
-                task: AssistantTask.explainFilters,
-                title: 'Creator Search Guidance',
-                contextData: {
-                  'activeFilters': filters.activeFilterCount,
-                  'categories': filters.categoryIds,
-                  'hasVerificationFilter': filters.verificationStatus != null,
-                },
-              );
-            },
-          ),
-          IconButton(
-            icon: Badge(
-              isLabelVisible: filters.activeFilterCount > 0,
-              label: Text(filters.activeFilterCount.toString()),
-              child: const Icon(Icons.filter_list),
-            ),
-            tooltip: 'Filter',
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const DiscoverFilterSheet()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Search field
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: AppSpacing.sm,
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.auto_awesome,
+                color: AppColors.burgundy,
+                size: 20,
               ),
-              child: AppSearchField(
-                onChanged: (val) {
-                  ref
-                      .read(creatorSearchFiltersProvider.notifier)
-                      .set(filters.copyWith(query: val.trim()));
-                },
-              ),
+              tooltip: 'AI: Explain Search Filters',
+              onPressed: () {
+                AssistantModalSheet.show(
+                  context: context,
+                  role: AssistantRole.brand,
+                  task: AssistantTask.explainFilters,
+                  title: 'Creator Search Guidance',
+                  contextData: {
+                    'activeFilters': filters.activeFilterCount,
+                    'categories': filters.categoryIds,
+                    'hasVerificationFilter': filters.verificationStatus != null,
+                  },
+                );
+              },
             ),
-
-            // Category shortcuts row
-            SizedBox(
-              height: 42,
-              child: categoriesAsync.when(
-                loading: () => const Center(
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+            IconButton(
+              icon: Badge(
+                isLabelVisible: filters.activeFilterCount > 0,
+                label: Text(filters.activeFilterCount.toString()),
+                child: const Icon(Icons.filter_list),
+              ),
+              tooltip: 'Filter',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const DiscoverFilterSheet(),
                   ),
-                ),
-                error: (err, stack) => const SizedBox.shrink(),
-                data: (cats) {
-                  return ListView.separated(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.lg,
-                    ),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: cats.length,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(width: 6),
-                    itemBuilder: (context, idx) {
-                      final cat = cats[idx];
-                      final isSelected = filters.categoryIds.contains(cat.id);
-                      return ChoiceChip(
-                        label: Text(cat.name),
-                        selected: isSelected,
-                        onSelected: (selected) {
-                          final updated = List<String>.from(
-                            filters.categoryIds,
-                          );
-                          if (selected) {
-                            updated.add(cat.id);
-                          } else {
-                            updated.remove(cat.id);
-                          }
-                          ref
-                              .read(creatorSearchFiltersProvider.notifier)
-                              .set(filters.copyWith(categoryIds: updated));
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: AppSpacing.xs),
-
-            // Content List
-            Expanded(
-              child: Builder(
-                builder: (context) {
-                  if (state.isLoading && state.items.isEmpty) {
-                    return const Padding(
-                      padding: EdgeInsets.all(AppSpacing.lg),
-                      child: AppSkeleton(),
-                    );
-                  }
-
-                  if (state.error != null && state.items.isEmpty) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(AppSpacing.lg),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(state.error!, textAlign: TextAlign.center),
-                            const SizedBox(height: AppSpacing.md),
-                            AppButton(
-                              label: 'Retry',
-                              onPressed: () => ref
-                                  .read(discoveryControllerProvider.notifier)
-                                  .retry(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-
-                  if (state.items.isEmpty) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(AppSpacing.lg),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.search_off,
-                              size: 48,
-                              color: AppColors.outline,
-                            ),
-                            const SizedBox(height: AppSpacing.sm),
-                            Text(
-                              'No creators found',
-                              style: AppTypography.heading,
-                            ),
-                            const SizedBox(height: AppSpacing.xs),
-                            const Text(
-                              'Try adjusting your search or clearing filters.',
-                            ),
-                            if (filters.activeFilterCount > 0) ...[
-                              const SizedBox(height: AppSpacing.md),
-                              OutlinedButton(
-                                onPressed: () {
-                                  ref
-                                      .read(
-                                        creatorSearchFiltersProvider.notifier,
-                                      )
-                                      .set(const CreatorSearchFilters());
-                                },
-                                child: const Text('Clear Filters'),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-
-                  return ListView.separated(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.all(AppSpacing.lg),
-                    itemCount: state.items.length + (state.hasMore ? 1 : 0),
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: AppSpacing.md),
-                    itemBuilder: (context, index) {
-                      if (index == state.items.length) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: AppSpacing.md,
-                            ),
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-                      final creator = state.items[index];
-                      return CreatorDiscoveryCard(
-                        creator: creator,
-                        onTap: () => context.push(
-                          '/discover/creator/${creator.creatorId}',
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
+                );
+              },
             ),
           ],
         ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Search field
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.sm,
+                ),
+                child: AppSearchField(
+                  placeholder: 'Search creators e.g. "Mumbai beauty 50K-200K"',
+                  onChanged: (val) {
+                    final parsed = NaturalLanguageSearchInterpreter.parse(val);
+                    setState(() => _parsedCriteria = parsed);
+
+                    ref
+                        .read(creatorSearchFiltersProvider.notifier)
+                        .set(
+                          filters.copyWith(
+                            query:
+                                parsed.nameOrKeyword ??
+                                (parsed.isNaturalLanguage ? '' : val.trim()),
+                            city: parsed.city ?? filters.city,
+                            minFollowers:
+                                parsed.minFollowers ?? filters.minFollowers,
+                            maxFollowers:
+                                parsed.maxFollowers ?? filters.maxFollowers,
+                          ),
+                        );
+                  },
+                ),
+              ),
+
+              // Smart Search Indicator & Filter Chips
+              SmartSearchIndicatorBar(
+                criteria: _parsedCriteria,
+                onClearFilter: (type) {
+                  if (type == 'city') {
+                    setState(
+                      () => _parsedCriteria = _parsedCriteria.copyWith(
+                        city: null,
+                      ),
+                    );
+                    ref
+                        .read(creatorSearchFiltersProvider.notifier)
+                        .set(filters.copyWith(city: null));
+                  } else if (type == 'category') {
+                    setState(
+                      () => _parsedCriteria = _parsedCriteria.copyWith(
+                        category: null,
+                      ),
+                    );
+                  } else if (type == 'followers' || type == 'tier') {
+                    setState(
+                      () => _parsedCriteria = _parsedCriteria.copyWith(
+                        minFollowers: null,
+                        maxFollowers: null,
+                        tier: null,
+                      ),
+                    );
+                    ref
+                        .read(creatorSearchFiltersProvider.notifier)
+                        .set(
+                          filters.copyWith(
+                            minFollowers: null,
+                            maxFollowers: null,
+                          ),
+                        );
+                  }
+                },
+              ),
+
+              // Category shortcuts row
+              SizedBox(
+                height: 42,
+                child: categoriesAsync.when(
+                  loading: () => const Center(
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
+                  error: (err, stack) => const SizedBox.shrink(),
+                  data: (cats) {
+                    return ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                      ),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: cats.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 6),
+                      itemBuilder: (context, idx) {
+                        final cat = cats[idx];
+                        final isSelected = filters.categoryIds.contains(cat.id);
+                        return ChoiceChip(
+                          label: Text(cat.name),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            final updated = List<String>.from(
+                              filters.categoryIds,
+                            );
+                            if (selected) {
+                              updated.add(cat.id);
+                            } else {
+                              updated.remove(cat.id);
+                            }
+                            ref
+                                .read(creatorSearchFiltersProvider.notifier)
+                                .set(filters.copyWith(categoryIds: updated));
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+
+              // Content List
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    if (state.isLoading && state.items.isEmpty) {
+                      return const Padding(
+                        padding: EdgeInsets.all(AppSpacing.lg),
+                        child: AppSkeleton(),
+                      );
+                    }
+
+                    if (state.error != null && state.items.isEmpty) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(AppSpacing.lg),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(state.error!, textAlign: TextAlign.center),
+                              const SizedBox(height: AppSpacing.md),
+                              AppButton(
+                                label: 'Retry',
+                                onPressed: () => ref
+                                    .read(discoveryControllerProvider.notifier)
+                                    .retry(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (state.items.isEmpty) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(AppSpacing.lg),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.search_off,
+                                size: 48,
+                                color: AppColors.outline,
+                              ),
+                              const SizedBox(height: AppSpacing.sm),
+                              Text(
+                                'No creators found',
+                                style: AppTypography.heading,
+                              ),
+                              const SizedBox(height: AppSpacing.xs),
+                              const Text(
+                                'Try adjusting your search or clearing filters.',
+                              ),
+                              if (filters.activeFilterCount > 0) ...[
+                                const SizedBox(height: AppSpacing.md),
+                                OutlinedButton(
+                                  onPressed: () {
+                                    ref
+                                        .read(
+                                          creatorSearchFiltersProvider.notifier,
+                                        )
+                                        .set(const CreatorSearchFilters());
+                                  },
+                                  child: const Text('Clear Filters'),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    return ListView.separated(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      itemCount: state.items.length + (state.hasMore ? 1 : 0),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: AppSpacing.md),
+                      itemBuilder: (context, index) {
+                        if (index == state.items.length) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: AppSpacing.md,
+                              ),
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                        final creator = state.items[index];
+                        return CreatorDiscoveryCard(
+                          creator: creator,
+                          onTap: () => context.push(
+                            '/discover/creator/${creator.creatorId}',
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

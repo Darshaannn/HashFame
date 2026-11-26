@@ -9,12 +9,10 @@ import '../../../../demo/demo_store.dart';
 import '../../../account/domain/account.dart';
 import '../../../auth/presentation/session_controller.dart';
 import '../../../creator/presentation/profile/creator_profile_controller.dart';
+import '../../../profile_common/presentation/widgets/account_switcher_menu.dart';
 
 class AgencyHomeHeader extends ConsumerWidget {
-  const AgencyHomeHeader({
-    super.key,
-    this.onRoleSelected,
-  });
+  const AgencyHomeHeader({super.key, this.onRoleSelected});
 
   final ValueChanged<ProfessionalRole>? onRoleSelected;
 
@@ -47,11 +45,7 @@ class AgencyHomeHeader extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Container(
-              height: 16,
-              width: 1,
-              color: AppColors.borderGray,
-            ),
+            Container(height: 16, width: 1, color: AppColors.borderGray),
             const SizedBox(width: 8),
 
             // Agency Demo Dropdown Pill
@@ -91,18 +85,8 @@ class AgencyHomeHeader extends ConsumerWidget {
 
             const SizedBox(width: 4),
 
-            // Profile Icon
-            IconButton(
-              icon: const Icon(
-                Icons.account_circle_outlined,
-                color: AppColors.black,
-                size: 23,
-              ),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
-              tooltip: 'Agency Profile',
-              onPressed: () => context.go('/profile'),
-            ),
+            // Top-right Account Menu Button
+            const GGAccountAvatarButton(),
           ],
         ),
       ),
@@ -111,7 +95,8 @@ class AgencyHomeHeader extends ConsumerWidget {
 
   Widget _buildRoleDropdown(BuildContext context, WidgetRef ref) {
     final session = ref.watch(sessionProvider);
-    final currentRole = session.snapshot?.account.primaryRoleLabel ?? ProfessionalRole.agency;
+    final currentRole =
+        session.snapshot?.account.primaryRoleLabel ?? ProfessionalRole.agency;
 
     final roles = [
       (ProfessionalRole.brandMarketer, 'Brand Demo'),
@@ -176,7 +161,9 @@ class AgencyHomeHeader extends ConsumerWidget {
                       ? Icons.check_circle_rounded
                       : Icons.radio_button_unchecked,
                   size: 16,
-                  color: role == currentRole ? AppColors.burgundy : AppColors.secondaryGray,
+                  color: role == currentRole
+                      ? AppColors.burgundy
+                      : AppColors.secondaryGray,
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -184,8 +171,12 @@ class AgencyHomeHeader extends ConsumerWidget {
                   style: TextStyle(
                     fontFamily: AppTypography.hindFont,
                     fontSize: 13,
-                    fontWeight: role == currentRole ? FontWeight.w600 : FontWeight.w400,
-                    color: role == currentRole ? AppColors.burgundy : AppColors.black,
+                    fontWeight: role == currentRole
+                        ? FontWeight.w600
+                        : FontWeight.w400,
+                    color: role == currentRole
+                        ? AppColors.burgundy
+                        : AppColors.black,
                   ),
                 ),
               ],
@@ -197,7 +188,10 @@ class AgencyHomeHeader extends ConsumerWidget {
         decoration: BoxDecoration(
           color: const Color(0xFFF9EBEB),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.burgundy.withValues(alpha: 0.2), width: 0.8),
+          border: Border.all(
+            color: AppColors.burgundy.withValues(alpha: 0.2),
+            width: 0.8,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -223,4 +217,3 @@ class AgencyHomeHeader extends ConsumerWidget {
     );
   }
 }
-

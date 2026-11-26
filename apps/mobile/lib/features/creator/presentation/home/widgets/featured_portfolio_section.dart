@@ -5,10 +5,7 @@ import '../../../../../core/design_system/tokens.dart';
 import '../../../domain/portfolio.dart';
 
 class FeaturedPortfolioSection extends StatelessWidget {
-  const FeaturedPortfolioSection({
-    super.key,
-    this.portfolioItems = const [],
-  });
+  const FeaturedPortfolioSection({super.key, this.portfolioItems = const []});
 
   final List<PortfolioItem> portfolioItems;
 
@@ -190,7 +187,9 @@ class FeaturedPortfolioSection extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    isVideo ? Icons.play_arrow_rounded : Icons.photo_library_outlined,
+                    isVideo
+                        ? Icons.play_arrow_rounded
+                        : Icons.photo_library_outlined,
                     size: 14,
                     color: Colors.white,
                   ),

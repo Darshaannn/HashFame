@@ -149,9 +149,7 @@ class CampaignSpaceSection extends ConsumerWidget {
   Widget _buildCampaignCard(BuildContext context, Campaign campaign) {
     final isLive = campaign.status == CampaignStatus.live;
     final statusLabel = isLive ? 'Active' : 'Draft';
-    final statusBg = isLive
-        ? const Color(0xFFE2F7E4)
-        : const Color(0xFFEEEEEE);
+    final statusBg = isLive ? const Color(0xFFE2F7E4) : const Color(0xFFEEEEEE);
     final statusColor = isLive
         ? const Color(0xFF2E7D32)
         : AppColors.secondaryGray;
@@ -249,11 +247,7 @@ class CampaignSpaceSection extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         child: const Row(
           children: [
-            Icon(
-              Icons.add_circle_outline,
-              color: AppColors.burgundy,
-              size: 24,
-            ),
+            Icon(Icons.add_circle_outline, color: AppColors.burgundy, size: 24),
             SizedBox(width: 10),
             Expanded(
               child: Text(
@@ -266,11 +260,7 @@ class CampaignSpaceSection extends ConsumerWidget {
                 ),
               ),
             ),
-            Icon(
-              Icons.chevron_right,
-              size: 20,
-              color: AppColors.secondaryGray,
-            ),
+            Icon(Icons.chevron_right, size: 20, color: AppColors.secondaryGray),
           ],
         ),
       ),

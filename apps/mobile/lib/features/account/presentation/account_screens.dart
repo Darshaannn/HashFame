@@ -348,12 +348,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             Consumer(
               builder: (context, ref, _) {
                 final currentLocale = ref.watch(activeLocaleProvider);
-                final localeItem = AppSupportedLocale.fromCode(currentLocale.languageCode);
+                final localeItem = AppSupportedLocale.fromCode(
+                  currentLocale.languageCode,
+                );
                 final l10n = AppLocalizations.of(context);
 
                 return GGAccountActionTile(
                   title: l10n?.language ?? 'Language',
-                  subtitle: '${localeItem.englishName} (${localeItem.nativeName})',
+                  subtitle:
+                      '${localeItem.englishName} (${localeItem.nativeName})',
                   icon: Icons.language_outlined,
                   onTap: () {
                     showModalBottomSheet<void>(
@@ -388,15 +391,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                       ),
                                       const SizedBox(width: AppSpacing.sm),
                                       Text(
-                                        l10n?.selectLanguage ?? 'Select Language',
-                                        style: AppTypography.heading.copyWith(fontSize: 18),
+                                        l10n?.selectLanguage ??
+                                            'Select Language',
+                                        style: AppTypography.heading.copyWith(
+                                          fontSize: 18,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
                                 const SizedBox(height: AppSpacing.md),
                                 ...AppSupportedLocale.values.map((item) {
-                                  final isSelected = item.locale.languageCode ==
+                                  final isSelected =
+                                      item.locale.languageCode ==
                                       currentLocale.languageCode;
                                   return ListTile(
                                     title: Text(
@@ -422,15 +429,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                           .read(activeLocaleProvider.notifier)
                                           .setLocale(item.locale);
                                       if (context.mounted) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              l10n?.languageChangedNotice ??
-                                                  'Language updated successfully',
-                                            ),
-                                            duration: const Duration(seconds: 2),
-                                          ),
-                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  l10n?.languageChangedNotice ?? 'Language updated successfully',
+                                                ),
+                                                duration: const Duration(
+                                                  seconds: 2,
+                                                ),
+                                              ),
+                                            );
                                       }
                                     },
                                   );

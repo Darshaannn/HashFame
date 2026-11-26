@@ -37,28 +37,64 @@ class BrandShell extends StatelessWidget {
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.home_outlined, color: AppColors.secondaryGray, size: 22),
+            icon: Icon(
+              Icons.home_outlined,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
             selectedIcon: Icon(Icons.home, color: AppColors.burgundy, size: 22),
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_search_outlined, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.person_search, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.person_search_outlined,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.person_search,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Creator',
           ),
           NavigationDestination(
-            icon: Icon(Icons.campaign_outlined, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.campaign, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.campaign_outlined,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.campaign,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Campaigns',
           ),
           NavigationDestination(
-            icon: Icon(Icons.bookmark_border, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.bookmark, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.bookmark_border,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.bookmark,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Shortlists',
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_outline, color: AppColors.secondaryGray, size: 22),
-            selectedIcon: Icon(Icons.person, color: AppColors.burgundy, size: 22),
+            icon: Icon(
+              Icons.person_outline,
+              color: AppColors.secondaryGray,
+              size: 22,
+            ),
+            selectedIcon: Icon(
+              Icons.person,
+              color: AppColors.burgundy,
+              size: 22,
+            ),
             label: 'Profile',
           ),
         ],

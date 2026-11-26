@@ -22,9 +22,7 @@ class AgencyEditorialHero extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 250,
-      decoration: const BoxDecoration(
-        color: AppColors.black,
-      ),
+      decoration: const BoxDecoration(color: AppColors.black),
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -48,7 +46,11 @@ class AgencyEditorialHero extends StatelessWidget {
                   errorBuilder: (_, _, _) => Container(
                     color: AppColors.deepBurgundy,
                     child: const Center(
-                      child: Icon(Icons.person, color: Colors.white24, size: 54),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white24,
+                        size: 54,
+                      ),
                     ),
                   ),
                 ),
@@ -57,11 +59,7 @@ class AgencyEditorialHero extends StatelessWidget {
           ),
 
           // 2. Diagonal geometric divider mask & shadows
-          Positioned.fill(
-            child: CustomPaint(
-              painter: _DiagonalHeroPainter(),
-            ),
-          ),
+          Positioned.fill(child: CustomPaint(painter: _DiagonalHeroPainter())),
 
           // 3. Editorial text & CTA (Left half)
           Positioned(
@@ -124,7 +122,10 @@ class AgencyEditorialHero extends StatelessWidget {
                     onTap: () => context.go('/discover'),
                     borderRadius: BorderRadius.circular(18),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 7,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.burgundy,
                         borderRadius: BorderRadius.circular(18),
@@ -201,14 +202,19 @@ class _DiagonalHeroPainter extends CustomPainter {
       ..close();
 
     final shadowPaint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-        colors: [
-          Colors.black.withValues(alpha: 0.45),
-          Colors.transparent,
-        ],
-      ).createShader(Rect.fromLTWH(bottomSplitX, 0, splitX - bottomSplitX + 16, size.height));
+      ..shader =
+          LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [Colors.black.withValues(alpha: 0.45), Colors.transparent],
+          ).createShader(
+            Rect.fromLTWH(
+              bottomSplitX,
+              0,
+              splitX - bottomSplitX + 16,
+              size.height,
+            ),
+          );
 
     canvas.drawPath(shadowPath, shadowPaint);
   }
@@ -216,4 +222,3 @@ class _DiagonalHeroPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-

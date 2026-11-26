@@ -49,7 +49,8 @@ class AssistantModalSheet extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<AssistantModalSheet> createState() => _AssistantModalSheetState();
+  ConsumerState<AssistantModalSheet> createState() =>
+      _AssistantModalSheetState();
 }
 
 class _AssistantModalSheetState extends ConsumerState<AssistantModalSheet> {
@@ -195,12 +196,18 @@ class _AssistantModalSheetState extends ConsumerState<AssistantModalSheet> {
                 decoration: BoxDecoration(
                   color: AppColors.errorLight,
                   borderRadius: BorderRadius.circular(AppRadius.sm),
-                  border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
+                  border: Border.all(
+                    color: AppColors.error.withValues(alpha: 0.3),
+                  ),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.info_outline, color: AppColors.error, size: 20),
+                    const Icon(
+                      Icons.info_outline,
+                      color: AppColors.error,
+                      size: 20,
+                    ),
                     const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
@@ -231,12 +238,15 @@ class _AssistantModalSheetState extends ConsumerState<AssistantModalSheet> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.shield_outlined, size: 16, color: AppColors.secondaryGray),
+                    const Icon(
+                      Icons.shield_outlined,
+                      size: 16,
+                      color: AppColors.secondaryGray,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        l10n?.aiReviewNotice ??
-                            'Review this AI suggestion before applying it to your data:',
+                        l10n?.aiReviewNotice ?? 'Review this AI suggestion before applying it to your data:',
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
@@ -309,7 +319,9 @@ class _AssistantModalSheetState extends ConsumerState<AssistantModalSheet> {
                         side: const BorderSide(color: AppColors.outline),
                         padding: const EdgeInsets.symmetric(vertical: 13),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppRadius.control),
+                          borderRadius: BorderRadius.circular(
+                            AppRadius.control,
+                          ),
                         ),
                       ),
                       onPressed: () => Navigator.of(context).pop(),
@@ -328,7 +340,9 @@ class _AssistantModalSheetState extends ConsumerState<AssistantModalSheet> {
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 13),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppRadius.control),
+                          borderRadius: BorderRadius.circular(
+                            AppRadius.control,
+                          ),
                         ),
                         elevation: 0,
                       ),
@@ -381,11 +395,7 @@ class AssistantActionChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.auto_awesome,
-              color: AppColors.burgundy,
-              size: 13,
-            ),
+            const Icon(Icons.auto_awesome, color: AppColors.burgundy, size: 13),
             const SizedBox(width: 5),
             Text(
               label,

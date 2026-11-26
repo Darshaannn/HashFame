@@ -17,10 +17,7 @@ class BrandHeroBanner extends StatelessWidget {
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              AppColors.burgundy,
-              AppColors.deepBurgundy,
-            ],
+            colors: [AppColors.burgundy, AppColors.deepBurgundy],
           ),
           boxShadow: [
             BoxShadow(

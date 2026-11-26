@@ -122,7 +122,11 @@ class AgencyPortfolioPreview extends StatelessWidget {
                 errorBuilder: (_, _, _) => Container(
                   color: const Color(0xFF2C2222),
                   child: const Center(
-                    child: Icon(Icons.image_outlined, color: Colors.white24, size: 28),
+                    child: Icon(
+                      Icons.image_outlined,
+                      color: Colors.white24,
+                      size: 28,
+                    ),
                   ),
                 ),
               ),

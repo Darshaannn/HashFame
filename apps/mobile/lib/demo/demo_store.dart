@@ -15,9 +15,9 @@ import 'package:ggs_mobile/features/profile_common/domain/reference_data.dart';
 import 'package:ggs_mobile/features/profile_common/domain/verification.dart';
 import 'package:ggs_mobile/features/shortlist/domain/shortlist.dart';
 import 'package:ggs_mobile/features/shortlist/domain/shortlist_member.dart';
+import 'package:ggs_mobile/features/contact/domain/contact_models.dart';
 
 import 'creator_directory_loader.dart';
-
 
 class DemoStore {
   DemoStore._() {
@@ -45,6 +45,14 @@ class DemoStore {
   final Map<String, List<CollaborationMessage>> messages = {};
   final Map<String, List<ActivityEvent>> userActivities = {};
 
+  // Phase 03: Contact & Outreach
+  final Map<String, CreatorContactRequest> contactRequests = {};
+  final Map<String, PrivateQuotation> privateQuotations = {};
+  final Map<String, OutreachConversation> outreachConversations = {};
+  final Map<String, List<OutreachMessage>> outreachMessages = {};
+  final Map<String, CreatorContactPreferences> contactPreferences = {};
+  final List<String> blockedUsers = [];
+
   // User Accounts for switching
   late Account brandAccount;
   late Account creatorAccount;
@@ -66,6 +74,12 @@ class DemoStore {
     submissions.clear();
     messages.clear();
     userActivities.clear();
+    contactRequests.clear();
+    privateQuotations.clear();
+    outreachConversations.clear();
+    outreachMessages.clear();
+    contactPreferences.clear();
+    blockedUsers.clear();
 
     _seedReferenceData();
     _seedAccounts();
@@ -75,6 +89,134 @@ class DemoStore {
     _seedApplications();
     _seedCollaborations();
     _seedActivityFeed();
+    _seedContactOutreach();
+  }
+
+  void _seedContactOutreach() {
+    // Preferences for Priya Mehra (demo_creator_user_id)
+    contactPreferences['demo_creator_user_id'] =
+        const CreatorContactPreferences(
+          creatorId: 'demo_creator_user_id',
+          allowCollaborationRequests: true,
+          allowBusinessEmail: true,
+          businessEmail: 'priya.collabs@priyamehra.in',
+          allowPhone: false,
+          allowWhatsapp: true,
+          whatsappNumber: '+91 98765 43210',
+          preferredContactMethod: OutreachContactMethod.inApp,
+          responseTimeHours: 24,
+        );
+
+    // Initial Request from Agency to Priya Mehra
+    const req1Id = 'req_demo_agency_priya';
+    const conv1Id = 'conv_demo_agency_priya';
+
+    final req1 = CreatorContactRequest(
+      id: req1Id,
+      senderUserId: 'demo_agency_user_id',
+      senderOrganizationId: 'demo_agency_org_id',
+      senderOrganizationName: 'Pulse Talent Agency',
+      recipientCreatorId: 'demo_creator_user_id',
+      recipientDisplayName: 'Priya Mehra',
+      recipientAvatarPath: 'avatars/creator_priya.png',
+      isRegisteredCreator: true,
+      requestType: ContactRequestType.requestQuotation,
+      campaignName: 'Summer Glow Beauty Reel',
+      collaborationRequirement: 'We require 1 Instagram Reel and 2 Stories highlighting clean beauty essentials for a premier cosmetics brand.',
+      deliverables: const [
+        '1x Instagram Reel (60s)',
+        '2x Instagram Stories with Link',
+      ],
+      expectedTimeline: '14 days after product delivery',
+      personalMessage: 'Hi Priya! Love your recent aesthetic reels. We have an exclusive campaign matching your audience perfectly.',
+      status: ContactRequestStatus.accepted,
+      contactMethod: OutreachContactMethod.inApp,
+      conversationId: conv1Id,
+      createdAt: DateTime.now().subtract(const Duration(days: 2)),
+      updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+    );
+    contactRequests[req1Id] = req1;
+
+    // Private quotation provided by Priya for req1
+    final quote1 = PrivateQuotation(
+      id: 'quote_priya_summer_glow',
+      requestId: req1Id,
+      creatorId: 'demo_creator_user_id',
+      proposedAmount: 45000.0,
+      currency: 'INR',
+      deliverableDescription:
+          '1 Dedicated Reel (60s, 4K) + 2 Stories with swipe-up link',
+      usageRights: 'Digital Organic & 30 Days Brand Social repost',
+      timeline: 'Script in 3 days, Final edit in 5 days',
+      notes: 'Includes one round of minor revisions. Product samples needed 3 days prior.',
+      createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 10)),
+      updatedAt: DateTime.now().subtract(const Duration(days: 1, hours: 10)),
+    );
+    privateQuotations[req1Id] = quote1;
+
+    // Outreach conversation for req1
+    final conv1 = OutreachConversation(
+      id: conv1Id,
+      requestId: req1Id,
+      organizationId: 'demo_agency_org_id',
+      brandUserId: 'demo_agency_user_id',
+      creatorUserId: 'demo_creator_user_id',
+      subject: 'Summer Glow Beauty Reel',
+      lastMessageAt: DateTime.now().subtract(const Duration(hours: 3)),
+      createdAt: DateTime.now().subtract(const Duration(days: 1)),
+    );
+    outreachConversations[conv1Id] = conv1;
+
+    outreachMessages[conv1Id] = [
+      OutreachMessage(
+        id: 'out_msg_1',
+        conversationId: conv1Id,
+        senderId: 'demo_agency_user_id',
+        senderName: 'Pulse Talent Agency',
+        content: 'Hi Priya, thanks for accepting our contact request! Looking forward to working together.',
+        createdAt: DateTime.now().subtract(const Duration(days: 1)),
+      ),
+      OutreachMessage(
+        id: 'out_msg_2',
+        conversationId: conv1Id,
+        senderId: 'demo_creator_user_id',
+        senderName: 'Priya Mehra',
+        content: 'Hey! Super excited about this. I have also submitted a tailored quotation for the deliverables.',
+        createdAt: DateTime.now().subtract(const Duration(hours: 8)),
+      ),
+      OutreachMessage(
+        id: 'out_msg_3',
+        conversationId: conv1Id,
+        senderId: 'demo_agency_user_id',
+        senderName: 'Pulse Talent Agency',
+        content: 'Awesome, reviewing the quotation now with the brand team.',
+        createdAt: DateTime.now().subtract(const Duration(hours: 3)),
+      ),
+    ];
+
+    // Pending incoming request for Priya from Brand
+    const req2Id = 'req_demo_brand_priya_festive';
+    final req2 = CreatorContactRequest(
+      id: req2Id,
+      senderUserId: 'demo_brand_user_id',
+      senderOrganizationId: 'demo_brand_org_id',
+      senderOrganizationName: 'Zenith Lifestyle',
+      recipientCreatorId: 'demo_creator_user_id',
+      recipientDisplayName: 'Priya Mehra',
+      recipientAvatarPath: 'avatars/creator_priya.png',
+      isRegisteredCreator: true,
+      requestType: ContactRequestType.brandCollaboration,
+      campaignName: 'Festive Season Launch',
+      collaborationRequirement: 'Seeking an authentic festive lookbook reel showcasing our new ethnic collection.',
+      deliverables: const ['1x Reel', '1x Carousel Post'],
+      expectedTimeline: 'Delivery before Diwali week',
+      personalMessage: 'Hi Priya, we would love to collaborate on our flagship festive collection!',
+      status: ContactRequestStatus.pending,
+      contactMethod: OutreachContactMethod.inApp,
+      createdAt: DateTime.now().subtract(const Duration(hours: 4)),
+      updatedAt: DateTime.now().subtract(const Duration(hours: 4)),
+    );
+    contactRequests[req2Id] = req2;
   }
 
   void _seedReferenceData() {

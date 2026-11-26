@@ -34,10 +34,10 @@ class AssistantRequest {
   final Map<String, dynamic> contextData;
 
   Map<String, dynamic> toJson() => {
-        'role': role.wire,
-        'task': task.wire,
-        'contextData': contextData,
-      };
+    'role': role.wire,
+    'task': task.wire,
+    'contextData': contextData,
+  };
 }
 
 /// Response returned from the assistant
@@ -70,10 +70,7 @@ class AssistantResponse {
   }
 
   factory AssistantResponse.failure(String error) {
-    return AssistantResponse(
-      success: false,
-      errorMessage: error,
-    );
+    return AssistantResponse(success: false, errorMessage: error);
   }
 }
 

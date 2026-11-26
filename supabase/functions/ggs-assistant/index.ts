@@ -56,7 +56,7 @@ export function createAssistantHandler() {
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return new Response(
         JSON.stringify({ error: "Unauthorized. Missing authentication token." }),
-        { status: 401, headers: { "Content-Type": "application/json" } }
+        { status: 401, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -69,7 +69,7 @@ export function createAssistantHandler() {
         JSON.stringify({
           error: "Backend configuration error. Edge function unconfigured.",
         }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
+        { status: 500, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -83,7 +83,7 @@ export function createAssistantHandler() {
     if (userError || !userData?.user) {
       return new Response(
         JSON.stringify({ error: "Invalid or expired user session." }),
-        { status: 401, headers: { "Content-Type": "application/json" } }
+        { status: 401, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -95,7 +95,7 @@ export function createAssistantHandler() {
           error: "Rate limit exceeded. Please wait 60 seconds before retrying.",
           rateLimitRemaining: 0,
         }),
-        { status: 429, headers: { "Content-Type": "application/json" } }
+        { status: 429, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -105,7 +105,7 @@ export function createAssistantHandler() {
     } catch {
       return new Response(
         JSON.stringify({ error: "Malformed JSON payload." }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -113,7 +113,7 @@ export function createAssistantHandler() {
     if (!role || !task) {
       return new Response(
         JSON.stringify({ error: "Missing required role or task." }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: { "Content-Type": "application/json" } },
       );
     }
 
@@ -124,7 +124,7 @@ export function createAssistantHandler() {
     // If an external AI provider is configured in environment, invoke it.
     // Otherwise, generate structured contextual guidance based on the verified input context data.
     // Notice: Never invent fake follower counts or verified stats!
-    const result = await processTask({
+    const result = processTask({
       role,
       task,
       contextData,
@@ -141,27 +141,31 @@ export function createAssistantHandler() {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   };
 }
 
-async function processTask(params: {
+function processTask(params: {
   role: string;
   task: string;
   contextData: Record<string, unknown>;
   geminiApiKey?: string;
   openAiApiKey?: string;
-}): Promise<{ suggestion: string; rationale: string; fields?: Record<string, unknown> }> {
-  const { role, task, contextData } = params;
+}): { suggestion: string; rationale: string; fields?: Record<string, unknown> } {
+  const { _role = params.role, task, contextData } = { _role: params.role, ...params };
 
   switch (task) {
     case "draft_brief": {
       const title = String(contextData.title || "Campaign");
       const objective = String(contextData.objective || "Brand awareness and creator engagement");
       return {
-        suggestion: `Looking for authentic creators to showcase ${title}. Primary goal: ${objective}. Deliverables include 1 high-resolution Reel/Video and 2 Story frames highlighting real product utility. Compensation includes direct fixed fee with milestone payment terms.`,
-        rationale: "Optimized for clear expectations, concise scope, and high applicant response rates.",
+        suggestion: `Looking for authentic creators to showcase ${title}. ` +
+          `Primary goal: ${objective}. Deliverables include 1 high-resolution ` +
+          "Reel/Video and 2 Story frames highlighting real product utility. " +
+          "Compensation includes direct fixed fee with milestone payment terms.",
+        rationale:
+          "Optimized for clear expectations, concise scope, and high applicant response rates.",
         fields: {
           suggestedDeliverables: "1x Dedicated Video/Reel, 2x Story frames with swipe-up/link",
           suggestedSlots: 3,
@@ -171,8 +175,10 @@ async function processTask(params: {
 
     case "suggest_deliverables": {
       return {
-        suggestion: "1x High-Resolution Reel/Video (60s), 2x Story posts with brand tags, 30-day organic digital usage rights.",
-        rationale: "Standard high-performing deliverable bundle for Indian creator collabs with transparent deliverables.",
+        suggestion: "1x High-Resolution Reel/Video (60s), 2x Story posts with brand tags, " +
+          "30-day organic digital usage rights.",
+        rationale: "Standard high-performing deliverable bundle for Indian creator collabs " +
+          "with transparent deliverables.",
         fields: {
           deliverablesList: [
             "1x 60s Reel / Short Video",
@@ -185,18 +191,24 @@ async function processTask(params: {
 
     case "explain_filters": {
       return {
-        suggestion: "Filters help narrow down talent by verified location, platform, and content category. The 'Verified Only' toggle ensures creators with authenticated platform identity.",
+        suggestion:
+          "Filters help narrow down talent by verified location, platform, and content category. " +
+          "The 'Verified Only' toggle ensures creators with authenticated platform identity.",
         rationale: "Using Category and Location filters together yields the best shortlist match.",
       };
     }
 
     case "draft_pitch": {
-      const creatorName = String(contextData.creatorName || "Creator");
+      const _creatorName = String(contextData.creatorName || "Creator");
       const campaignTitle = String(contextData.campaignTitle || "the campaign");
       const categories = String(contextData.categories || "content creation");
       return {
-        suggestion: `Hi team, I would love to collaborate on ${campaignTitle}! My audience is deeply engaged in ${categories}, and my style aligns naturally with your brand voice. I provide prompt communication, high-production deliverables, and on-time milestones. Excited to make this a win-win partnership!`,
-        rationale: "Structured to emphasize category relevance, audience engagement, and reliability.",
+        suggestion: `Hi team, I would love to collaborate on ${campaignTitle}! ` +
+          `My audience is deeply engaged in ${categories}, and my style aligns naturally ` +
+          "with your brand voice. I provide prompt communication, high-production deliverables, " +
+          "and on-time milestones. Excited to make this a win-win partnership!",
+        rationale:
+          "Structured to emphasize category relevance, audience engagement, and reliability.",
       };
     }
 
@@ -207,11 +219,13 @@ async function processTask(params: {
 
       const suggestionText = missingFields.length > 0
         ? `To improve profile discovery by brands, we recommend: \n• ${missingFields.join("\n• ")}`
-        : "Your profile contains all core verification fields! Keeping your portfolio and biography up to date ensures faster brand selections.";
+        : "Your profile contains all core verification fields! Keeping your portfolio and " +
+          "biography up to date ensures faster brand selections.";
 
       return {
         suggestion: suggestionText,
-        rationale: "Profiles with complete portfolios and biographies get 3x higher shortlist rates.",
+        rationale:
+          "Profiles with complete portfolios and biographies get 3x higher shortlist rates.",
       };
     }
 
@@ -220,7 +234,8 @@ async function processTask(params: {
       const handle = String(contextData.handle || "");
       const primaryCategory = String(contextData.primaryCategory || "General");
       return {
-        suggestion: `${name} (${handle}) specializes in ${primaryCategory}. Suitable for category-aligned brand briefs with direct deliverable workflows.`,
+        suggestion: `${name} (${handle}) specializes in ${primaryCategory}. ` +
+          "Suitable for category-aligned brand briefs with direct deliverable workflows.",
         rationale: "Quick talent briefing based purely on verified profile records.",
       };
     }

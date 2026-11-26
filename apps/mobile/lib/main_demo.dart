@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,6 +10,7 @@ import 'core/telemetry/analytics_service.dart';
 import 'demo/demo_repositories.dart';
 import 'demo/demo_store.dart';
 import 'features/assistant/data/assistant_service_impl.dart';
+import 'features/instagram/data/demo_instagram_repository.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +51,7 @@ void main() {
   final campaignRepo = DemoCampaignRepository(store);
   final collabRepo = DemoCollaborationRepository(store);
   final activityRepo = DemoActivityRepository(store);
+  final contactRepo = DemoContactOutreachRepository(store);
 
   runApp(
     ProviderScope(
@@ -67,7 +70,13 @@ void main() {
         campaignRepositoryProvider.overrideWithValue(campaignRepo),
         collaborationRepositoryProvider.overrideWithValue(collabRepo),
         activityRepositoryProvider.overrideWithValue(activityRepo),
-        assistantServiceProvider.overrideWithValue(const DemoAssistantServiceImpl()),
+        contactOutreachRepositoryProvider.overrideWithValue(contactRepo),
+        instagramRepositoryProvider.overrideWithValue(
+          DemoInstagramRepository(),
+        ),
+        assistantServiceProvider.overrideWithValue(
+          const DemoAssistantServiceImpl(),
+        ),
       ],
       child: const DemoAppRoot(),
     ),

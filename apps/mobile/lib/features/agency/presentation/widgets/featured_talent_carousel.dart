@@ -5,10 +5,7 @@ import '../../../../core/design_system/tokens.dart';
 import '../../../discovery/domain/creator_discovery_item.dart';
 
 class FeaturedTalentCarousel extends StatelessWidget {
-  const FeaturedTalentCarousel({
-    super.key,
-    required this.talentList,
-  });
+  const FeaturedTalentCarousel({super.key, required this.talentList});
 
   final List<CreatorDiscoveryItem> talentList;
 
@@ -106,7 +103,9 @@ class FeaturedTalentCarousel extends StatelessWidget {
                   categories: creator.primaryCategoryNames.isNotEmpty
                       ? creator.primaryCategoryNames.take(2).join(' • ')
                       : 'Talent • Creator',
-                  imageUrl: creator.avatarPath ?? AppImages.getCreatorPhoto(creator.displayName),
+                  imageUrl:
+                      creator.avatarPath ??
+                      AppImages.getCreatorPhoto(creator.displayName),
                   onTap: () => context.push('/creators/${creator.creatorId}'),
                 );
               } else {

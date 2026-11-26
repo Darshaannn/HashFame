@@ -15,8 +15,11 @@ begin
 end;
 $$;
 
--- 1. Check all new tables have RLS enabled
-select pg_temp.assert_true((select count(*) = 21 from pg_tables where schemaname = 'public' and rowsecurity), 'all 21 public tables have RLS');
+-- 1. Check all public application tables have RLS enabled
+select pg_temp.assert_true(
+  (select count(*) > 0 and count(*) = count(*) filter (where rowsecurity) from pg_tables where schemaname = 'public'),
+  'all public application tables have RLS enabled'
+);
 
 -- 2. Verify categories and languages are read-only for anonymous, readable for authenticated
 set local role anon;
