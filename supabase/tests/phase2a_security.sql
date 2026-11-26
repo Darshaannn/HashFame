@@ -42,33 +42,33 @@ select pg_temp.assert_true((select count(*) = 1 from public.creator_profiles whe
 
 -- Creator Rate Item
 insert into public.creator_rate_items (id, user_id, deliverable_type, price_amount, currency)
-values ('r1111111-1111-4111-8111-111111111111', '11111111-1111-4111-8111-111111111111', 'instagram_reel', 25000, 'INR');
+values ('a1111111-1111-4111-8111-111111111111', '11111111-1111-4111-8111-111111111111', 'instagram_reel', 25000, 'INR');
 select pg_temp.assert_true((select count(*) = 1 from public.creator_rate_items where user_id = '11111111-1111-4111-8111-111111111111'), 'creator can insert own rate item');
 
 -- Creator Social Account
 insert into public.creator_social_accounts (id, user_id, platform, handle, user_provided_follower_count)
-values ('s1111111-1111-4111-8111-111111111111', '11111111-1111-4111-8111-111111111111', 'instagram', 'creator_official', 50000);
+values ('b1111111-1111-4111-8111-111111111111', '11111111-1111-4111-8111-111111111111', 'instagram', 'creator_official', 50000);
 select pg_temp.assert_true((select count(*) = 1 from public.creator_social_accounts where user_id = '11111111-1111-4111-8111-111111111111'), 'creator can insert own social account');
 
 -- Creator Portfolio Item
 insert into public.creator_portfolio_items (id, user_id, title, content_type)
-values ('p1111111-1111-4111-8111-111111111111', '11111111-1111-4111-8111-111111111111', 'Sample Reel', 'video');
+values ('c1111111-1111-4111-8111-111111111111', '11111111-1111-4111-8111-111111111111', 'Sample Reel', 'video');
 select pg_temp.assert_true((select count(*) = 1 from public.creator_portfolio_items where user_id = '11111111-1111-4111-8111-111111111111'), 'creator can insert own portfolio item');
 
 -- Creator Collaboration
 insert into public.creator_collaborations (id, user_id, brand_name, deliverable_type)
-values ('col11111-1111-4111-8111-111111111111', '11111111-1111-4111-8111-111111111111', 'Nike', 'instagram_reel');
+values ('d1111111-1111-4111-8111-111111111111', '11111111-1111-4111-8111-111111111111', 'Nike', 'instagram_reel');
 select pg_temp.assert_true((select count(*) = 1 from public.creator_collaborations where user_id = '11111111-1111-4111-8111-111111111111'), 'creator can insert past collaboration');
 
 -- 4. Cross-user isolation checks (User B tries to mutate User A's data)
 select set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
 
 -- User B cannot update User A's rate item
-with changed as (update public.creator_rate_items set price_amount = 0 where id = 'r1111111-1111-4111-8111-111111111111' returning id)
+with changed as (update public.creator_rate_items set price_amount = 0 where id = 'a1111111-1111-4111-8111-111111111111' returning id)
  select pg_temp.assert_true((select count(*) = 0 from changed), 'User B cannot update User A rate item');
 
 -- User B cannot delete User A's social account
-with changed as (delete from public.creator_social_accounts where id = 's1111111-1111-4111-8111-111111111111' returning id)
+with changed as (delete from public.creator_social_accounts where id = 'b1111111-1111-4111-8111-111111111111' returning id)
  select pg_temp.assert_true((select count(*) = 0 from changed), 'User B cannot delete User A social account');
 
 -- User B cannot tamper with field_verifications
