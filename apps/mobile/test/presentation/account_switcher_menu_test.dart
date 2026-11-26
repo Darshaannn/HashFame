@@ -58,8 +58,10 @@ class _FakeAccountRepository implements AccountRepository {
   Future<void> clearCache() async {}
 
   @override
-  Future<Account> completeOnboarding(ProfessionalRole role, String name) async =>
-      _buildAccount();
+  Future<Account> completeOnboarding(
+    ProfessionalRole role,
+    String name,
+  ) async => _buildAccount();
 
   @override
   Future<AccountSnapshot> load() async {
@@ -105,9 +107,7 @@ void main() {
             DemoAccountRepository(DemoStore.instance),
           ),
         ],
-        child: const MaterialApp(
-          home: Scaffold(body: BrandHomeHeader()),
-        ),
+        child: const MaterialApp(home: Scaffold(body: BrandHomeHeader())),
       ),
     );
     await tester.pumpAndSettle();
@@ -127,40 +127,41 @@ void main() {
     expect(find.text('Switch Account'), findsNothing);
   });
 
-  testWidgets('Real non-admin user sees Switch Account and no Admin Dashboard', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          authRepositoryProvider.overrideWithValue(
-            _FakeRealAuthRepository('real_user_1'),
-          ),
-          accountRepositoryProvider.overrideWithValue(
-            _FakeAccountRepository(ProfessionalRole.brandMarketer),
-          ),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) => ElevatedButton(
-                onPressed: () => GGAccountSwitcherMenu.show(context),
-                child: const Text('Open'),
+  testWidgets(
+    'Real non-admin user sees Switch Account and no Admin Dashboard',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            authRepositoryProvider.overrideWithValue(
+              _FakeRealAuthRepository('real_user_1'),
+            ),
+            accountRepositoryProvider.overrideWithValue(
+              _FakeAccountRepository(ProfessionalRole.brandMarketer),
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => ElevatedButton(
+                  onPressed: () => GGAccountSwitcherMenu.show(context),
+                  child: const Text('Open'),
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Open'));
-    await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
 
-    expect(find.text('Switch Account'), findsOneWidget);
-    expect(find.text('Demo Account Switcher'), findsNothing);
-    expect(find.text('Admin Dashboard'), findsNothing);
-  });
+      expect(find.text('Switch Account'), findsOneWidget);
+      expect(find.text('Demo Account Switcher'), findsNothing);
+      expect(find.text('Admin Dashboard'), findsNothing);
+    },
+  );
 
   testWidgets('Server-authorized admin user sees Admin Dashboard', (
     tester,

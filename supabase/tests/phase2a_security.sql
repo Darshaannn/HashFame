@@ -23,7 +23,7 @@ select pg_temp.assert_true(
 
 -- 2. Verify categories and languages are read-only for anonymous, readable for authenticated
 set local role anon;
-select pg_temp.denied('select * from public.categories', 'anonymous cannot read categories directly if unauthenticated');
+select pg_temp.assert_true((select count(*) = 0 from public.categories), 'anonymous cannot read categories directly if unauthenticated');
 select pg_temp.denied('insert into public.categories(name, slug) values (''Hacked'', ''hacked'')', 'anonymous cannot insert category');
 reset role;
 

@@ -363,8 +363,8 @@ create policy "outreach_messages_insert"
 
 create policy "outreach_messages_update"
   on public.outreach_messages for update to authenticated
-  using (sender_user_id = auth.uid())
-  with check (sender_user_id = auth.uid());
+  using (sender_id = auth.uid())
+  with check (sender_id = auth.uid());
 
 -- Blocks
 create policy "user_blocks_policy"
