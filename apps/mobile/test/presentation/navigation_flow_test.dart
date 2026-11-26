@@ -206,8 +206,10 @@ void main() {
         await tester.tap(find.text('VIEW AS BRAND'));
         await tester.pumpAndSettle();
 
-        // Navigate to Settings
-        await tester.tap(find.byIcon(Icons.settings_outlined).first);
+        // Navigate to Settings via account switcher menu
+        await tester.tap(find.byKey(const Key('gg_account_switcher_button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Settings'));
         await tester.pumpAndSettle();
 
         expect(find.text('Settings & Preferences'), findsOneWidget);
@@ -276,8 +278,10 @@ void main() {
         await tester.tap(find.text('VIEW AS BRAND'));
         await tester.pumpAndSettle();
 
-        // Navigate to Settings
-        await tester.tap(find.byIcon(Icons.settings_outlined).first);
+        // Navigate to Settings via account switcher menu
+        await tester.tap(find.byKey(const Key('gg_account_switcher_button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Settings'));
         await tester.pumpAndSettle();
 
         // Verify BackButton exists and has min 48x48 bounds
@@ -627,8 +631,10 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Brand Workspace'), findsOneWidget);
 
-      // Go to settings
-      await tester.tap(find.byIcon(Icons.settings_outlined).first);
+      // Go to settings via account switcher menu
+      await tester.tap(find.byKey(const Key('gg_account_switcher_button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Settings'));
       await tester.pumpAndSettle();
       expect(find.text('Settings & Preferences'), findsOneWidget);
 

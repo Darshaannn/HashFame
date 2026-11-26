@@ -42,13 +42,17 @@ class CreatorHomeHeader extends ConsumerWidget {
             const SizedBox(width: 8),
             Container(height: 18, width: 1, color: Colors.white24),
             const SizedBox(width: 8),
-            const Text(
-              'Creator Home',
-              style: TextStyle(
-                fontFamily: AppTypography.hindFont,
-                fontSize: 12,
-                color: Colors.white70,
-                fontWeight: FontWeight.w500,
+            const Flexible(
+              child: Text(
+                'Creator Home',
+                style: TextStyle(
+                  fontFamily: AppTypography.hindFont,
+                  fontSize: 12,
+                  color: Colors.white70,
+                  fontWeight: FontWeight.w500,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
 
