@@ -46,7 +46,9 @@ class BrandHomeHeader extends ConsumerWidget {
             Flexible(
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
-                onTap: isDemo ? () => GGAccountSwitcherMenu.show(context) : null,
+                onTap: isDemo
+                    ? () => GGAccountSwitcherMenu.show(context)
+                    : null,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 6,

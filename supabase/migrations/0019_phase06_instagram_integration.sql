@@ -76,7 +76,8 @@ alter table public.creator_instagram_connections enable row level security;
 alter table public.creator_instagram_media enable row level security;
 
 -- Policies for Connections:
--- Creators can view and update their own Instagram connection status
+-- Creators can view their own Instagram connection status; connected profiles are readable by authenticated users.
+-- Writes to connection status and metrics are restricted to trusted backend service_role / Edge Functions.
 create policy "instagram_connection_self_read"
   on public.creator_instagram_connections for select to authenticated
   using (creator_id = auth.uid());
@@ -85,21 +86,12 @@ create policy "instagram_connection_public_read"
   on public.creator_instagram_connections for select to authenticated
   using (status = 'connected');
 
-create policy "instagram_connection_self_write"
-  on public.creator_instagram_connections for all to authenticated
-  using (creator_id = auth.uid())
-  with check (creator_id = auth.uid());
-
 -- Policies for Media:
--- Authenticated users can view permitted public media of connected creators
+-- Authenticated users can view permitted public media of connected creators.
+-- Media sync writes are restricted to trusted backend service_role / Edge Functions.
 create policy "instagram_media_select"
   on public.creator_instagram_media for select to authenticated
   using (true);
-
-create policy "instagram_media_self_write"
-  on public.creator_instagram_media for all to authenticated
-  using (creator_id = auth.uid())
-  with check (creator_id = auth.uid());
 
 -- 6. Indexes
 create index if not exists idx_ig_conn_username on public.creator_instagram_connections(instagram_username);
