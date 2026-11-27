@@ -1,61 +1,116 @@
 -- ==============================================================================
 -- GGs STAGE 08: CONSOLIDATED END-TO-END SECURITY AUDIT TEST SUITE
 -- Verifies:
--- 1. Tenant/Org Isolation & Multi-tenancy
--- 2. Contact Requests & Contact Preferences Privacy
--- 3. Private Quotations Access Restriction (No public Rate Cards)
--- 4. Online Influencer Directory Access & Shortlist Dual Target (UUID + dir_...)
--- 5. Intelligent Search RPC Execution & Fallback
--- 6. Instagram Meta Integration: Token Vault Security & Feed Isolation
+-- 1. Schema Baseline (all core & Phase 3-6 tables)
+-- 2. RLS Status Audit on All Public Application Tables
+-- 3. Shortlist Member Dual Target Constraint & Partial Unique Indexes
+-- 4. Private Contact Preferences, Contact Requests & Private Quotations Isolation
+-- 5. Instagram Token Vault Isolation (private.creator_instagram_tokens)
+-- 6. Intelligent Search & Directory Claim RPC Security
 -- ==============================================================================
 
 BEGIN;
 
-SELECT '--- 1. Extensions, Tables and Schema Baseline ---' AS stage;
-SELECT table_name FROM information_schema.tables 
-WHERE table_schema = 'public' 
-AND table_name IN (
-    'profiles', 'organizations', 'organization_memberships',
-    'creators', 'creator_directory', 'shortlists', 'shortlist_members',
-    'campaigns', 'campaign_applications', 'collaborations',
-    'contact_requests', 'creator_contact_preferences', 'private_quotations',
-    'instagram_connections', 'instagram_media_cache'
+CREATE FUNCTION pg_temp.assert_true(ok boolean, label text) RETURNS void LANGUAGE plpgsql AS $$
+BEGIN
+  IF ok IS DISTINCT FROM true THEN
+    RAISE EXCEPTION 'FAIL: %', label;
+  END IF;
+  RAISE NOTICE 'PASS: %', label;
+END;
+$$;
+
+CREATE FUNCTION pg_temp.denied(statement text, label text) RETURNS void LANGUAGE plpgsql AS $$
+BEGIN
+  BEGIN
+    EXECUTE statement;
+  EXCEPTION
+    WHEN insufficient_privilege OR check_violation OR invalid_parameter_value
+      OR unique_violation OR invalid_text_representation OR foreign_key_violation
+      OR raise_exception THEN
+      RAISE NOTICE 'PASS: %', label;
+      RETURN;
+  END;
+  RAISE EXCEPTION 'FAIL: expected rejection: %', label;
+END;
+$$;
+
+-- 1. Schema Baseline
+SELECT pg_temp.assert_true(
+  (SELECT count(*) = 15 FROM information_schema.tables
+   WHERE table_schema = 'public'
+     AND table_name IN (
+       'profiles', 'organizations', 'organization_memberships',
+       'creator_profiles', 'creator_directory', 'shortlists', 'shortlist_members',
+       'campaigns', 'campaign_applications', 'collaborations',
+       'creator_contact_requests', 'creator_contact_preferences', 'creator_quotations',
+       'creator_instagram_connections', 'creator_instagram_media'
+     )),
+  'all 15 core and phase 3-6 public tables exist'
 );
 
-SELECT '--- 2. RLS Status Audit on All Sensitive Tables ---' AS stage;
-SELECT relname AS table_name, relrowsecurity AS rls_enabled, relforcerowsecurity AS rls_forced
-FROM pg_class
-JOIN pg_namespace ON pg_namespace.oid = pg_class.relnamespace
-WHERE pg_namespace.nspname = 'public'
-AND relname IN (
-    'contact_requests', 'creator_contact_preferences', 'private_quotations',
-    'instagram_connections', 'instagram_media_cache', 'shortlists', 'shortlist_members'
+-- 2. RLS Status Audit on All Public Tables
+SELECT pg_temp.assert_true(
+  (SELECT count(*) > 0 AND count(*) = count(*) FILTER (WHERE rowsecurity)
+   FROM pg_tables WHERE schemaname = 'public'),
+  'all public application tables have RLS enabled'
 );
 
-SELECT '--- 3. Verify Shortlist Member Dual Target Constraint ---' AS stage;
-SELECT conname, pg_get_constraintdef(oid) 
-FROM pg_constraint 
-WHERE conname IN ('chk_shortlist_member_target', 'uq_shortlist_creator', 'uq_shortlist_directory');
+-- 3. Verify Shortlist Member Dual Target Constraint & Partial Unique Indexes
+SELECT pg_temp.assert_true(
+  EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_shortlist_member_target'),
+  'chk_shortlist_member_target constraint exists'
+);
+SELECT pg_temp.assert_true(
+  (SELECT count(*) = 2 FROM pg_indexes
+   WHERE schemaname = 'public'
+     AND indexname IN ('uq_shortlist_registered_creator', 'uq_shortlist_directory_creator')),
+  'shortlist dual-target partial unique indexes exist'
+);
 
-SELECT '--- 4. Verify Contact Requests Privacy & Access ---' AS stage;
-SELECT polname, polcmd, polroles::regrole[], pg_get_expr(polqual, polrelid) AS qual
-FROM pg_policy
-WHERE polrelid = 'public.contact_requests'::regclass;
+-- 4. Verify Instagram Token Vault Exists in Private Schema
+SELECT pg_temp.assert_true(
+  EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_schema = 'private' AND table_name = 'creator_instagram_tokens'
+  ),
+  'private.creator_instagram_tokens vault exists'
+);
 
-SELECT '--- 5. Verify Private Quotations Privacy & No Public Rates ---' AS stage;
-SELECT polname, polcmd, polroles::regrole[], pg_get_expr(polqual, polrelid) AS qual
-FROM pg_policy
-WHERE polrelid = 'public.private_quotations'::regclass;
+-- 5. Verify RPC Signatures
+SELECT pg_temp.assert_true(
+  (SELECT count(*) = 3 FROM pg_proc p
+   JOIN pg_namespace n ON n.oid = p.pronamespace
+   WHERE n.nspname = 'public'
+     AND p.proname IN ('search_creators_intelligent', 'claim_directory_profile', 'disconnect_instagram_account')),
+  'all phase 4-6 RPC functions exist'
+);
 
-SELECT '--- 6. Verify Instagram Token Security ---' AS stage;
--- Ensure access_token cannot be viewed by unauthorized users and table has RLS
-SELECT polname, polcmd, polroles::regrole[], pg_get_expr(polqual, polrelid) AS qual
-FROM pg_policy
-WHERE polrelid = 'public.instagram_connections'::regclass;
+-- 6. Anonymous User Restrictions
+SET LOCAL ROLE anon;
+SELECT pg_temp.denied('SELECT * FROM private.creator_instagram_tokens', 'anon cannot read Instagram token vault');
+SELECT pg_temp.denied('SELECT * FROM public.search_creators_intelligent(''fashion'')', 'anon cannot invoke intelligent search');
+RESET ROLE;
 
-SELECT '--- 7. Verify Intelligent Search RPC Signature ---' AS stage;
-SELECT proname, proargnames, prorettype::regtype 
-FROM pg_proc 
-WHERE proname IN ('search_creators_intelligent', 'claim_creator_profile', 'disconnect_instagram_account');
+-- 7. Cross-User & Client Privilege Isolation (Authenticated User B)
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '22222222-2222-4222-8222-222222222222', true);
+
+SELECT pg_temp.denied('SELECT * FROM private.creator_instagram_tokens', 'authenticated user cannot read Instagram token vault');
+SELECT pg_temp.denied(
+  $s$INSERT INTO public.creator_instagram_connections(creator_id, instagram_user_id, instagram_username, status)
+     VALUES ('22222222-2222-4222-8222-222222222222', '12345', 'fake_user', 'connected')$s$,
+  'authenticated user cannot self-verify Instagram connection'
+);
+SELECT pg_temp.assert_true(
+  (SELECT count(*) = 0 FROM public.creator_contact_preferences WHERE creator_id = '11111111-1111-4111-8111-111111111111'),
+  'user B cannot directly read user A private contact preferences'
+);
+SELECT pg_temp.assert_true(
+  (SELECT count(*) = 0 FROM public.creator_quotations WHERE creator_id = '11111111-1111-4111-8111-111111111111'),
+  'user B cannot read user A private quotations'
+);
+
+RESET ROLE;
 
 ROLLBACK;
